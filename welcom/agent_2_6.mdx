@@ -1,10 +1,11 @@
 ---
-title: "エージェントの公開"
+title: "🌐 エージェントの公開"
+description: "エージェントをHTTPアプリケーションまたはAPIサービスとして公開する方法の完全ガイド"
 ---
 
-## 公開方法
+## 📤 公開方法
 
-右上の「···」ボタンをクリックし、表示されたメニューから「公開」ボタンを選択して、エージェントの公開ページに進みます。
+右上の「**···**」ボタンをクリックし、表示されたメニューから「**公開**」ボタンを選択して、エージェントの公開ページに進みます。
 
 <img
   src="/images/43.png"
@@ -14,54 +15,122 @@ title: "エージェントの公開"
   src="/images/44.png"
 />
 
-## HTTPアプリケーション
+## 🔗 HTTPアプリケーション
 
-HTTPリンクの作成と管理方法：
+HTTPリンクを作成して、エージェントをWebアプリケーションとして公開できます。
 
-1. **リンクの作成**
+### 1. リンクの作成
 
-   * 画面右上の「リンク作成」ボタンをクリック
-
-   * 必須項目：リンク名、有効期限
-
-   * デフォルト設定：「自己充填での利用」
-
-   * 任意：リンクパスワードの有効化/無効化
+<CardGroup cols={2}>
+  <Card title="作成手順" icon="plus">
+    - 画面右上の「**リンク作成**」ボタンをクリックします。
+    - 以下の必須項目を入力します：
+      - **リンク名**
+      - **有効期限**
+    - デフォルト設定：「自己利用モード」
+    - 任意：パスワード保護の設定
+  </Card>
+  
+  <Card title="設定オプション" icon="gear">
+    - **リンク名**: わかりやすい名前を設定します。
+    - **有効期限**: アクセス可能な期間を指定します。
+    - **パスワード保護**: セキュリティを強化する場合に設定します（任意）。
+    - **利用モード**: 自己利用に関する設定を行います。
+  </Card>
+</CardGroup>
 
 <img
   src="/images/45.png"
 />
 
-* **リンクの操作**
+### 2. リンクの操作
 
-  * 作成後、以下の操作が可能：開く、コピー、Webページへの埋め込み
+作成後、以下の操作が可能です：
 
-  * リンク右側の「···」ボタンをクリックで：削除、編集
+
+
+<CardGroup cols={2}>
+  <Card title="開く" icon="arrow-up-right-from-square">
+    リンクをブラウザで開いて動作を確認します。
+  </Card>
+  <Card title="コピー" icon="copy">
+    リンクURLをクリップボードにコピーします。
+  </Card>
+  <Card title="Webページへの埋め込み" icon="code">
+    iframeコードを取得し、既存のWebサイトにエージェントを埋め込みます。
+  </Card>
+  <Card title="編集" icon="pen-to-square">
+    リンクの設定（名前、有効期限、パスワードなど）を変更します。
+  </Card>
+  <Card title="削除" icon="trash">
+    リンクを削除します（リンク右側の「···」ボタンから）。
+  </Card>
+</CardGroup>
 
 <img
   src="/images/46.png"
 />
 
-## APIサービス
+## 🔌 APIサービス
 
-APIサービスページでの表示内容と操作：
+エージェントをRESTful APIとして公開し、プログラムから呼び出すことができます。
 
-1. **表示される情報**
+### 📋 表示される情報
 
-   * **UUID**：このエージェントAPIの一意な識別子。異なるAPIインスタンスの識別に使用。
+<CardGroup cols={2}>
+  <Card title="UUID" icon="fingerprint">
+    このエージェントAPIの一意な識別子
+    
+    **用途**: 異なるAPIインスタンスの識別に使用
+  </Card>
+  
+  <Card title="AuthKey" icon="key">
+    APIアクセス認証用のキー
+    
+    **用途**: 認可されたユーザーのみアクセス可能にする
+  </Card>
+  
+  <Card title="AuthSecret" icon="lock">
+    セキュリティ強化のための秘密キー
+    
+    **用途**: AuthKeyと併用してセキュリティを強化
+  </Card>
+  
+  <Card title="作成日時" icon="calendar">
+    このAPIが作成された日時
+    
+    **用途**: API管理とトラッキング
+  </Card>
+</CardGroup>
 
-   * **AuthKey**：APIアクセス認証用のキー。認可されたユーザーのみアクセス可能にする。
+### ⚙️ ユーザー操作
 
-   * **AuthSecret**：セキュリティ強化のための秘密キー。AuthKeyと併用。
+<CardGroup cols={3}>
+  <Card title="コピー" icon="copy">
+    API情報（UUID、AuthKey、AuthSecret）をクリップボードにコピーします。
+  </Card>
+  <Card title="更新" icon="rotate">
+    認証情報を再生成してセキュリティを強化します（リフレッシュ）。
+  </Card>
+  <Card title="削除" icon="trash">
+    APIサービスを削除します（**注意：復元できません**）。
+  </Card>
+</CardGroup>
 
-   * **作成日時**：このAPIが作成された日時。
+### 📚 API使用方法
 
-2. **ユーザー操作**
+詳細な使用方法については、以下のドキュメントを参照してください：
 
-   * API情報のコピー、更新（リフレッシュ）、削除
-
-3. APIの詳細な使用方法：参考[ Agents Open Api](https://drive.google.com/file/d/1zfY4_p4j8-KuDqRNTF8Y0nsfGwZ8P_20/view?usp=sharing)
+<Card title="Agents Open API ドキュメント" icon="book" href="https://drive.google.com/file/d/1zfY4_p4j8-KuDqRNTF8Y0nsfGwZ8P_20/view?usp=sharing">
+  APIの詳細な使用方法、エンドポイント、リクエスト/レスポンス形式などを確認できます
+</Card>
 
 <img
   src="/images/47.png"
 />
+
+---
+
+<Note>
+**💡 ヒント**: HTTPアプリケーションは簡単な共有に適しており、APIサービスはシステム統合やプログラムからの呼び出しに適しています。
+</Note>

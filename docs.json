@@ -1,11 +1,11 @@
 {
   "$schema": "https://mintlify.com/docs.json",
-  "theme": "maple",
+  "theme": "mint",
   "name": "Agentify JP",
   "colors": {
-    "primary": "#0075DB",
-    "light": "#07C983",
-    "dark": "#15803D"
+    "primary": "#60A5FA",
+    "light": "#93C5FD",
+    "dark": "#2563EB"
   },
   "favicon": "/favicon.svg",
   "navigation": {
@@ -16,7 +16,8 @@
           {
             "group": "Welcome！",
             "pages": [
-              "welcom/welcome"
+              "welcom/welcome",
+              "welcom/update_log"
             ]
           },
           {
@@ -40,26 +41,61 @@
           {
             "group": "基本モジュール",
             "pages": [
-              "welcom/agent_2_2_20",
-              "welcom/agent_2_2_21",
               "welcom/agent_2_2_1",
-              "welcom/agent_2_2_2",
-              "welcom/agent_2_2_3",
-              "welcom/agent_2_2_4",
-              "welcom/agent_2_2_5",
-              "welcom/agent_2_2_6",
-              "welcom/agent_2_2_7",
-              "welcom/agent_2_2_8",
-              "welcom/agent_2_2_9",
-              "welcom/agent_2_2_10",
-              "welcom/agent_2_2_11",
-              "welcom/agent_2_2_12",
-              "welcom/agent_2_2_14",
-              "welcom/agent_2_2_15",
-              "welcom/agent_2_2_16",
-              "welcom/agent_2_2_17",
-              "welcom/agent_2_2_18",
-              "welcom/agent_2_2_19"
+              {
+                "group": "🧠 LLM",
+                "pages": [
+                  "welcom/agent_2_2_21",
+                  "welcom/agent_2_2_20",
+                  "welcom/agent_2_2_2",
+                  "welcom/agent_2_2_3",
+                  "welcom/agent_2_2_4"
+                ]
+              },
+              {
+                "group": "📚 ナレッジベース",
+                "pages": [
+                  "welcom/agent_2_2_5",
+                  "welcom/agent_2_2_13"
+                ]
+              },
+              {
+                "group": "🖼️ マルチモーダル",
+                "pages": [
+                  "welcom/agent_2_2_7",
+                  "welcom/agent_2_2_8"
+                ]
+              },
+              {
+                "group": "📝 ドキュメントのレビュー",
+                "pages": [
+                  "welcom/agent_2_2_6",
+                  "welcom/agent_2_2_9"
+                ]
+              },
+              {
+                "group": "🎛️ 高度な設定",
+                "pages": [
+                  "welcom/agent_2_2_10",
+                  "welcom/agent_2_2_15",
+                  "welcom/agent_2_2_11",
+                  "welcom/agent_2_2_12",
+                  "welcom/agent_2_2_14",
+                  "welcom/agent_2_2_16",
+                  "welcom/agent_2_2_22",
+                  "welcom/agent_2_2_24",
+                  "welcom/agent_2_2_25",
+                  "welcom/agent_2_2_23"
+                ]
+              },
+              {
+                "group": "🗄️ データベース",
+                "pages": [
+                  "welcom/agent_2_2_17",
+                  "welcom/agent_2_2_18",
+                  "welcom/agent_2_2_19"
+                ]
+              }
             ]
           },
           {
@@ -97,13 +133,13 @@
     "links": [
       {
         "label": "Support",
-        "href": "mailto:hi@mintlify.com"
+        "href": "mailto:kakaxu@trendo.co.jp"
       }
     ],
     "primary": {
       "type": "button",
-      "label": "Dashboard",
-      "href": "https://dashboard.mintlify.com"
+      "label": "Agentify",
+      "href": "https://agentify.jp"
     }
   },
   "footer": {

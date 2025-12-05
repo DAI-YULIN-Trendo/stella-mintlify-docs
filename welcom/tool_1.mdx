@@ -2,190 +2,236 @@
 title: "カスタムツールの作成"
 ---
 
-## 1. カスタムツールの作成
-
-**ナビゲーション**
-
-* 左側のナビゲーションバーで「ツール」をクリックし、「カスタムツール」を選択します。
-
-![](https://uxkpl4cba3j.feishu.cn/space/api/box/stream/download/asynccode/?code=ODNiOGFiNGFhMDk3ODU2ZWY4OGIzYTEzZjUyMTU1MDZfSE54a3lrMG5nOXh0Y0syMENsOG5hdURrZG1pWVhIUHFfVG9rZW46QTBUMWJ6SDZ0b2dIUkJ4TkpqMWNNS0NZblRBXzE3NDMwNDM5NzA6MTc0MzA0NzU3MF9WNA)
-
-## 2. 作成フロー
-
-現在、作成方法は「手動入力」と「クイックインポート」の2種類があります。
-&#x20;特に**APIドキュメントやURLがある場合は「クイックインポート」がおすすめ**です。よりスピーディかつ簡単にツールを作成できます。手動入力は柔軟ですが、業務担当者にとってはやや複雑で時間がかかる傾向があります。
-
-### 2.1 ツールの基本情報を入力
-
-**例：外部の携帯番号所属エリア確認APIを利用**：<https://api.oioweb.cn/doc/common/teladress>
-
-**インポート方法は3種類：**
-
-* **ファイルをインポート**
-
-* **URLをインポート**
-
-* **テキストをインポート**
-
-![](https://uxkpl4cba3j.feishu.cn/space/api/box/stream/download/asynccode/?code=NWM4ZTUwMmYzMDdlYjE0ODAwZjMwZThmODUwYmUzZTZfazVVYTN6bGQxano4dUtoaENxU3lNUTdLZUFxU0RoOW5fVG9rZW46Wkd6R2JWRjJ1b2x2UEt4bVZWNGN5dGxxbmxoXzE3NDMwNDM5NzA6MTc0MzA0NzU3MF9WNA)
-
-**インポート課程：**
-
-![](https://uxkpl4cba3j.feishu.cn/space/api/box/stream/download/asynccode/?code=YjUzYWVhOGNmZmQ3YjA3MmYzYWU4ODUxY2JlY2E0MGZfSWl4cEFscjliZnU0bGdSN1cyamxwQ1lpUzJRUmFRb2VfVG9rZW46UDdpWmJKa2p0b3hhUFZ4UDBrdGNtNnBWbjZnXzE3NDMwNDM5NzA6MTc0MzA0NzU3MF9WNA)
-
-**インポート後**：
-
-* インポート内容が不完全な場合、**必須項目は手動で補完する必要があります。**
-
-![](https://uxkpl4cba3j.feishu.cn/space/api/box/stream/download/asynccode/?code=M2Y3NWRhNjFkOThiMTM4MWE0ZTliMWJiZjc4ZDVhMTFfc0VkUjBvNm9RUnFGY0JrMUFIQVRRb3kxM2QyWWkwa1hfVG9rZW46VGtiRWI3NUdCb0U4U094azN1TWNmMklVbjJlXzE3NDMwNDM5NzA6MTc0MzA0NzU3MF9WNA)
-
-#### 2.1.1 リクエスト方式の説明
-
-カスタムツールでは、以下5種類のHTTPリクエスト方式をサポートしています：
-
-**GET（取得リクエスト）**
-
-* **定義：**&#x47;ET リクエストは、サーバー上の特定リソースへのアクセスを要求するために使用されます。主に情報の取得・検索に用いられ、サーバーの状態を変更しません。
-
-* **使用シーン：**&#x30E6;ーザー一覧の取得、記事詳細の表示など。
-
-* **例：**&#x5546;品価格の取得：`GET https://api.example.com/products/123`。（123は商品ID）
-
-**POST（新規作成・データ送信リクエスト）**
-
-* **定義：**&#x50;OST リクエストは、サーバーにデータを送信して新しいリソースを作成したり、データ処理を行うために使用されます。データはリクエストボディに含まれます。
-
-* **使用シーン：**&#x65B0;規ユーザー登録、フォーム送信、ファイルアップロードなど。
-
-* **例：**&#x65B0;規ユーザーの作成：`POST https://api.example.com/users`、※リクエストボディに「ユーザー名」「パスワード」などを含む。
-
-**PUT（リソースの置換・作成リクエスト）**
-
-* **定義：PUT リクエストは、既存リソースを完全に置換または新規作成する際に使用されます。送信するデータはリソースの全情報が必要です。**
-
-* **使用シーン：**&#x30E6;ーザー情報の更新、ファイルの置き換えなど。
-
-* **例：**&#x30E6;ーザープロフィールの更新：`PUT https://api.example.com/users/456`、
-
-（456はユーザーID） 　※リクエストボディに更新後の全情報を含む
-
-**DELETE（リソース削除リクエスト）**
-
-* **定義：**&#x44;ELETE リクエストは、**指定されたリソースを削除**するために使用されます。**べきとう性**を持ち、複数回実行しても結果は変わりません。
-
-* **使用シーン：**&#x30D5;ァイル削除、ユーザーアカウント削除など。
-
-* **例：**&#x30D6;ログ記事の削除：`DELETE https://api.example.com/blogs/789`、（789は記事ID）
-
-**PATCH（リソースの部分更新リクエスト）**
-
-* **定義：**&#x50;ATCH リクエストは、リソースの一部のみを更新する場合に使用されます。PUT よりも柔軟性が高く、変更したい項目だけ送信すればよいのが特徴です。
-
-* **使用シーン：**&#x50;ATCH リクエストは、リソースの一部のみを更新する場合に使用されます。PUT よりも柔軟性が高く、変更したい項目だけ送信すればよいのが特徴です。
-
-* **例：**&#x8A18;事タイトルの変更：`PATCH https://api.example.com/articles/1010`、（1010は記事ID） 　※リクエストボディには新しいタイトルのみを含む
-
-**補足： 使用するリクエスト方式は、各APIの仕様書（インターフェース定義）を参考に正しく選んでください。**
-
-![](https://uxkpl4cba3j.feishu.cn/space/api/box/stream/download/asynccode/?code=ZTA1NmEzM2E3ODE5MmVhMTRlMGU4OGRmZjVlNzE2N2VfdUljbWNOY2RnVlVxYWN3VzAxcDBIMm1zb09CaUxrQU9fVG9rZW46S053amJET3lkb3lLdzV4aDNZNmMxSzVjbkNkXzE3NDMwNDM5NzA6MTc0MzA0NzU3MF9WNA)
-
-#### 2.1.2 認証方式の説明
-
-Webリクエストにおいて、認証はリクエスト元の正当性を検証する手段です。以下の方式に対応しています：
-
-1. **Basic 認証**
-
-   * **定義：**&#x30E6;ーザー名とパスワードを使った基本的な認証方式です。
-
-   * **操作方法**：ユーザー名とパスワードを「:\`（コロン）」で連結し、**Base64でエンコード**します。
-
-   * **例**：
-
-   ```http
-   http
-   コードコピー
-   Authorization: Basic dXNlcm5hbWU6cGFzc3dvcmQ=
-   ```
-
-2. **Bearer Token 認証**
-
-   * **定義**：クライアントが OAuth2.0 などの手段で取得した アクセストークン を使用して認証する方式です。`Authorization: Bearer <token>`。
-
-   * **例**：
-
-   ```http
-   http
-   コードコピー
-   Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9
-   ```
-
-3. **カスタム認証**
-
-   * **定義：**&#x4EFB;意のリクエストヘッダーを使用して、開発者が独自に定義した認証方式です。
-
-   * **操作方法**：リクエストヘッダーに任意のキーと値を追加します。
-
-   * **例**：
-
-   ```http
-   http
-   コードコピー
-   X-Custom-Auth: my-custom-value
-   ```
-
-**※用途に応じて、適切な認証方式を選択してください。**
-
-### 2.2 入力・出力パラメータの設定
-
-**対応データ型**：
-
-現在サポートされているパラメータのデータ型は、**string（文字列）**、**boolean（真偽値）**、**any（任意型）** の3種類です。
-
-入力または出力のパラメータで明確な型が判別できない場合は、**デフォルトで string 型**として扱われます。
-
-なお、ツールが**ワークフロー（フロー設計）ノードとして接続されること**を想定し、出力パラメータは他のノードとの型整合性を考慮して設定する必要があります。
-&#x20;現在、ワークフロー上で接続可能な型も、**string、boolean、any** の3種類に対応しています。
-
-![](https://uxkpl4cba3j.feishu.cn/space/api/box/stream/download/asynccode/?code=ODBkYzg0ZDI2NTdjNWRiMzZiNjNiNGM1ZTM4NmJjNmZfSUZxS0dvMU9DU0czcHJjcXlRTWY1ZG9lVVg5NWpBdzlfVG9rZW46UmNCVmJxbHJBb2JOM1J4RnpJSWM2d1o3bmhLXzE3NDMwNDM5NzA6MTc0MzA0NzU3MF9WNA)
-
-![](https://uxkpl4cba3j.feishu.cn/space/api/box/stream/download/asynccode/?code=YjFiN2JiMDI5ZTE0ZmZkODQzNTM4NTMxZTYwYTc1NmFfdExSYkswT0ozVTNHYWhBRldVYmt6NkRXQVVHS2RTMlNfVG9rZW46V3FRYWJEN3l3bzNxSlN4SngwaGNzS3BFbnFDXzE3NDMwNDM5NzA6MTc0MzA0NzU3MF9WNA)
-
-パラメータの送信方法について：
-
-| 传入方法  | 各パラメータには、以下のいずれかの方法で値を渡すことができます： ・Body 内での送信形式は2種類：**form（フォーム形式）：&#xA; &#x3000;**&#x30D5;ォームデータとしてリクエストボディを送信します。**&#xA;** 　一般的に `application/x-www-form-urlencoded` または `multipart/form-data` の形式で使用され、主にフォーム送信に用いられます。&#xA;**raw（生データ形式）：&#xA; &#x3000;**&#x4A;SON、XML、プレーンテキストなどの生データをそのままリクエストボディに含めて送信します。**&#xA;** 　この場合、`Content-Type` は通常 `application/json` または `text/plain` が使われます。 |
-| ----- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-
-### 2.3 デバッグと検証
-
-ツールを保存した後は、**ステップ3：デバッグと検証** に進みます。
-&#x20;対応する入力項目を入力し、APIリクエストを送信して動作確認を行います。
-
-* テストが成功した場合 → **公開（リリース）可能**
-
-* テストが失敗した場合 → **保存は可能だが、公開は不可**
-
-![](https://uxkpl4cba3j.feishu.cn/space/api/box/stream/download/asynccode/?code=NTczNmI0ZWQ3YjY1OGQ4ZWU0MjBhOTE3ZmNhMmU3ZjRfc3ByOVNIdDJZZ2k2ZGtuMWxoSENxY2RMYlJZOEEyVm1fVG9rZW46S0NtdGJLR29xb05NTlJ4MjRnYWNVSTdGbnJoXzE3NDMwNDM5NzA6MTc0MzA0NzU3MF9WNA)
-
-## 3. ツールの公開
+## カスタムツール作成の流れ
+
+<Steps>
+  <Step title="ナビゲーション">
+    左側のナビゲーションバーで「**ツール**」をクリックし、「**カスタムツール**」を選択します。
+    
+    ![](https://uxkpl4cba3j.feishu.cn/space/api/box/stream/download/asynccode/?code=ODNiOGFiNGFhMDk3ODU2ZWY4OGIzYTEzZjUyMTU1MDZfSE54a3lrMG5nOXh0Y0syMENsOG5hdURrZG1pWVhIUHFfVG9rZW46QTBUMWJ6SDZ0b2dIUkJ4TkpqMWNNS0NZblRBXzE3NDMwNDM5NzA6MTc0MzA0NzU3MF9WNA)
+  </Step>
+
+  <Step title="作成方法の選択">
+    現在、作成方法は「**手動入力**」と「**クイックインポート**」の2種類があります。
+    
+    <Info>
+      特に**APIドキュメントやURLがある場合は「クイックインポート」がおすすめ**です。よりスピーディかつ簡単にツールを作成できます。
+    </Info>
+
+    ### インポート方法
+
+    <CardGroup cols={3}>
+      <Card title="ファイルをインポート" icon="file-import">
+        APIドキュメントファイルから自動的にツール設定を読み込みます
+      </Card>
+      <Card title="URLをインポート" icon="link">
+        APIドキュメントのURLを指定して設定を取得します
+      </Card>
+      <Card title="テキストをインポート" icon="text">
+        APIドキュメントのテキストを直接貼り付けて設定します
+      </Card>
+    </CardGroup>
+
+    ![](https://uxkpl4cba3j.feishu.cn/space/api/box/stream/download/asynccode/?code=NWM4ZTUwMmYzMDdlYjE0ODAwZjMwZThmODUwYmUzZTZfazVVYTN6bGQxano4dUtoaENxU3lNUTdLZUFxU0RoOW5fVG9rZW46Wkd6R2JWRjJ1b2x2UEt4bVZWNGN5dGxxbmxoXzE3NDMwNDM5NzA6MTc0MzA0NzU3MF9WNA)
+
+    **インポート例：外部の携帯番号所属エリア確認API**
+    
+    API URL: https://api.oioweb.cn/doc/common/teladress
+
+    ![](https://uxkpl4cba3j.feishu.cn/space/api/box/stream/download/asynccode/?code=YjUzYWVhOGNmZmQ3YjA3MmYzYWU4ODUxY2JlY2E0MGZfSWl4cEFscjliZnU0bGdSN1cyamxwQ1lpUzJRUmFRb2VfVG9rZW46UDdpWmJKa2p0b3hhUFZ4UDBrdGNtNnBWbjZnXzE3NDMwNDM5NzA6MTc0MzA0NzU3MF9WNA)
+
+    <Warning>
+      インポート内容が不完全な場合、**必須項目は手動で補完する必要があります。**
+    </Warning>
+
+    ![](https://uxkpl4cba3j.feishu.cn/space/api/box/stream/download/asynccode/?code=M2Y3NWRhNjFkOThiMTM4MWE0ZTliMWJiZjc4ZDVhMTFfc0VkUjBvNm9RUnFGY0JrMUFIQVRRb3kxM2QyWWkwa1hfVG9rZW46VGtiRWI3NUdCb0U4U094azN1TWNmMklVbjJlXzE3NDMwNDM5NzA6MTc0MzA0NzU3MF9WNA)
+  </Step>
+
+  <Step title="リクエスト方式の設定">
+    カスタムツールでは、以下5種類のHTTPリクエスト方式をサポートしています。
+
+    <CardGroup cols={2}>
+      <Card title="GET（取得リクエスト）" icon="download">
+        **定義:** サーバー上の特定リソースへのアクセスを要求するために使用されます。主に情報の取得・検索に用いられ、サーバーの状態を変更しません。
+        
+        **使用シーン:** ユーザー一覧の取得、記事詳細の表示など
+        
+        **例:** 商品価格の取得：`GET https://api.example.com/products/123`
+      </Card>
+      
+      <Card title="POST（新規作成）" icon="plus">
+        **定義:** サーバーにデータを送信して新しいリソースを作成したり、データ処理を行うために使用されます。
+        
+        **使用シーン:** 新規ユーザー登録、フォーム送信、ファイルアップロードなど
+        
+        **例:** 新規ユーザーの作成：`POST https://api.example.com/users`
+      </Card>
+      
+      <Card title="PUT（リソース置換）" icon="arrows-rotate">
+        **定義:** 既存リソースを完全に置換または新規作成する際に使用されます。送信するデータはリソースの全情報が必要です。
+        
+        **使用シーン:** ユーザー情報の更新、ファイルの置き換えなど
+        
+        **例:** ユーザープロフィールの更新：`PUT https://api.example.com/users/456`
+      </Card>
+      
+      <Card title="DELETE（削除）" icon="trash">
+        **定義:** 指定されたリソースを削除するために使用されます。べきとう性を持ち、複数回実行しても結果は変わりません。
+        
+        **使用シーン:** ファイル削除、ユーザーアカウント削除など
+        
+        **例:** ブログ記事の削除：`DELETE https://api.example.com/blogs/789`
+      </Card>
+      
+      <Card title="PATCH（部分更新）" icon="pen-to-square">
+        **定義:** リソースの一部のみを更新する場合に使用されます。PUT よりも柔軟性が高く、変更したい項目だけ送信すればよいのが特徴です。
+        
+        **使用シーン:** 記事タイトルの変更、ユーザー設定の一部更新など
+        
+        **例:** 記事タイトルの変更：`PATCH https://api.example.com/articles/1010`
+      </Card>
+    </CardGroup>
+
+    <Tip>
+      使用するリクエスト方式は、各APIの仕様書（インターフェース定義）を参考に正しく選んでください。
+    </Tip>
+
+    ![](https://uxkpl4cba3j.feishu.cn/space/api/box/stream/download/asynccode/?code=ZTA1NmEzM2E3ODE5MmVhMTRlMGU4OGRmZjVlNzE2N2VfdUljbWNOY2RnVlVxYWN3VzAxcDBIMm1zb09CaUxrQU9fVG9rZW46S053amJET3lkb3lLdzV4aDNZNmMxSzVjbkNkXzE3NDMwNDM5NzA6MTc0MzA0NzU3MF9WNA)
+  </Step>
+
+  <Step title="認証方式の設定">
+    Webリクエストにおいて、認証はリクエスト元の正当性を検証する手段です。以下の方式に対応しています。
+
+    <AccordionGroup>
+      <Accordion title="Basic 認証" icon="user-lock">
+        **定義:** ユーザー名とパスワードを使った基本的な認証方式です。
+        
+        **操作方法:** ユーザー名とパスワードを「:」（コロン）で連結し、**Base64でエンコード**します。
+        
+        **例:**
+        ```http
+        Authorization: Basic dXNlcm5hbWU6cGFzc3dvcmQ=
+        ```
+      </Accordion>
+      
+      <Accordion title="Bearer Token 認証" icon="key">
+        **定義:** クライアントが OAuth2.0 などの手段で取得した アクセストークン を使用して認証する方式です。
+        
+        **例:**
+        ```http
+        Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9
+        ```
+      </Accordion>
+      
+      <Accordion title="カスタム認証" icon="sliders">
+        **定義:** 任意のリクエストヘッダーを使用して、開発者が独自に定義した認証方式です。
+        
+        **操作方法:** リクエストヘッダーに任意のキーと値を追加します。
+        
+        **例:**
+        ```http
+        X-Custom-Auth: my-custom-value
+        ```
+      </Accordion>
+    </AccordionGroup>
+
+    <Tip>
+      用途に応じて、適切な認証方式を選択してください。
+    </Tip>
+  </Step>
+
+  <Step title="入力・出力パラメータの設定">
+    ### 対応データ型
+
+    現在サポートされているパラメータのデータ型は、**string（文字列）**、**boolean（真偽値）**、**any（任意型）** の3種類です。
+
+    <CardGroup cols={3}>
+      <Card title="string（文字列）" icon="text">
+        テキストデータを扱う型
+      </Card>
+      <Card title="boolean（真偽値）" icon="toggle-on">
+        true/falseの2値を扱う型
+      </Card>
+      <Card title="any（任意型）" icon="asterisk">
+        任意のデータ型を受け入れる型
+      </Card>
+    </CardGroup>
+
+    <Info>
+      入力または出力のパラメータで明確な型が判別できない場合は、**デフォルトで string 型**として扱われます。
+    </Info>
+
+    ![](https://uxkpl4cba3j.feishu.cn/space/api/box/stream/download/asynccode/?code=ODBkYzg0ZDI2NTdjNWRiMzZiNjNiNGM1ZTM4NmJjNmZfSUZxS0dvMU9DU0czcHJjcXlRTWY1ZG9lVVg5NWpBdzlfVG9rZW46UmNCVmJxbHJBb2JOM1J4RnpJSWM2d1o3bmhLXzE3NDMwNDM5NzA6MTc0MzA0NzU3MF9WNA)
+
+    ![](https://uxkpl4cba3j.feishu.cn/space/api/box/stream/download/asynccode/?code=YjFiN2JiMDI5ZTE0ZmZkODQzNTM4NTMxZTYwYTc1NmFfdExSYkswT0ozVTNHYWhBRldVYmt6NkRXQVVHS2RTMlNfVG9rZW46V3FRYWJEN3l3bzNxSlN4SngwaGNzS3BFbnFDXzE3NDMwNDM5NzA6MTc0MzA0NzU3MF9WNA)
+
+    ### パラメータの送信方法
+
+    <CardGroup cols={2}>
+      <Card title="form（フォーム形式）" icon="file-lines">
+        フォームデータとしてリクエストボディを送信します。
+        
+        一般的に `application/x-www-form-urlencoded` または `multipart/form-data` の形式で使用され、主にフォーム送信に用いられます。
+      </Card>
+      
+      <Card title="raw（生データ形式）" icon="code">
+        JSON、XML、プレーンテキストなどの生データをそのままリクエストボディに含めて送信します。
+        
+        この場合、`Content-Type` は通常 `application/json` または `text/plain` が使われます。
+      </Card>
+    </CardGroup>
+  </Step>
+
+  <Step title="デバッグと検証">
+    ツールを保存した後は、**デバッグと検証** に進みます。
+    対応する入力項目を入力し、APIリクエストを送信して動作確認を行います。
+
+    <CardGroup cols={2}>
+      <Card title="テスト成功" icon="circle-check" color="#10b981">
+        **公開（リリース）可能**
+      </Card>
+      <Card title="テスト失敗" icon="circle-xmark" color="#ef4444">
+        **保存は可能だが、公開は不可**
+      </Card>
+    </CardGroup>
+
+    ![](https://uxkpl4cba3j.feishu.cn/space/api/box/stream/download/asynccode/?code=NTczNmI0ZWQ3YjY1OGQ4ZWU0MjBhOTE3ZmNhMmU3ZjRfc3ByOVNIdDJZZ2k2ZGtuMWxoSENxY2RMYlJZOEEyVm1fVG9rZW46S0NtdGJLR29xb05NTlJ4MjRnYWNVSTdGbnJoXzE3NDMwNDM5NzA6MTc0MzA0NzU3MF9WNA)
+  </Step>
+</Steps>
+
+## ツールの公開と管理
 
 保存およびデバッグが完了すると、作成したツールが一覧に表示されます。
 
 ![](https://uxkpl4cba3j.feishu.cn/space/api/box/stream/download/asynccode/?code=NDM1Yzk0ZTUzMGYyMGYxNzU3OWQ2MDhmMGFlOWUxZjlfMG1KMTZiTGJzdW53ck45MGhHanRtb2hrTmV1ZkpvSG1fVG9rZW46QWtTcGJObHUzb3E5YnB4eE11NmM1SXRXbkViXzE3NDMwNDM5NzA6MTc0MzA0NzU3MF9WNA)
 
-ツール一覧では以下の操作が可能です：
+### ツール一覧での操作
 
-* 編集
+<CardGroup cols={4}>
+  <Card title="編集" icon="pen-to-square">
+    ツールの設定を変更します
+  </Card>
+  <Card title="削除" icon="trash">
+    ツールを削除します
+  </Card>
+  <Card title="公開" icon="upload">
+    ツールを公開します
+  </Card>
+  <Card title="非公開" icon="eye-slash">
+    下書き状態に戻します
+  </Card>
+</CardGroup>
 
-* 削除
+### 重要な注意点
 
-* 公開
+<Warning>
+  **デバッグに成功したツールのみ公開可能**です。
+</Warning>
 
-* 非公開（下書き状態に戻す）
+<Info>
+  **公開されたツール**は、「プラニング」画面で**ドラッグ＆ドロップして使用可能**になります。
+</Info>
 
-注意点：
-
-**デバッグに成功したツールのみ公開可能**です。
-
-**公開されたツール**は、ワークフロー（フロー設計）画面で**ドラッグ＆ドロップして使用可能**になります。
-
-ツールが\*\*非公開（下架）\*\*状態になると、サイドバーには表示されなくなりますが、**過去に使用されたエージェントには影響しません**。
+<Note>
+  ツールが「非公開」状態になると、サイドバーには表示されなくなりますが、**過去に使用されたエージェントには影響しません**。
+</Note>

@@ -4,23 +4,59 @@ title: "ツールモジュールのパラメータ設定説明"
 
 以下は、各ツールモジュールに関する依存サービス、必要なパラメータ、および申請方法の一覧です。
 
-| 名称 | 依存サービス | 設定に必要なパラメータ | 申請方法 |
-|------|--------------|-------------------------|-----------|
-| HTTPコール | なし | なし | なし |
-| OCR | paddle-OCR | なし | なし |
-| PDFを画像に変換 | なし | なし | なし |
-| ドキュメント解析 | なし | なし | なし |
-| AI検索 | bocha API | `bocha.api_key` | [https://open.bochaai.com/](https://open.bochaai.com/) |
-| 画像生成ツール | stable diffusion API | `stablediffusion.api_key`<br>`stablediffusion.url`<br>`stablediffusion.model`: `sd3-medium`, `sd3.5-large`, `sd3.5-large-turbo`, `sd3.5-medium`, `sd3-large`, `sd3-large-turbo` | [https://platform.stability.ai/docs/api-reference#tag/Generate/paths/~1v2beta~1stable-image~1generate~1sd3/post](https://platform.stability.ai/docs/api-reference#tag/Generate/paths/~1v2beta~1stable-image~1generate~1sd3/post) |
-| 天気検索 | なし | なし | なし |
-| Bingウェブ検索 | bing.web_search API | `bing.web_search_api_key` | [https://learn.microsoft.com/en-us/bing/search-apis/bing-web-search/](https://learn.microsoft.com/en-us/bing/search-apis/bing-web-search/) |
-| 智譜検索 | chatglm API | `chatglm.api_key`<br>`chatglm.api_secret` | [https://open.bigmodel.cn/dev/api/search-tool/web-search-pro](https://open.bigmodel.cn/dev/api/search-tool/web-search-pro) |
-| ウェブ検索（Bing） | Bing検索 | `bing.web_search_api_key` | [https://learn.microsoft.com/en-us/bing/search-apis/bing-web-search/](https://learn.microsoft.com/en-us/bing/search-apis/bing-web-search/) |
-| ウェブ検索（智譜） | 智譜検索 | `chatglm.api_key`<br>`chatglm.api_secret` | [https://open.bigmodel.cn/dev/api/search-tool/web-search-pro](https://open.bigmodel.cn/dev/api/search-tool/web-search-pro) |
-| ウェブ検索（Google） | Google検索 | `serpapi.web_search_api_key` | [https://serpapi.com/search-api](https://serpapi.com/search-api) |
-| ウェブ検索（テンセント） | テンセント検索 | `tencent.api_key`<br>`tencent.api_secret` | 1. [Tencent Cloud 開通ガイド](https://docs.qq.com/doc/DVG10VlFlYmxvdXlk?nlc=1)<br>2. [APIドキュメントとデバッグ](https://docs.qq.com/doc/DVFphQmtubk5UaGlW) |
-| ウェブ検索-PRO（Bing） | Bing検索 | `bing.web_search_api_key` | [https://learn.microsoft.com/en-us/bing/search-apis/bing-web-search/](https://learn.microsoft.com/en-us/bing/search-apis/bing-web-search/) |
-| ウェブ検索-PRO（智譜） | 智譜検索 | `chatglm.api_key`<br>`chatglm.api_secret` | [https://open.bigmodel.cn/dev/api/search-tool/web-search-pro](https://open.bigmodel.cn/dev/api/search-tool/web-search-pro) |
-| ウェブ検索-PRO（Google） | Google検索 | `serpapi.web_search_api_key` | [https://serpapi.com/search-api](https://serpapi.com/search-api) |
-| ウェブ検索-PRO（テンセント） | テンセント検索 | `tencent.api_key`<br>`tencent.api_secret` | 1. [Tencent Cloud 開通ガイド](https://docs.qq.com/doc/DVG10VlFlYmxvdXlk?nlc=1)<br>2. [APIドキュメントとデバッグ](https://docs.qq.com/doc/DVFphQmtubk5UaGlW) |
-| ウェブ検索結果プロセッサ | なし | なし | なし |
+<CardGroup cols={2}>
+  <Card title="HTTPコール" icon="globe">
+    - **依存サービス**: なし
+    - **パラメータ**: なし
+  </Card>
+  <Card title="OCR" icon="eye">
+    - **依存サービス**: paddle-OCR
+    - **パラメータ**: なし
+  </Card>
+  <Card title="PDFを画像に変換" icon="file-pdf">
+    - **依存サービス**: なし
+    - **パラメータ**: なし
+  </Card>
+  <Card title="ドキュメント解析" icon="file-lines">
+    - **依存サービス**: なし
+    - **パラメータ**: なし
+  </Card>
+  <Card title="AI検索" icon="magnifying-glass">
+    - **依存サービス**: bocha API
+    - **パラメータ**: `bocha.api_key`
+    - **申請**: [open.bochaai.com](https://open.bochaai.com/)
+  </Card>
+  <Card title="画像生成ツール" icon="image">
+    - **依存サービス**: stable diffusion API
+    - **パラメータ**: `stablediffusion.api_key`, `stablediffusion.url`, `stablediffusion.model`
+    - **申請**: [Stability AI Docs](https://platform.stability.ai/docs/api-reference#tag/Generate/paths/~1v2beta~1stable-image~1generate~1sd3/post)
+  </Card>
+  <Card title="天気検索" icon="cloud-sun">
+    - **依存サービス**: なし
+    - **パラメータ**: なし
+  </Card>
+  <Card title="Bingウェブ検索" icon="microsoft">
+    - **依存サービス**: bing.web_search API
+    - **パラメータ**: `bing.web_search_api_key`
+    - **申請**: [Microsoft Bing Search](https://learn.microsoft.com/en-us/bing/search-apis/bing-web-search/)
+  </Card>
+  <Card title="智譜検索" icon="magnifying-glass-chart">
+    - **依存サービス**: chatglm API
+    - **パラメータ**: `chatglm.api_key`, `chatglm.api_secret`
+    - **申請**: [BigModel Open Platform](https://open.bigmodel.cn/dev/api/search-tool/web-search-pro)
+  </Card>
+  <Card title="ウェブ検索（Google）" icon="google">
+    - **依存サービス**: Google検索
+    - **パラメータ**: `serpapi.web_search_api_key`
+    - **申請**: [SerpApi](https://serpapi.com/search-api)
+  </Card>
+  <Card title="ウェブ検索（テンセント）" icon="qq">
+    - **依存サービス**: テンセント検索
+    - **パラメータ**: `tencent.api_key`, `tencent.api_secret`
+    - **申請**: [Tencent Cloud](https://docs.qq.com/doc/DVG10VlFlYmxvdXlk?nlc=1)
+  </Card>
+  <Card title="ウェブ検索結果プロセッサ" icon="filter">
+    - **依存サービス**: なし
+    - **パラメータ**: なし
+  </Card>
+</CardGroup>

@@ -1,0 +1,71 @@
+---
+title: "MarkdownからWordへ変換"
+---
+
+<img
+  src="/images/k3.png"
+/>
+
+### **モジュール概要**
+
+* **Markdown形式のテキストをWord形式のドキュメント（.docx）に変換**するためのコンポーネントです。
+
+* **Markdownの構造（見出し、リスト、テーブルなど）を保持したままWord文書を生成**できます。
+
+
+
+### 🔌 入力とトリガー (Inputs & Triggers)
+
+<CardGroup cols={2}>
+  <Card title="条件をすべて満たした場合に動作を開始" icon="link">
+    **タイプ**: ブール型
+    
+    本ノードは複数のブール型入力を接続可能。**全ての条件が `true`** の場合に本モジュールを実行します（AND条件）。
+  </Card>
+  <Card title="いずれかを満たした場合に動作を開始" icon="bolt">
+    **タイプ**: ブール型
+    
+    本ノードは複数のブール型入力を接続可能。**いずれか1つでも条件が `true`** の場合に本モジュールを実行します（OR条件）。
+  </Card>
+  <Card title="Markdownコンテンツ" icon="message">
+    **タイプ**: 文字列型
+    
+    変換対象のMarkdownコンテンツを入力します。
+  </Card>
+</CardGroup>
+
+### ⚙️ 設定 (Configuration)
+
+<CardGroup cols={2}>
+  <Card title="Word文書名" icon="file">
+    **タイプ**: 文字列型
+    
+    生成するWord文書のファイル名を入力します。
+  </Card>
+  <Card title="文書情報表示設定" icon="eye">
+    ドキュメント情報をユーザーに表示するかどうかを制御します。
+  </Card>
+</CardGroup>
+
+### 📤 出力と動作 (Outputs & Behavior)
+
+<CardGroup cols={2}>
+  <Card title="文書メタデータ" icon="file">
+    **タイプ**: 文字列型
+    
+    生成された文書のメタデータを出力します。
+  </Card>
+  <Card title="成功ステータス" icon="check-double">
+    **タイプ**: ブール型    
+    **本モジュールの成功時、出力値は `True` となります**。
+  </Card>
+<Card title="失敗ステータス" icon="check-double">
+    **タイプ**: ブール型    
+    **本モジュールの失敗時、出力値は `True` となります**。
+  </Card>
+  <Card title="処理完了フラグ" icon="check-double">
+    **タイプ**: ブール型
+    
+    **本モジュールの実行完了時、出力値は `True` となります**。
+  </Card> 
+</CardGroup>

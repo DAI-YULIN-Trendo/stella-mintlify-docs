@@ -1,0 +1,329 @@
+智能体平台进阶使用文档-v1.4
+1 系统内置变量
+使用语法
+{{var}}表示引用变量
+{{var:defautValue}}表示引用变量并设置默认值
+{{@var}}表示引用变量，如果变量不存在则任然显示此表达式
+{{cTime}}当前日期和时间 yyyy-MM-dd HH:mm:ss
+{{cDate}}当前日期 yyyy-MM-dd
+{{cYear}}当前年 yyyy
+{{cMonth}}当前月
+{{cDay}}当前日 
+{{cHHmmss}}当前时钟时间 HH:mm:ss
+{{cMills}}当前时间戳
+{{cWeekdayNum}}周-数字
+{{cWeekdayEn}}周-英文
+{{cWeekdayEn2}}周-英文缩写
+{{cWeekdayCn}}周-中文
+{{_input}}所有输入参数信息
+{{_state}}输入状态参数信息
+{{userChatInput}}输入文字参数信息
+{{_images_}}输入图片参数信息
+{{_files_}}输入文件参数信息
+{{$db_type}}Agent引入的数据库类型信息
+{{$db_schema}}Agent引入的数据库表结构信息
+{{$kbIdList}}获取用户选择的知识库ID列表
+{{systemContext}}获取当前系统环境和登录用户信息（v1.9.0.0+）
+示例：
+Python{  // 当前用户信息  "su": {    // 当前用户扩展信息，比如同步自客户系统相关的用户信息、登录相关信息等    "ext": {      "lastLoginTime": 1755164481495,      "lastLoginSuccess": true,      "currentLoginIp": "117.133.43.38",      "currentLoginSuccess": true,      "currentLoginTime": 1755503761632,      "lastLoginIp": "117.133.43.38"    },    // 手机号    "phoneNumber": "",    "avatarUrl": "/assets/avatar/56.png",    "nickName": "zoupengfei",    "tenantId": 1,    "id": 574,    "userName": "zoupengfei",    "email": "",    "orgId": 3  },  // 语言信息  "locale": "zh_CN",  // 当前登录用户的Token  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiWkxsN21DVW0wWXRvUkxIT0JOM3VNMSttRzc5QWJGemdlc0hMc2dFWlJGNmtaeUszZTlSYUVBdFF0emo2Uy9hbnFpY2w4UUxTRDJwbWowMi9YTE1MOGViRFQzSkNQOWpLLzRkTFk3dVRxbWFCd0xuWjgwcExlYjJ0cFlaU3VYeHQ2OUM4eVhETzA3d2xBZEFWNzN3c1F4dVMxcS8wSDcyNy9iUXdjK1p3NjFZKzg0MnBwc2lIODVWRHFxQ2RyZlBERE1mS2hFV1EvUm5CQVo1Q0hocmpWQmhiN0c1c2ZnNWx3RGZTVUtxSU8rbz0iLCJleHAiOjE3NTgwOTU3NjF9.LwItGsx2iYEh2QqItgTdf4wq-FwkaxwgvPW4GucKCMg"}
+
+2 系统内置函数
+使用语法
+[@["functionName", "args1", "args2",....]@] 表示函数调用
+日期格式化
+ [@["DateFormatFromMills","your  mills", "your formats"]@]
+说明：
+
+示例：
+日期格式化
+ [@["DateFormatFromSeconds","your  seconds", "your formats"]@]
+说明：
+
+示例：
+日期转换为毫秒
+ [@["DateStrToMills","your date", "your date format"]@]
+示例：
+日期转换为秒
+ [@["DateStrToSeconds","your date", "your date format"]@]
+示例：
+提取包围的子字符串 
+[@["ExtractAroundStr","your text", "your start str", "your end str", "containsBorder true|false"]@]
+示例：
+提取第一个符合正则的字符串
+ [@["ExtractStrByRegex","your text", "your regex"]@]
+去学习正则怎么写：
+https://www.runoob.com/regexp/regexp-tutorial.html
+示例：
+提取所有符合正则的字符串
+ [@["ExtractArrByRegex","your text", "your regex"]@]
+去学习正则怎么写：
+https://www.runoob.com/regexp/regexp-tutorial.html
+示例：
+提取json对象
+ [@["ExtractJsonObj","your text", "your jsonpath"]@]
+去学习JSON Path: 
+https://github.com/alibaba/fastjson/wiki/JSONPath
+https://jsonpath.com/
+示例：
+提取json数组
+ [@["ExtractJsonArr","your text", "your jsonpath"]@]
+去学习JSON Path: 
+https://github.com/alibaba/fastjson/wiki/JSONPath
+https://jsonpath.com/
+示例：
+正则提取json 
+[@["ExtractJsonByRegex","your text", "your json key1", "your json key1 regex", "your json key2", "your json key2 regex"]@]
+去学习正则怎么写：
+https://www.runoob.com/regexp/regexp-tutorial.html
+示例：
+日期加减
+ [@["GetDateFromNow","your add/substract days"]@]
+示例：
+URL编码
+	•	 [@["UrlEncode","your text", "your charset, default is UTF-8"]@]
+示例：
+URL解码
+ [@["UrlDecode","your text", "your charset, default is UTF-8"]@]
+示例：
+自动检测指定用什么语言回复 
+[@["AutoSpecifyResponseLanguage","your text", "your default lang, The optional values are EN,CN, default value is CN"]@]
+示例：
+字符串替换
+ [@["Replace","your text", "your old str", "your new str"]@]
+示例：
+字符串正则替换 
+[@["ReplaceRegex","your text", "your regex str", "your new str"]@]
+去学习正则怎么写：
+https://www.runoob.com/regexp/regexp-tutorial.html
+示例：
+字符串转义 
+[@["EscapeStr","your text"]@]
+示例：
+text={"dataList":[{"aiSkipType":"3","play_id":"1613810","guest_name":"广岛蜻蜓","play_msg":"今天 日联季后 冲绳金帝皇VS广岛蜻蜓 赛事预测"}
+[@["EscapeStr","{{text}}"]@]：
+{\"dataList\":[{\"aiSkipType\":\"3\",\"play_id\":\"1613810\",\"guest_name\":\"广岛蜻蜓\",\"play_msg\":\"今天 日联季后 冲绳金帝皇VS广岛蜻蜓 赛事预测\"}
+
+ RSA加密 
+[@["RSAEncode","your text", "your public key"]@]
+示例：
+
+根据条件赋值
+ [@["CaseWhenThen","your case value", "when value1", "then value1", "when value2", "then value2"..., "default value"]@]
+示例：
+根据条件赋值-区分大小写
+ [@["CaseWhenThenIgnoreCase","your case value", "when value1", "then value1", "when value2, optional", "then value2, optional"..., "default value, optional"]@]
+示例：
+是否与任意给定的候选值相等
+[@["EqualsAny","your value", "your other value1", "your other value2, optional"...]@]
+示例：
+是否与任意给定的候选值相等-区分大小写
+[@["EqualsAnyIgnoreCase","your value", "your other value1", "your other value2, optional"...]@]
+示例：
+日期格式转换
+ [@["DateStrReFormat","your date", "your target format", "your source format, optional"]@]
+示例：
+字符串拼接
+ [@["Concat","your text1","your text2","your text3",...]@]
+示例：
+
+数组拼接
+ [@["ConcatArray","your array1","your arr2","your arr3",...]@]
+示例：
+
+数据对象合并
+ [@["MergeObject","your obj1","your obj2","your obj3",...]@]
+示例：
+
+自然语言转日期
+[@["JionlpParseTime","your text1"]@]
+示例：
+[@["JionlpParseTime","今天"]@]
+说明文档
+时间语义解析-说明文档
+
+Md5摘要
+[@["Md5Digest","your text"]@]
+示例：
+
+通过Tika解析文件
+[@["ParseDocByTika","FileInput[]"]@]
+示例：
+JSONFileInput: [ { "fileName": "西部.docx", "fileType": "docx", "fileId": "66ac4bde0564ee6d4213148d" } ]
+函数解析文件成功后以JSON数组的形式返回文件内容
+JSON[{"content":"NBA西部全明星首发：詹姆斯、杜兰特、约基奇、东契奇、亚历山大\nNBA西部全明星替补：莱昂纳德、安东尼-戴维斯、布克、爱德华兹、库里、乔治、唐斯\n","fileId":"66ac4bde0564ee6d4213148d","fileName":"西部.docx","fileType":"docx","success":true}]
+抓取网页内容
+[@["FetchUrl","UrlFetchReq[]"]@]
+输入：
+JSON[{// 标准字段"url":"xxx","timeout": 6666, //默认值"xpath":[{     "key":"key1",    "path":""}] // 非必填// 其他字段原样返回给用户"x1":"""x2":""}]
+输出：
+JSON[{// 标准字段，timeout，xpath这些字段要remove掉"url":"xxx","content":{       // 用户没有定义xpath时，默认返回body       "body":"doc.text()"       // 用户定义了xpath时，不返回body       "key1":"value1",       "key2":"value2",},"success":true, // 内容是否抓取成功// 其他字段原样返回给用户"x1":"""x2":""}]
+
+
+3 内置命令 Command
+3.1 调用方式
+通过往记忆变量发送命令信号实现与平台内部服务的交互。
+3.1.1 调用方式1：发送命令信号
+	•	1） 组装命令信号JSON结构体
+JSON {   // 命令编码, 必填   "command":"command code",   // 命令参数, 每个命令有它的参数结构，参考下文。如果没有参数就设置为{}   "data":{       // ....   },   // 是否异步调用，可不填。默认false.   "async": false }
+	•	2）组装好的命令信号连接到记忆变量，记忆变量的key必须是$command_xxx开头。
+	•	3）如果需要获取命令调用后的结果数据则使用以下方式获取：
+{{记忆变量的key.result}}
+示例：{{$command_mytext2agent.result}}
+
+3.1.2 调用方式2：声明函数式调用
+ 声明命令函数：[$[ 命令数据JSON ]$] 
+示例：
+Python[$[    {       "command":"AddMessageMeta",       "embedResult": true, // true 会把命令结果嵌入到prompt所在位置。false则命令所在为之替换为空。       "data": {          "alias":"xxx",          "metadata":          {"renderType" : "deepResearchDesign", "toolType":"deepResearch"}        }    }]$]
+
+3.2 命令列表
+3.2.1 text2agent 创建Agent命令
+命令参数：
+JSON{   "command":"text2agent",   "data": {        // 编排数据        "agentJson":[]   }}
+命令结果：
+JSON{   "result": {        "avatar":"",        "id":"",        "intro":"",        "name":""   }}
+3.2.2 userKbs 查询用户知识库列表命令
+命令参数：
+JSON{   "command":"userKb",   "data": {}}
+命令结果：
+JSON{  "result":[      {        "avatar":"",        "id":"",        "name":""      }  ]}
+3.2.3 AddMessageMeta 消息携带元信息
+命令参数：
+JSON{   "command":"AddMessageMeta",   "data": {      "whenComplete": false,      "metadata": {"metaKey1" : "metaValue1","metaKey2" : "metaValue2"},      "beforeMetadata": {"metaKey1" : "metaValue1","metaKey2" : "metaValue2"},      "afterMetadata": {"metaKey1" : "metaValue1","metaKey2" : "metaValue2"}    }}
+参数说明：
+	•	流式输出增加字段: metaMessage 消息携带元信息，包含一些系统内置属性和用户自定义metadata:
+	•	whenComplete 仅当某组件回复结束时携带元信息，默认fasle
+	•	beforeMetadata 前置元数据,仅当某组件回复第一个token时携带的元信息，非必填；由用户自定义其内的属性和值;
+	•	metadata 元数据,所有流式回复过程都携带的元信息，如果设置了whenComplete=true 则仅在流某组件回复complete时携带的元信息，非必填；由用户自定义其内的属性和值; 
+	•	afterMetadata 后置元数据,仅当某组件回复complete时携带的元信息，非必填；由用户自定义其内的属性和值
+命令结果：无
+
+4 代码块嵌入
+获取内置参数：params['yourVarNameToGet'] 可以取到当前记忆变量的值
+需要有返回值：return yourVarNameToReturn 可以取到当前记忆变量的值，有返回值会嵌入到它所在位置
+简单实例参考：5.2.1 章节
+4.1 嵌入Python代码
+示例：
+Python我是:[python[name="邹鹏飞"return name]python]他是:[py[name="张三"return name]py]都来自国家：[py[import jsondata=json.loads(params['data'])return data['cou']]py]
+4.2 嵌入JS代码
+示例：
+JavaScript我是:[js[name="邹鹏飞"return name]js]他是:[js[name="张三"return name]js]都来自国家：[js[data=JSON.parse(params['data'])return data['cou']]js]
+5 使用技巧
+5.1 提示词案例
+5.1.1 文生图案例
+	•	编排结构
+
+	•	提示词优化：
+	•	在生图工具前置一个智能对话组件，内置prompt如下
+Plain Text# Stable Diffusion prompt AssistantYou'll be an artsy Stable Diffusion prompt assistant.# # Task1、 I use natural language to tell you the topic of the prompt to generate, your task is to imagine a complete picture according to this topic, and then transform it into a detailed, high-quality prompt, so that Stable Diffusion can produce a high-quality image.2、 Translate written prompt words into English3、Reply prompt only, returned as a string,Don't reply Negative Prompt## BackgroundStable Diffusion is a Vincennes diagram model that leverages deep learning and supports the use of prompt to produce new images describing the elements to be included or omitted.## prompt concept- A complete prompt contains one parts: "** Prompt:**" ".- prompt is used to describe the image and consists of common words, using the English half corner "," as the separator.- Each word or phrase separated by a "," is called a tag.  So prompt  are composed of a series of tags separated by ",".## () and [] syntaxThe equivalent way to adjust keyword strength is to use () and [].  (keyword) increases the strength of the tag by 1.1 times, the same as (keyword:1.1), and up to three layers can be added.  [keyword] reduces the strength by a factor of 0.9, the same as (keyword:0.9).## Prompt format requirementBelow I describe the steps for generating prompt, which can be used to describe people, landscapes, objects, or abstract digital art drawings.  You can add as many details as you want, but no fewer than five.### 1.  prompt request- Your output Stable Diffusion prompt starts with "**Prompt:**".- prompt contains the body of the picture, materials, additional details, image quality, art style, color tone, lighting, etc., but your output prompt cannot be broken up.  For example, a broken description like "medium:" is not required, nor can it contain ":" and ".".- Subject of the picture: not brief English description of the subject of the picture, such as A girl in a garden, subject details (subject can be people, things, objects, scenery) the core content of the picture.  This section is generated based on the topic I give you each time.  You can add more reasonable details related to the topic.- For the character theme, you must describe the eyes, nose, lips of the character, For example, 'beautiful detailed eyes,beautiful detailed lips,extremely detailed eyes and face,longeyelashes', It is important to avoid Stable Diffusion of random distorted facial features.  You can also describe the character's appearance, mood, clothes, posture, perspective, movement, background, etc.  In character attributes, 1girl means one girl and 2girls means two girls.- Material: The material used to make the artwork.  Examples: illustration, oil painting, 3D rendering and photography.  Medium has a strong effect because a single keyword can dramatically change the style.- Additional details: Scene details, or character details, describe the details of the picture, so that the image looks more substantial and reasonable.  This part is optional, pay attention to the overall harmony of the picture, can not conflict with the theme.- Image quality: Always start this section with "(best Quality, 4 k, 8 k, highres, masterpiece: 1.2), ultra - the detailed, realistic, photorealistic, photo - realistic: 1.37), "this is a sign of high quality.  Other commonly used tags to improve quality are those that you can add according to the needs of the theme: HDR,UHD,studio lighting,ultra-fine painting,sharp focus,physically-based rendering,extreme detail  The description, professional, vivid colors, bokeh.- Artistic Style: This section describes the style of the image.  Adding the right art style can enhance the resulting image.  Commonly used art style such as: portraits, landscape, horror, anime, sci - fi, photography, concept artists, etc.- Color tone: Color, by adding color to control the overall color of the picture.- Lighting: The lighting effect of the overall picture.### 3.  Restrictions:- tag content is described in English words or phrases, not limited to the words I give you.  Note that you can only# # # 3. Description copy:{{text}}
+
+5.2 Agent示例
+5.2.1 代码块嵌入
+复制后导入你的Agent
+sql{"nodes":[{"id":"simpleInputId","type":"custom","initialized":false,"position":{"x":-352.3619937398315,"y":352.41078014184393},"data":{"outputs":[{"valueType":"string","description":"引用变量：{{userChatInput}}","label":"文本信息","type":"source","targets":[],"key":"userChatInput"},{"valueType":"file","description":"以JSON数组格式输出用户上传文档列表，若为文档比对，包含分组信息","label":"文档信息","type":"source","targets":[],"key":"files"},{"valueType":"image","description":"以JSON数组格式输出用户上传的图片列表","label":"图片信息","type":"source","targets":[],"key":"images"},{"valueType":"boolean","description":"当未点击任何按钮时值为true","label":"未点击按钮","type":"source","targets":[],"key":"unclickedButton"},{"valueType":"boolean","description":"运行完成后开关打开,下游链接组件开始运行。","label":"模块运行结束","type":"source","targets":[{"targetHandle":"switchAny","target":"59427879-f101-4629-a670-2bcad6fdb33c"}],"key":"finish"}],"moduleType":"questionInput","inputs":[{"connected":true,"valueType":"boolean","description":"同时满足上游所有条件方可激活当前组件执行逻辑","label":"联动激活","type":"target","keyType":"trigger","value":false,"key":"switch"},{"connected":true,"valueType":"boolean","description":"同时满足上游任一条件即可激活当前组件执行逻辑","label":"任一激活","type":"target","keyType":"triggerAny","value":false,"key":"switchAny"},{"valueType":"boolean","description":"输入文本开关","label":"输入文本","type":"switch","value":true,"key":"inputText"},{"valueType":"boolean","description":"上传文档开关","label":"上传文档","type":"switch","value":false,"key":"uploadFile"},{"valueType":"boolean","description":"上传图片开关","label":"上传图片","type":"switch","value":false,"key":"uploadPicture"},{"valueType":"boolean","description":"文档审查开关","label":"文档审查","type":"switch","value":false,"key":"fileUpload"},{"valueType":"boolean","description":"是否开启文档比对功能","label":"是否文档对比","type":"checkBox","value":false,"key":"fileContrast"},{"valueType":"any","description":"上传的文件列表,如果开启了文档对比,每个分组只能上传一个文件","label":"文档分组","type":"table","value":[],"key":"fileInfo"},{"valueType":"boolean","description":"是否作为初始全局input","label":"是否作为初始全局input","type":"hidden","value":true,"key":"initialInput"}],"intro":"用户输入入口,对话中用户的输入信息,与其他模块连接,一般作为起始模块","name":"用户提问","disabled":false,"category":"用户提问"}},{"id":"0c533ed9-360b-49dd-80f2-086083862eee","type":"custom","initialized":false,"position":{"x":558.8680851063833,"y":516.6428368794325},"data":{"outputs":[{"valueType":"string","description":"回复内容原样输出。","label":"回复内容","type":"source","value":"","targets":[],"key":"text"},{"valueType":"boolean","description":"运行完成后开关打开，下游链接组件开始运行。","label":"模块运行结束","type":"source","targets":[{"targetHandle":"switchAny","target":"f1c54919-8aab-4a69-a2da-783da604bcf8"}],"key":"finish"}],"moduleType":"confirmreply","inputs":[{"connected":true,"valueType":"boolean","description":"同时满足上游所有条件方可激活当前组件执行逻辑","label":"联动激活","type":"target","keyType":"trigger","value":false,"key":"switch"},{"connected":true,"valueType":"boolean","description":"同时满足上游任一条件即可激活当前组件执行逻辑","label":"任一激活","type":"target","keyType":"triggerAny","value":false,"key":"switchAny"},{"connected":false,"valueType":"boolean","description":"控制回复内容是否输出给用户","label":"回复对用户可见","type":"switch","value":true,"key":"stream"},{"connected":true,"valueType":"string","description":"可以使用 \\n 来实现连续换行。\n\n可以通过外部模块输入实现回复，外部模块输入时会覆盖当前填写的内容。引用变量：{{text}}","label":"回复内容","type":"textarea","value":"我是:[js[\nname=\"邹鹏飞JS\"\nreturn name\n]js]\n他是:[js[\nname=\"张三JS\"\nreturn name\n]js]\n都来自国家JS：[js[\ndata=JSON.parse(params['data'])\nreturn data['cou']\n]js]","key":"text"}],"intro":"结合触发条件使用，输出预设内容或输出上游模块接入内容。","name":"确定回复","disabled":false,"category":"大模型"}},{"id":"f1c54919-8aab-4a69-a2da-783da604bcf8","type":"custom","initialized":false,"position":{"x":1013.3521276595748,"y":523.6368085106383},"data":{"outputs":[{"valueType":"string","description":"回复内容原样输出。","label":"回复内容","type":"source","value":"","targets":[],"key":"text"},{"valueType":"boolean","description":"运行完成后开关打开，下游链接组件开始运行。","label":"模块运行结束","type":"source","targets":[{"targetHandle":"switchAny","target":"fbee9bd9-90ef-4cf6-889a-d2816e326ace"}],"key":"finish"}],"moduleType":"confirmreply","inputs":[{"connected":true,"valueType":"boolean","description":"同时满足上游所有条件方可激活当前组件执行逻辑","label":"联动激活","type":"target","keyType":"trigger","value":false,"key":"switch"},{"connected":true,"valueType":"boolean","description":"同时满足上游任一条件即可激活当前组件执行逻辑","label":"任一激活","type":"target","keyType":"triggerAny","value":false,"key":"switchAny"},{"connected":false,"valueType":"boolean","description":"控制回复内容是否输出给用户","label":"回复对用户可见","type":"switch","value":true,"key":"stream"},{"connected":true,"valueType":"string","description":"可以使用 \\n 来实现连续换行。\n\n可以通过外部模块输入实现回复，外部模块输入时会覆盖当前填写的内容。引用变量：{{text}}","label":"回复内容","type":"textarea","value":"我是:[python[\nname=\"邹鹏飞py\"\nreturn name\n]python]\n他是:[py[\nname=\"张三py\"\nreturn name\n]py]\n都来自国家py：[py[\nimport json\ndata=json.loads(params['data'])\nreturn data['cou']\n]py]","key":"text"}],"intro":"结合触发条件使用，输出预设内容或输出上游模块接入内容。","name":"确定回复","disabled":false,"category":"大模型"}},{"id":"fbee9bd9-90ef-4cf6-889a-d2816e326ace","type":"custom","initialized":false,"position":{"x":1547.128297872341,"y":456.58283687943265},"data":{"outputs":[{"valueType":"boolean","description":"代码执行成功","label":"执行成功","type":"source","targets":[],"key":"_runSuccess_"},{"valueType":"boolean","description":"代码执行异常","label":"执行异常","type":"source","targets":[],"key":"_runFailed_"},{"valueType":"string","description":"代码执行的全部结果","label":"执行结果","type":"source","targets":[{"targetHandle":"text","target":"eb6f8e79-f715-4f98-8f50-3c7ec17c559e"}],"key":"_runResult_"},{"valueType":"boolean","description":"运行完成后开关打开,下游链接组件开始运行。","label":"模块运行结束","type":"source","targets":[],"key":"finish","required":false}],"moduleType":"codeFragment","inputs":[{"connected":true,"valueType":"boolean","description":"同时满足上游所有条件方可激活当前组件执行逻辑","label":"联动激活","type":"target","keyType":"trigger","value":false,"key":"switch"},{"connected":true,"valueType":"boolean","description":"同时满足上游任一条件即可激活当前组件执行逻辑","label":"任一激活","type":"target","keyType":"triggerAny","value":false,"key":"switchAny"},{"valueType":"string","options":[{"label":"javascript","value":"js"},{"label":"python","value":"python"}],"description":"选择编程语言","label":"语言","type":"radio","value":"js","key":"_language_"},{"connected":false,"valueType":"string","description":"代码描述，非必填","label":"代码描述","type":"textarea","key":"_description_"},{"connected":false,"valueType":"string","description":"用户编写的函数，Python函数名需指定为userFunction，输入输出为Key-Value数据类型，Key为String类型，Key和入参和岀参的设置对应","label":"代码内容","type":"textarea","value":"(\n      function userFunction(param) { \n        var input1 = \"js-\";\n        var result = {};\n        result['output_key'] = input1 + \" append string\";\n        return result;\n      }\n )","key":"_code_"}],"intro":"通过编写代码对输入数据进行精确的处理与加工","name":"代码块","disabled":false,"category":"高阶能力"}},{"id":"7c069630-d12b-4b6c-84cd-273c7f70ef34","type":"custom","initialized":false,"position":{"x":2390.8722965152083,"y":468.53304964539007},"data":{"outputs":[{"valueType":"boolean","description":"代码执行成功","label":"执行成功","type":"source","targets":[],"key":"_runSuccess_"},{"valueType":"boolean","description":"代码执行异常","label":"执行异常","type":"source","targets":[],"key":"_runFailed_"},{"valueType":"string","description":"代码执行的全部结果","label":"执行结果","type":"source","targets":[{"targetHandle":"text","target":"6575bbfe-4bd1-44c0-aa4f-fdca4475b74d"}],"key":"_runResult_"},{"valueType":"boolean","description":"运行完成后开关打开,下游链接组件开始运行。","label":"模块运行结束","type":"source","targets":[],"key":"finish","required":false}],"moduleType":"codeFragment","inputs":[{"connected":true,"valueType":"boolean","description":"同时满足上游所有条件方可激活当前组件执行逻辑","label":"联动激活","type":"target","keyType":"trigger","value":false,"key":"switch"},{"connected":true,"valueType":"boolean","description":"同时满足上游任一条件即可激活当前组件执行逻辑","label":"任一激活","type":"target","keyType":"triggerAny","value":false,"key":"switchAny"},{"valueType":"string","options":[{"label":"javascript","value":"js"},{"label":"python","value":"python"}],"description":"选择编程语言","label":"语言","type":"radio","value":"python","key":"_language_"},{"connected":false,"valueType":"string","description":"代码描述，非必填","label":"代码描述","type":"textarea","key":"_description_"},{"connected":false,"valueType":"string","description":"用户编写的函数，Python函数名需指定为userFunction，输入输出为Key-Value数据类型，Key为String类型，Key和入参和岀参的设置对应","label":"代码内容","type":"textarea","value":"\nfrom datetime import datetime\ndef userFunction(params):\n  dt = datetime.strptime(\"2024-03-13 16:18:23\", \"%Y-%m-%d %H:%M:%S\")\n  unix_timestamp = dt.timestamp()\n  result = {}\n  result['output_key'] = \"python-\" + \" append python\"\n  return result\n        ","key":"_code_"}],"intro":"通过编写代码对输入数据进行精确的处理与加工","name":"代码块","disabled":false,"category":"高阶能力"}},{"id":"eb6f8e79-f715-4f98-8f50-3c7ec17c559e","type":"custom","initialized":false,"position":{"x":1990.283491249933,"y":599.1120988478598},"data":{"outputs":[{"valueType":"string","description":"回复内容原样输出。","label":"回复内容","type":"source","value":"","targets":[],"key":"text"},{"valueType":"boolean","description":"运行完成后开关打开，下游链接组件开始运行。","label":"模块运行结束","type":"source","targets":[{"targetHandle":"switchAny","target":"7c069630-d12b-4b6c-84cd-273c7f70ef34"}],"key":"finish"}],"moduleType":"confirmreply","inputs":[{"connected":true,"valueType":"boolean","description":"同时满足上游所有条件方可激活当前组件执行逻辑","label":"联动激活","type":"target","keyType":"trigger","value":false,"key":"switch"},{"connected":true,"valueType":"boolean","description":"同时满足上游任一条件即可激活当前组件执行逻辑","label":"任一激活","type":"target","keyType":"triggerAny","value":false,"key":"switchAny"},{"connected":false,"valueType":"boolean","description":"控制回复内容是否输出给用户","label":"回复对用户可见","type":"switch","value":true,"key":"stream"},{"connected":true,"valueType":"string","description":"可以使用 \\n 来实现连续换行。\n\n可以通过外部模块输入实现回复，外部模块输入时会覆盖当前填写的内容。引用变量：{{text}}","label":"回复内容","type":"textarea","value":"您可以输入希望用户看到的内容，当触发条件判定成立，将显示您输入的内容。","key":"text"}],"intro":"结合触发条件使用，输出预设内容或输出上游模块接入内容。","name":"确定回复","disabled":false,"category":"大模型"}},{"id":"6575bbfe-4bd1-44c0-aa4f-fdca4475b74d","type":"custom","initialized":false,"position":{"x":3003.8240851329815,"y":675.4001005379815},"data":{"outputs":[{"valueType":"string","description":"回复内容原样输出。","label":"回复内容","type":"source","value":"","targets":[],"key":"text"},{"valueType":"boolean","description":"运行完成后开关打开，下游链接组件开始运行。","label":"模块运行结束","type":"source","targets":[],"key":"finish"}],"moduleType":"confirmreply","inputs":[{"connected":true,"valueType":"boolean","description":"同时满足上游所有条件方可激活当前组件执行逻辑","label":"联动激活","type":"target","keyType":"trigger","value":false,"key":"switch"},{"connected":true,"valueType":"boolean","description":"同时满足上游任一条件即可激活当前组件执行逻辑","label":"任一激活","type":"target","keyType":"triggerAny","value":false,"key":"switchAny"},{"connected":false,"valueType":"boolean","description":"控制回复内容是否输出给用户","label":"回复对用户可见","type":"switch","value":true,"key":"stream"},{"connected":true,"valueType":"string","description":"可以使用 \\n 来实现连续换行。\n\n可以通过外部模块输入实现回复，外部模块输入时会覆盖当前填写的内容。引用变量：{{text}}","label":"回复内容","type":"textarea","value":"您可以输入希望用户看到的内容，当触发条件判定成立，将显示您输入的内容。","key":"text"}],"intro":"结合触发条件使用，输出预设内容或输出上游模块接入内容。","name":"确定回复","disabled":false,"category":"大模型"}},{"id":"5deb947b-b0f1-4bfa-9ff8-6403155e5ec8","type":"custom","initialized":false,"position":{"x":560.9398340489695,"y":1176.7363588472206},"data":{"outputs":[],"moduleType":"addMemoryVariable","inputs":[{"connected":true,"valueType":"string","description":"","label":"data","type":"agentMemoryVar","targets":[],"key":"data"}],"intro":"使用该组件将变量存为记忆变量后，可以在智能体的其他组件中引用","name":"添加记忆变量","category":"高阶能力"}},{"id":"59427879-f101-4629-a670-2bcad6fdb33c","type":"custom","initialized":false,"position":{"x":78.98587206336629,"y":528.0111113873488},"data":{"outputs":[{"valueType":"string","description":"回复内容原样输出。","label":"回复内容","type":"source","value":"","targets":[{"targetHandle":"data","target":"5deb947b-b0f1-4bfa-9ff8-6403155e5ec8"}],"key":"text"},{"valueType":"boolean","description":"运行完成后开关打开，下游链接组件开始运行。","label":"模块运行结束","type":"source","targets":[{"targetHandle":"switchAny","target":"0c533ed9-360b-49dd-80f2-086083862eee"}],"key":"finish"}],"moduleType":"confirmreply","inputs":[{"connected":true,"valueType":"boolean","description":"同时满足上游所有条件方可激活当前组件执行逻辑","label":"联动激活","type":"target","keyType":"trigger","value":false,"key":"switch"},{"connected":true,"valueType":"boolean","description":"同时满足上游任一条件即可激活当前组件执行逻辑","label":"任一激活","type":"target","keyType":"triggerAny","value":false,"key":"switchAny"},{"connected":false,"valueType":"boolean","description":"控制回复内容是否输出给用户","label":"回复对用户可见","type":"switch","value":false,"key":"stream"},{"connected":true,"valueType":"string","description":"可以使用 \\n 来实现连续换行。\n\n可以通过外部模块输入实现回复，外部模块输入时会覆盖当前填写的内容。引用变量：{{text}}","label":"回复内容","type":"textarea","value":"{\n  \"cou\":\"China\"\n}","key":"text"}],"intro":"结合触发条件使用，输出预设内容或输出上游模块接入内容。","name":"确定回复","disabled":false,"category":"大模型"}}],"edges":[{"id":"vueflow__edge-0c533ed9-360b-49dd-80f2-086083862eeefinish-f1c54919-8aab-4a69-a2da-783da604bcf8switchAny","type":"custom","source":"0c533ed9-360b-49dd-80f2-086083862eee","target":"f1c54919-8aab-4a69-a2da-783da604bcf8","sourceHandle":"finish","targetHandle":"switchAny","data":{},"label":"","sourceX":882.8681461415396,"sourceY":1045.8303368794325,"targetY":662.3321210106383,"targetX":1009.3521276595748,"animated":false},{"id":"vueflow__edge-f1c54919-8aab-4a69-a2da-783da604bcf8finish-fbee9bd9-90ef-4cf6-889a-d2816e326aceswitchAny","type":"custom","source":"f1c54919-8aab-4a69-a2da-783da604bcf8","target":"fbee9bd9-90ef-4cf6-889a-d2816e326ace","sourceHandle":"finish","targetHandle":"switchAny","data":{},"label":"","sourceX":1337.3521276595748,"sourceY":1052.824247475482,"targetY":585.2781493794326,"targetX":1545.128297872341,"animated":false},{"id":"vueflow__edge-fbee9bd9-90ef-4cf6-889a-d2816e326ace_runResult_-eb6f8e79-f715-4f98-8f50-3c7ec17c559etext","type":"custom","source":"fbee9bd9-90ef-4cf6-889a-d2816e326ace","target":"eb6f8e79-f715-4f98-8f50-3c7ec17c559e","sourceHandle":"_runResult_","targetHandle":"text","data":{},"label":"","sourceX":1903.1284199426534,"sourceY":1137.3718383442765,"targetY":907.4011613478598,"targetX":1986.283491249933,"animated":false},{"id":"vueflow__edge-eb6f8e79-f715-4f98-8f50-3c7ec17c559efinish-7c069630-d12b-4b6c-84cd-273c7f70ef34switchAny","type":"custom","source":"eb6f8e79-f715-4f98-8f50-3c7ec17c559e","target":"7c069630-d12b-4b6c-84cd-273c7f70ef34","sourceHandle":"finish","targetHandle":"switchAny","data":{},"label":"","sourceX":2314.283491249933,"sourceY":1128.2995378127034,"targetY":597.2283621453901,"targetX":2388.8722965152083,"animated":false},{"id":"vueflow__edge-7c069630-d12b-4b6c-84cd-273c7f70ef34_runResult_-6575bbfe-4bd1-44c0-aa4f-fdca4475b74dtext","type":"custom","source":"7c069630-d12b-4b6c-84cd-273c7f70ef34","target":"6575bbfe-4bd1-44c0-aa4f-fdca4475b74d","sourceHandle":"_runResult_","targetHandle":"text","data":{},"label":"","sourceX":2746.8722965152083,"sourceY":1149.32211214539,"targetY":983.6892240731378,"targetX":2999.8240851329815,"animated":false},{"id":"vueflow__edge-simpleInputIdfinish-59427879-f101-4629-a670-2bcad6fdb33cswitchAny","type":"custom","source":"simpleInputId","target":"59427879-f101-4629-a670-2bcad6fdb33c","sourceHandle":"finish","targetHandle":"switchAny","data":{},"label":"","animated":false,"sourceX":-28.36199373983152,"sourceY":1117.395155141844,"targetX":74.98579046749343,"targetY":666.7063514362615},{"id":"vueflow__edge-59427879-f101-4629-a670-2bcad6fdb33cfinish-0c533ed9-360b-49dd-80f2-086083862eeeswitchAny","type":"custom","source":"59427879-f101-4629-a670-2bcad6fdb33c","target":"0c533ed9-360b-49dd-80f2-086083862eee","sourceHandle":"finish","targetHandle":"switchAny","data":{},"label":"","animated":false,"sourceX":402.98541875025194,"sourceY":1057.1982186005216,"targetX":554.8680851063833,"targetY":655.3381493794325},{"id":"vueflow__edge-59427879-f101-4629-a670-2bcad6fdb33ctext-5deb947b-b0f1-4bfa-9ff8-6403155e5ec8data","type":"custom","source":"59427879-f101-4629-a670-2bcad6fdb33c","target":"5deb947b-b0f1-4bfa-9ff8-6403155e5ec8","sourceHandle":"text","targetHandle":"data","data":{},"label":"","animated":false,"sourceX":402.98541875025194,"sourceY":1011.198042313443,"targetX":556.9397524530966,"targetY":1261.6347308949423}],"position":[156.45714377303506,100.21362836988743],"zoom":0.2918043999166089,"viewport":{"x":156.45714377303506,"y":100.21362836988743,"zoom":0.2918043999166089}}
+
+
+5.3 知识库进阶 - 高级查询示例
+知识库搜索组件的信息输入支持高级查询设置，支持分组并行召回、指定文件召回、不同分组不同权重和相似度设置等。
+示例如下：
+JSON{  "keywords": "2025年3月18日晚峰短信的内容是什么？",  "overwrite": "true",  // 可以固定指定，也可以通过{{$kbIdList}}获取用户选择的知识库ID列表动态指定  "kbIdList": [2,3,4,5,6],  "searchGroups": [    {      "kbIdList": [        5      ],      "topK": 22,      "fileNameKeywords": [        "特高压",        "运行规定"      ]    },    {      "kbIdList": [2,3,4,5,6],      "topK": 6    }  ]}
+高阶查询字段解释说明
+	•	keywords 查询关键词
+	•	overwrite 是否覆盖知识库搜索组件选定的知识库，默认true, 如果为false,则会将知识库搜索组件选定的知识库与kbIdList合并
+	•	kbIdList 指定知识库ID全集，如果有searchGroups则会跟每个searchGroups取交集进行分组。可以固定指定，也可以通过{{$kbIdList}}获取用户选择的知识库ID列表动态指定
+	•	searchGroups[] 分组数组，对知识库进行分组并行查询
+	•	kbIdList[] 知识库ID数组，指定该分组的知识库ID
+	•	topK 召回数
+	•	fileNameKeywords[]  指定文件名关键词模糊搜索，%代表模糊匹配的部分，示例：%年%月%晚峰短信
+	•	fileNameKeywordsTopK 指定文件相关切片召回数，默认等于topK，代表从fileNameKeywords指定的文件召回切片的数量，如若这个数量小于topK则，(topK-fileNameKeywordsTopK)代表同一个库下非指定文件召回切片的数量；
+	•	similar 相似度阈值，默认与知识库搜索组件的值一致
+	•	vectorSimilarWeight 向量相似度权重，默认与知识库搜索组件的值一致
+	•	enableRerank 重排序开关,true/flase，默认与知识库搜索组件的值一致
+	•	rerankModelType 重排序模型，默认与知识库搜索组件的值一致
+	•	rerankSimilarLimit  重排序阈值,，默认与知识库搜索组件的值一致
+	•	rerankTopK 重排序召回数，默认与知识库搜索组件的值一致
+
+5.4 数据类型转换
+转换方式：通过信息处理组件转换
+
+5.4.1 图片URL地址转换为图片信息类型
+JSON[{"url":"http://你的图片URL地址"}]
+5.4.1 文件URL地址转换为文件信息类型
+JSON[  {    "fileName": "你的文件名.docx",     "fileUrl": "https://你的文件URL地址"  }]
+
+5.5 数据处理协议（v1.9.0.0+）
+支持的组件有：确定回复、代码块、自定义组件的输出字段
+实现方法：
+将字段值组装为特定协议的数据结构
+	•	schema 固定值schema-v1，系统用于识别该数据处理协议，以扩展实现不同的功能用途
+	•	type 数据类型
+	•	text：文本、markdown
+	•	file：文件
+	•	image：图片
+	•	websearch：Web搜索
+	•	needSendMessage 是否需要发送消息，true/false; 系统会根据数据类型发送对应的消息格式响应给终端用户
+	•	needEncryptFileUrl 是否返回加密了文件流的下载地址，开启了加密服务的才生效。如果客户没有文件流加密服务，则加密服务需要定制开发。
+	•	needFullFileUrl 是否返回文件下载地址的绝对路径，默认false(下载地址的相对路径)
+	•	value 数据的值
+	•	文本类型直接赋值字符串值即可
+	•	文件和图片类需要赋值json结构{"fileName": "your_file_name","fileUrl": "your_file_url"}， fileUrl支持本地文件、Base64、HTTP等三种协议的数据：
+	•	本地临时文件协议（存储后删除）：tmpfile:/mindSynth/xxxx.docx
+	•	本地持久文件协议：psfile:/mindSynth/xxxx.docx
+	•	Base64数据流：data:xxxxx
+	•	网络文件流协议：http://xxxx; https://xxxx
+5.5.1 text: 普通文本/markdown类
+JSON{    "schema": "schema-v1",    "type": "text",    "needSendMessage": true,    "needEncryptFileUrl": false,    "value": "message"}
+5.5.2 file: 文件类
+JSONJavascript版本{    "schema": "schema-v1",    "type": "file",    "needSendMessage": false,    "needEncryptFileUrl": false,    "needFullFileUrl": false,    "value": {                "fileName": your_file_name,                "fileUrl": "tempfile" + your_file_url            }}
+
+PythonPython版本{    "schema": "schema-v1",    "type": "file",    "needSendMessage": True, # 返回文件卡片消息    "needEncryptFileUrl": False,    "needFullFileUrl": True,  # 返回完整文件URL    "value": {            "fileName": your_file_name,            "fileUrl": "tempfile" + your_file_url    }}
+5.5.3 image: 图片类
+JSON{    "schema": "schema-v1",    "type": "image",    "needSendMessage": true,    "needEncryptFileUrl": false,    "needFullFileUrl": true,     "value": {                "fileName": your_imagefile_name,                "fileUrl": your_imagefile_url            }}
+
+5.5.4 websearch: Web搜索
+JSON{    "schema": "schema-v1",    "type": "websearch",    "needSendMessage": true,    "value": [        {"title":"网页标题1",         "url":"网页链接1",         "snippet":"网页摘要1",         "siteIcon":"网站icon1"        },{"title":"网页标题2",         "url":"网页链接2",         "snippet":"网页摘要2",         "siteIcon":"网站icon2"        }    ]}
+示例：代码块生成随机文件并发送文件消息
+Pythonimport jsonimport osimport uuiddef userFunction(params):    result = {}    try:        # 生成随机文本        random_text = str(uuid.uuid4())                # 生成随机文件名        random_filename = str(uuid.uuid4()) + '.txt'                # 获取当前目录并拼接文件路径        current_dir = os.getcwd()        file_path = os.path.join(current_dir, random_filename)                # 写入文件        with open(file_path, 'w') as f:            f.write(random_text)                # 返回绝对路径        result['file_info'] = {            "schema": "schema-v1",            "type": "file",            "needSendMessage": True,            "needEncryptFileUrl": False,            "needFullFileUrl": True,             "value": {                "fileName": random_filename,                "fileUrl": 'tmpfile:' + os.path.abspath(file_path)             }        }    except Exception as e:        result['error'] = f'生成文件失败: {str(e)}'    return result
+5.6 Excel导出模板使用说明
+使用"Excel生成"组件可以使用JSON数据填充XLSX模板，具体语法和样例模板如下
+5.6.1. 占位符替换
+格式： {{expression}}
+在 Excel 单元格中直接使用占位符来替换数据
+支持的数据访问方式：
+	•	简单变量：{{var1}}
+	•	嵌套对象：{{other.var3}}
+	•	数组元素：{{list1.[0].var1}}
+	•	深层嵌套：{{data.user.profile.name}}
+5.6.2. 纵向循环（区域循环）
+格式： <for item in list>...</for>
+用于在垂直方向生成多行数据：
+Plain Text<for item in list1>{{item.var1}}  {{item.var2}}  {{item.detail.var3}}</for>
+特点：
+	•	自动根据数据数组长度生成对应行数
+	•	支持多行模板（在循环区域内定义多行）
+	•	支持在循环内使用嵌套对象和数组
+5.6.3. 横向循环
+格式： <hfor item in list>...</hfor>
+用于在水平方向生成多列数据：
+Plain Text<hfor item in demo.list2>{{item.var1}}  {{item.detail.var2}}</hfor>
+特点：
+	•	数据向右展开成多列
+	•	适用于表头或横向数据展示
+	•	循环变量 item 代表当前遍历的数据项
+5.6.4. 图片插入
+格式： {{@expression}}
+在 Excel 形状中使用图片占位符：
+Plain Text{{@imgurl1}}                // 静态图片{{@item.aaImage}}           // 循环中的动态图片{{@data.other.imgurl2}}     // 嵌套对象中的图片
+支持的图片格式：
+	•	URL图片：https://example.com/image.jpg
+	•	Base64格式：data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA...
+图片处理特性：
+	•	自动识别图片格式（PNG、JPEG）
+	•	图片自动适应单元格大小
+	•	支持在循环中动态插入图片
+	•	保持原始形状的位置和尺寸信息
+5.6.5. 模板示例和输入参数示例
+[新模版.xlsx]
+[渲染数据.json]
+
+5.7 Word文档生成组件使用语法参考
+https://deepoove.com/poi-tl/

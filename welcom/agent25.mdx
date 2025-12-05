@@ -1,432 +1,730 @@
 ---
-title: "システム組み込み関数と変数の説明"
-description: "システムで利用可能な組み込み関数と変数の詳細ガイド"
+title: "💾 システム変数 & 関数"
+description: "システムで利用可能な組み込み関数、変数、および高度なドキュメント生成機能の完全ガイド"
 ---
 
-# システム組み込み変数
-
-## 基本的な使用方法
-
-変数を参照する場合は `{{var}}` の形式を使用します。
-
-| 変数名 | 説明 | 例 |
-|:-----------|:------------|:------------|
-| `{{cTime}}` | 現在の日時（yyyy-MM-dd HH:mm:ss形式） | `2023-04-01 12:30:45` |
-| `{{cMills}}` | 現在のUNIXタイムスタンプ（ミリ秒） | `1680345045000` |
-| `{{cWeekdayNum}}` | 曜日（数字表現） | `1`（月曜日）～`7`（日曜日） |
-| `{{cWeekdayEn}}` | 曜日（英語表現） | `Monday`, `Tuesday`など |
-| `{{cWeekdayEn2}}` | 曜日（英語略語） | `Mon`, `Tue`など |
-| `{{cWeekdayCn}}` | 曜日（中国語表現） | `星期一`, `星期二`など |
-
-# システム組み込み関数
-
-## 基本的な使用方法
-
-関数を呼び出すには以下の形式を使用します：
-
-```
-[@["関数名", "引数1", "引数2", ...]@]
-```
-
-## 日時関連の関数
-
-日付や時間を操作・変換するための関数群です。
-
-### ミリ秒から日時への変換
-
-`DateFormatFromMills` - ミリ秒単位のタイムスタンプを指定した日時形式に変換します。
-
-**構文:**
-```
-[@["DateFormatFromMills", "ミリ秒", "フォーマット"]@]
-```
-
-**例:**
-```
-[@["DateFormatFromMills", "1680345045000", "yyyy-MM-dd"]@]
-```
-
-### 秒から日時への変換
-
-`DateFormatFromSeconds` - 秒単位のタイムスタンプを指定した日時形式に変換します。
-
-**構文:**
-```
-[@["DateFormatFromSeconds", "秒", "フォーマット"]@]
-```
-
-**例:**
-```
-[@["DateFormatFromSeconds", "1680345045", "yyyy-MM-dd"]@]
-```
-
-### 日時文字列からミリ秒への変換
-
-`DateStrToMills` - 日時文字列をミリ秒単位のタイムスタンプに変換します。
-
-**構文:**
-```
-[@["DateStrToMills", "日時文字列", "日時フォーマット"]@]
-```
-
-**例:**
-```
-[@["DateStrToMills", "2023-04-01", "yyyy-MM-dd"]@]
-```
-
-### 日時文字列から秒への変換
-
-`DateStrToSeconds` - 日時文字列を秒単位のタイムスタンプに変換します。
-
-**構文:**
-```
-[@["DateStrToSeconds", "日時文字列", "日時フォーマット"]@]
-```
-
-**例:**
-```
-[@["DateStrToSeconds", "2023-04-01", "yyyy-MM-dd"]@]
-```
-
-### 日時文字列のフォーマット変換
-
-`DateStrReFormat` - 日時文字列を異なるフォーマットに変換します。
-
-**構文:**
-```
-[@["DateStrReFormat", "日時文字列", "変換後フォーマット", "変換前フォーマット(省略可)"]@]
-```
-
-**例:**
-```
-[@["DateStrReFormat", "2023-04-01", "MM/dd/yyyy"]@]
-```
-
-### 現在日時からの日数加減算
-
-`GetDateFromNow` - 現在日時から指定した日数を加減算します。
-
-**構文:**
-```
-[@["GetDateFromNow", "加減算日数"]@]
-```
-
-**例:**
-```
-[@["GetDateFromNow", "7"]@]
-```
-
-### 自然言語から日時への変換
-
-`JionlpParseTime` - 自然言語表現を日時に変換します。
-
-**構文:**
-```
-[@["JionlpParseTime", "テキスト"]@]
-```
-
-**例:**
-```
-[@["JionlpParseTime", "今天"]@]
-```
-
-
-## 文字列処理関数
-
-テキストデータを操作・加工するための関数群です。
-
-### 指定文字列間のテキスト抽出
-
-`ExtractAroundStr` - 指定された開始文字列と終了文字列の間のテキストを抽出します。
-
-**構文:**
-```
-[@["ExtractAroundStr", "テキスト", "開始文字列", "終了文字列"]@]
-```
-
-**例:**
-```
-[@["ExtractAroundStr", "Hello World", "Hello", "World"]@]
-```
-
-### 文字列置換
-
-`Replace` - 文字列内の特定部分を置換します。
-
-**構文:**
-```
-[@["Replace", "テキスト", "置換対象", "置換後"]@]
-```
-
-**例:**
-```
-[@["Replace", "Hello World", "World", "Earth"]@]
-```
-
-### 正規表現による文字列置換
-
-`ReplaceRegex` - 正規表現にマッチする部分を置換します。
-
-**構文:**
-```
-[@["ReplaceRegex", "テキスト", "正規表現", "置換後"]@]
-```
-
-**例:**
-```
-[@["ReplaceRegex", "Hello 123", "\\d+", "World"]@]
-```
-
-### 文字列エスケープ
-
-`EscapeStr` - 特殊文字をエスケープします。
-
-**構文:**
-```
-[@["EscapeStr", "テキスト"]@]
-```
-
-**例:**
-```
-[@["EscapeStr", "Hello \"World\""]@]
-```
-
-### 文字列結合
-
-`Concat` - 複数の文字列を1つに結合します。
-
-**構文:**
-```
-[@["Concat", "テキスト1", "テキスト2", ...]@]
-```
-
-**例:**
-```
-[@["Concat", "Hello", " ", "World"]@]
-```
-
-### 配列結合
-
-`ConcatArray` - 複数の配列を1つに結合します。
-
-**構文:**
-```
-[@["ConcatArray", "配列1", "配列2", ...]@]
-```
-
-**例:**
-```
-[@["ConcatArray", "[1,2]", "[3,4]"]@]
-```
-
-## URL関連の関数
-
-URL操作のための関数群です。
-
-### URLエンコード
-
-`UrlEncode` - 文字列をURL用にエンコードします。
-
-**構文:**
-```
-[@["UrlEncode", "テキスト", "文字コード(デフォルトUTF-8)"]@]
-```
-
-**例:**
-```
-[@["UrlEncode", "Hello World"]@]
-```
-
-### URLデコード
-
-`UrlDecode` - URLエンコードされた文字列をデコードします。
-
-**構文:**
-```
-[@["UrlDecode", "テキスト", "文字コード(デフォルトUTF-8)"]@]
-```
-
-**例:**
-```
-[@["UrlDecode", "Hello%20World"]@]
-```
-
-## 正規表現関連の関数
-
-正規表現を使ったテキスト操作のための関数群です。
-
-### 正規表現で最初にマッチした文字列を抽出
-
-`ExtractStrByRegex` - 正規表現で最初にマッチした文字列を抽出します。
-
-**構文:**
-```
-[@["ExtractStrByRegex", "テキスト", "正規表現"]@]
-```
-
-**例:**
-```
-[@["ExtractStrByRegex", "abc123def", "\\d+"]@]
-```
-
-### 正規表現でマッチしたすべての文字列を抽出
-
-`ExtractArrByRegex` - 正規表現でマッチしたすべての文字列を抽出します。
-
-**構文:**
-```
-[@["ExtractArrByRegex", "テキスト", "正規表現"]@]
-```
-
-**例:**
-```
-[@["ExtractArrByRegex", "abc123def456", "\\d+"]@]
-```
-
-**正規表現について詳しく学ぶには：** [正規表現チュートリアル](https://www.runoob.com/regexp/regexp-tutorial.html)
-
-## JSON関連の関数
-
-JSON操作のための関数群です。
-
-### JSONオブジェクト抽出
-
-`ExtractJsonObj` - JSONPathを使ってJSONからデータを抽出します。
-
-**構文:**
-```
-[@["ExtractJsonObj", "テキスト", "JSONPath"]@]
-```
-
-**例:**
-```
-[@["ExtractJsonObj", "{\"name\":\"John\"}", "$.name"]@]
-```
-
-### JSON配列抽出
-
-`ExtractJsonArr` - JSONPathを使ってJSON配列を抽出します。
-
-**構文:**
-```
-[@["ExtractJsonArr", "テキスト", "JSONPath"]@]
-```
-
-**例:**
-```
-[@["ExtractJsonArr", "{\"items\":[1,2,3]}", "$.items"]@]
-```
-
-### 正規表現でJSONを抽出
-
-`ExtractJsonByRegex` - 正規表現を使ってJSONを抽出します。
-
-**構文:**
-```
-[@["ExtractJsonByRegex", "テキスト", "JSON_キー1", "キー1正規表現", "JSON_キー2", "キー2正規表現"]@]
-```
-
-**例:**
-```
-[@["ExtractJsonByRegex", "text", "id", "\\d+", "name", "[a-z]+"]@]
-```
-
-**JSONPathについて詳しく学ぶには：** [JSONPath オンラインエバリュエータ](https://jsonpath.com/)
-
-## 条件分岐関数
-
-条件に基づいた値の選択のための関数群です。
-
-### 条件分岐（Case When Then）
-
-`CaseWhenThen` - 複数の条件と値のペアから条件に一致する値を返します。
-
-**構文:**
-```
-[@["CaseWhenThen", "比較値", "条件値1", "結果1", "条件値2", "結果2", ..., "デフォルト値"]@]
-```
-
-**例:**
-```
-[@["CaseWhenThen", "A", "A", "選択肢A", "B", "選択肢B", "その他"]@]
-```
-
-### 条件分岐（大文字小文字区別なし）
-
-`CaseWhenThenIgnoreCase` - 大文字小文字を区別せずに条件分岐します。
-
-**構文:**
-```
-[@["CaseWhenThenIgnoreCase", "比較値", "条件値1", "結果1", ...]@]
-```
-
-**例:**
-```
-[@["CaseWhenThenIgnoreCase", "a", "A", "選択肢A"]@]
-```
-
-### いずれかの値と等しいか
-
-`EqualsAny` - 値がリストのいずれかと一致するかを確認します。
-
-**構文:**
-```
-[@["EqualsAny", "比較値", "値1", "値2", ...]@]
-```
-
-**例:**
-```
-[@["EqualsAny", "A", "A", "B", "C"]@]
-```
-
-### いずれかの値と等しいか（大文字小文字区別なし）
-
-`EqualsAnyIgnoreCase` - 大文字小文字を区別せずに値の一致を確認します。
-
-**構文:**
-```
-[@["EqualsAnyIgnoreCase", "比較値", "値1", "値2", ...]@]
-```
-
-**例:**
-```
-[@["EqualsAnyIgnoreCase", "a", "A", "B"]@]
-```
-
-## その他の関数
-
-その他の特殊な目的のための関数です。
-
-### テキストから応答言語を自動判定
-
-`AutoSpecifyResponseLanguage` - テキストから言語を自動判定します。
-
-**構文:**
-```
-[@["AutoSpecifyResponseLanguage", "テキスト", "デフォルト言語(EN/CN)"]@]
-```
-
-**例:**
-```
-[@["AutoSpecifyResponseLanguage", "こんにちは", "EN"]@]
-```
-
-### RSA暗号化
-
-`RSAEncode` - テキストをRSA公開鍵で暗号化します。
-
-**構文:**
-```
-[@["RSAEncode", "テキスト", "公開鍵"]@]
-```
-
-**例:**
-```
-[@["RSAEncode", "secret", "MIGfMA..."]@]
-```
-
-## 関連資料
-
-- [自然言語日時変換の解説](https://github.com/dongrixinyu/JioNLP/wiki/%E6%97%B6%E9%97%B4%E8%AF%AD%E4%B9%89%E8%A7%A3%E6%9E%90-%E8%AF%B4%E6%98%8E%E6%96%87%E6%A1%A3)
-- [正規表現チュートリアル](https://www.runoob.com/regexp/regexp-tutorial.html)
-- [JSONPath オンラインエバリュエータ](https://jsonpath.com/)
+## 📊 1. システム組み込み変数
+<Accordion title="詳細を表示">
+    ### 使用方法
+    - `{{var}}`: 変数を参照します。
+    - `{{var:defaultValue}}`: 変数を参照し、存在しない場合のデフォルト値を設定します。
+    - `{{@var}}`: 変数を参照しますが、変数が存在しない場合でもこの式 `{{@var}}` をそのまま表示します。
+
+    | 変数名 | 説明 | 例 |
+    |:---|:---|:---|
+    | `{{cTime}}` | 現在の日時（yyyy-MM-dd HH:mm:ss） | `2023-04-01 12:30:45` |
+    | `{{cDate}}` | 現在の日付（yyyy-MM-dd） | `2023-04-01` |
+    | `{{cYear}}` | 現在の年（yyyy） | `2023` |
+    | `{{cMonth}}` | 現在の月 | `04` |
+    | `{{cDay}}` | 現在の日 | `01` |
+    | `{{cHHmmss}}` | 現在の時刻（HH:mm:ss） | `12:30:45` |
+    | `{{cMills}}` | 現在のUNIXタイムスタンプ（ミリ秒） | `1680345045000` |
+    | `{{cWeekdayNum}}` | 曜日（数字） | `1`（月）～`7`（日） |
+    | `{{cWeekdayEn}}` | 曜日（英語） | `Monday` |
+    | `{{cWeekdayEn2}}` | 曜日（英語略語） | `Mon` |
+    | `{{cWeekdayCn}}` | 曜日（中国語） | `星期一` |
+    | `{{_input}}` | すべての入力パラメータ情報 | - |
+    | `{{_state}}` | 入力状態パラメータ情報 | - |
+    | `{{userChatInput}}` | ユーザーの入力テキスト情報 | - |
+    | `{{_images_}}` | 入力画像パラメータ情報 | - |
+    | `{{_files_}}` | 入力ファイルパラメータ情報 | - |
+    | `{{$db_type}}` | エージェントが参照しているデータベースの種類 | - |
+    | `{{$db_schema}}` | エージェントが参照しているデータベースのスキーマ情報 | - |
+    | `{{$kbIdList}}` | ユーザーが選択したナレッジベースIDリスト | - |
+    | `{{systemContext}}` | 現在のシステム環境とログインユーザー情報 (v1.9.0.0+) | - |
+
+    <Accordion title="systemContext の例">
+    ```json
+    {
+      "su": {
+        "ext": {
+          "lastLoginTime": 1755164481495,
+          "currentLoginIp": "117.133.43.38",
+          "nickName": "matsui",
+          "userName": "matsui"
+        },
+        "avatarUrl": "/assets/avatar/56.png",
+        "id": 574
+      },
+      "locale": "zh_CN",
+      "token": "eyJhbGciOiJIUzI1NiIs..."
+    }
+    ```
+    </Accordion>
+</Accordion>
+
+## 🧮 2. システム組み込み関数
+<Accordion title="詳細を表示">
+    ### 使用方法
+    関数呼び出し形式: `[@["関数名", "引数1", "引数2", ...]@]`
+
+    <AccordionGroup>
+      <Accordion title="🕒 日時操作">
+        **DateFormatFromMills**
+        ミリ秒を日時にフォーマット
+        `[@["DateFormatFromMills", "ミリ秒", "フォーマット"]@]`
+
+        **DateFormatFromSeconds**
+        秒を日時にフォーマット
+        `[@["DateFormatFromSeconds", "秒", "フォーマット"]@]`
+
+        **DateStrToMills**
+        日時文字列をミリ秒に変換
+        `[@["DateStrToMills", "日時文字列", "フォーマット"]@]`
+
+        **DateStrToSeconds**
+        日時文字列を秒に変換
+        `[@["DateStrToSeconds", "日時文字列", "フォーマット"]@]`
+
+        **GetDateFromNow**
+        現在日時からの加減算（日数）
+        `[@["GetDateFromNow", "加減算日数"]@]`
+
+        **DateStrReFormat**
+        日時フォーマット変換
+        `[@["DateStrReFormat", "日時文字列", "変換後形式", "変換前形式(任意)"]@]`
+
+        **JionlpParseTime**
+        自然言語を日時に変換
+        `[@["JionlpParseTime", "今日"]@]`
+      </Accordion>
+
+      <Accordion title="📝 文字列操作">
+        **ExtractAroundStr**
+        指定文字列間のテキスト抽出
+        `[@["ExtractAroundStr", "テキスト", "開始文字", "終了文字", "境界を含むか(true|false)"]@]`
+
+        **ExtractStrByRegex**
+        正規表現で最初にマッチした文字列を抽出
+        `[@["ExtractStrByRegex", "テキスト", "正規表現"]@]`
+        [正規表現チュートリアル](https://www.runoob.com/regexp/regexp-tutorial.html)
+
+        **ExtractArrByRegex**
+        正規表現でマッチしたすべての文字列を抽出（配列）
+        `[@["ExtractArrByRegex", "テキスト", "正規表現"]@]`
+
+        **Replace**
+        文字列置換
+        `[@["Replace", "テキスト", "旧文字列", "新文字列"]@]`
+
+        **ReplaceRegex**
+        正規表現による置換
+        `[@["ReplaceRegex", "テキスト", "正規表現", "新文字列"]@]`
+
+        **EscapeStr**
+        文字列のエスケープ（JSON用など）
+        `[@["EscapeStr", "テキスト"]@]`
+        
+        例:
+        入力: `text={"dataList":[{"name":"東京支店","msg":"売上報告"}]}`
+        実行: `[@["EscapeStr","{{text}}"]@]`
+        結果: `{\"dataList\":[{\"name\":\"東京支店\",\"msg\":\"売上報告\"}]}`
+
+        **Concat**
+        文字列結合
+        `[@["Concat", "テキスト1", "テキスト2", ...]@]`
+
+        **Md5Digest**
+        MD5ハッシュ生成
+        `[@["Md5Digest", "テキスト"]@]`
+      </Accordion>
+
+      <Accordion title="🔗 JSON & URL操作">
+        **ExtractJsonObj**
+        JSONオブジェクト抽出 (JSONPath)
+        `[@["ExtractJsonObj", "JSONテキスト", "JSONPath"]@]`
+        [JSONPath Guide](https://jsonpath.com/)
+
+        **ExtractJsonArr**
+        JSON配列抽出
+        `[@["ExtractJsonArr", "JSONテキスト", "JSONPath"]@]`
+
+        **ExtractJsonByRegex**
+        正規表現でJSON抽出
+        `[@["ExtractJsonByRegex", "テキスト", "key1", "regex1", "key2", "regex2"]@]`
+
+        **UrlEncode**
+        URLエンコード
+        `[@["UrlEncode", "テキスト", "文字コード(デフォルトUTF-8)"]@]`
+
+        **UrlDecode**
+        URLデコード
+        `[@["UrlDecode", "テキスト", "文字コード(デフォルトUTF-8)"]@]`
+
+        **MergeObject**
+        データオブジェクトの結合
+        `[@["MergeObject", "obj1", "obj2", ...]@]`
+      </Accordion>
+
+      <Accordion title="⚖️ 条件分岐・その他">
+        **AutoSpecifyResponseLanguage**
+        応答言語の自動指定
+        `[@["AutoSpecifyResponseLanguage", "テキスト", "デフォルト言語(EN/CN)"]@]`
+
+        **RSAEncode**
+        RSA暗号化
+        `[@["RSAEncode", "テキスト", "公開鍵"]@]`
+
+        **CaseWhenThen**
+        条件分岐
+        `[@["CaseWhenThen", "値", "条件1", "結果1", "条件2", "結果2", ..., "デフォルト"]@]`
+
+        **CaseWhenThenIgnoreCase**
+        条件分岐（大文字小文字無視）
+        `[@["CaseWhenThenIgnoreCase", "値", "条件1", "結果1", ...]@]`
+
+        **EqualsAny**
+        いずれかと一致するか
+        `[@["EqualsAny", "値", "候補1", "候補2", ...]@]`
+
+        **EqualsAnyIgnoreCase**
+        いずれかと一致するか（大文字小文字無視）
+        `[@["EqualsAnyIgnoreCase", "値", "候補1", "候補2", ...]@]`
+
+        **ConcatArray**
+        配列結合
+        `[@["ConcatArray", "配列1", "配列2", ...]@]`
+
+        **ParseDocByTika**
+        Tikaによるファイル解析
+        `[@["ParseDocByTika", "FileInput[]"]@]`
+        
+        例:
+        入力: `[ { "fileName": "製品仕様書.docx", "fileType": "docx", "fileId": "..." } ]`
+        出力: `[{"content":"製品名：スマートウォッチ X1 主な機能：心拍計測、GPS搭載、防水機能...","fileId":"...","fileName":"製品仕様書.docx","success":true}]`
+
+        **FetchUrl**
+        Webページ内容の取得
+        `[@["FetchUrl", "UrlFetchReq[]"]@]`
+
+        入力例:
+        ```json
+        [{
+            "url": "https://example.com",
+            "timeout": 6666,
+            "xpath": [{"key":"title", "path":"//title/text()"}]
+        }]
+        ```
+
+        出力例:
+        ```json
+        [{
+            "url": "https://example.com",
+            "content": {"title": "Example Domain"},
+            "success": true
+        }]
+        ```
+      </Accordion>
+        </AccordionGroup>
+</Accordion>
+## 💻 3. 組み込みコマンド (Command)
+<Accordion title="詳細を表示">
+    メモリ変数にコマンドシグナルを送信することで、プラットフォーム内部サービスと対話できます。
+
+    ### 3.1 呼び出し方法
+
+    **方法1：コマンドシグナルの送信**
+    1. コマンドJSONを構築
+    ```json
+    {
+       "command": "command code",
+       "data": { ... },
+       "async": false
+    }
+    ```
+    2. メモリ変数（キーは `$command_xxx` で始まる必要あり）に接続。
+    3. 結果取得: `{{$command_xxx.result}}`
+
+    **方法2：関数式呼び出し**
+    ```
+    [$[ { "command": "...", "data": { ... } } ]$]
+    ```
+
+    ### 3.2 コマンドリスト
+
+    <CardGroup cols={1}>
+      <Card title="text2agent" icon="robot">
+        **エージェント作成**
+        `{"command":"text2agent", "data": {"agentJson":[]}}`
+        結果: エージェントID, 名前, アバターなど
+      </Card>
+      <Card title="userKb" icon="book">
+        **ユーザーナレッジベース一覧**
+        `{"command":"userKb", "data": {}}`
+        結果: ナレッジベースリスト
+      </Card>
+      <Card title="AddMessageMeta" icon="message">
+        **メッセージメタ情報追加**
+        ストリーミング出力にメタデータを付与します。
+        
+        **コマンドパラメータ:**
+        ```json
+        {
+           "command":"AddMessageMeta",
+           "data": {
+              "whenComplete": false,
+              "metadata": {"metaKey1" : "metaValue1","metaKey2" : "metaValue2"},
+              "beforeMetadata": {"metaKey1" : "metaValue1","metaKey2" : "metaValue2"},
+              "afterMetadata": {"metaKey1" : "metaValue1","metaKey2" : "metaValue2"}
+            }
+        }
+        ```
+        
+        **パラメータ説明:**
+        - **`whenComplete`**: 某コンポーネントの応答が完了したときのみメタ情報を付与するか（デフォルト: `false`）
+        - **`beforeMetadata`**: 前置メタデータ。コンポーネントが最初のトークンを返す時に付与される元情報（任意）。ユーザーが内部の属性と値を自由に定義できます
+        - **`metadata`**: メタデータ。すべてのストリーミング応答プロセスで付与される元情報。`whenComplete=true`の場合は、コンポーネントの応答完了時のみ付与されます（任意）。ユーザーが内部の属性と値を自由に定義できます
+        - **`afterMetadata`**: 後置メタデータ。コンポーネントの応答完了時のみ付与される元情報（任意）。ユーザーが内部の属性と値を自由に定義できます
+        
+        **注意:** ストリーミング出力には `metaMessage` フィールドが追加され、システム組み込み属性とユーザー定義メタデータが含まれます。
+        
+        **コマンド結果:** なし
+      </Card>
+    </CardGroup>
+</Accordion>
+## 🧩 4. コードブロック埋め込み
+<Accordion title="詳細を表示">
+    - `params['yourVar']`: 現在のメモリ変数を取得
+    - `return yourVar`: 値を返し、埋め込み場所に挿入
+
+    ### Python埋め込み
+    ```python
+    私は:[python[name="ユーザー" return name]python]
+    ```
+
+    ### JS埋め込み
+    ```javascript
+    私は:[js[name="ユーザー" return name]js]
+    ```
+</Accordion>
+## 💡 5. 使用テクニック
+<Accordion title="詳細を表示">
+    ### 5.1 プロンプト例（画像生成）
+    Stable Diffusion用のプロンプトを生成するアシスタントの例。
+
+    <Accordion title="Stable Diffusion Prompt Assistant">
+    ```text
+    # Stable Diffusion prompt Assistant
+    You'll be an artsy Stable Diffusion prompt assistant.
+    
+    # Task
+    1、 I use natural language to tell you the topic of the prompt to generate, your task is to imagine a complete picture according to this topic, and then transform it into a detailed, high-quality prompt, so that Stable Diffusion can produce a high-quality image.
+    2、 Translate written prompt words into English
+    3、Reply prompt only, returned as a string,Don't reply Negative Prompt
+    
+    ## Background
+    Stable Diffusion is a Vincennes diagram model that leverages deep learning and supports the use of prompt to produce new images describing the elements to be included or omitted.
+    
+    ## prompt concept
+    - A complete prompt contains one parts: "** Prompt:**" ".
+    - prompt is used to describe the image and consists of common words, using the English half corner "," as the separator.
+    - Each word or phrase separated by a "," is called a tag.  So prompt  are composed of a series of tags separated by ",".
+    
+    ## () and [] syntax
+    The equivalent way to adjust keyword strength is to use () and [].  (keyword) increases the strength of the tag by 1.1 times, the same as (keyword:1.1), and up to three layers can be added.  [keyword] reduces the strength by a factor of 0.9, the same as (keyword:0.9).
+    
+    ## Prompt format requirement
+    Below I describe the steps for generating prompt, which can be used to describe people, landscapes, objects, or abstract digital art drawings.  You can add as many details as you want, but no fewer than five.
+    
+    ### 1.  prompt request
+    - Your output Stable Diffusion prompt starts with "**Prompt:**".
+    - prompt contains the body of the picture, materials, additional details, image quality, art style, color tone, lighting, etc., but your output prompt cannot be broken up.  For example, a broken description like "medium:" is not required, nor can it contain ":" and ".".
+    - Subject of the picture: not brief English description of the subject of the picture, such as A girl in a garden, subject details (subject can be people, things, objects, scenery) the core content of the picture.  This section is generated based on the topic I give you each time.  You can add more reasonable details related to the topic.
+    - For the character theme, you must describe the eyes, nose, lips of the character, For example, 'beautiful detailed eyes,beautiful detailed lips,extremely detailed eyes and face,longeyelashes', It is important to avoid Stable Diffusion of random distorted facial features.  You can also describe the character's appearance, mood, clothes, posture, perspective, movement, background, etc.  In character attributes, 1girl means one girl and 2girls means two girls.
+    - Material: The material used to make the artwork.  Examples: illustration, oil painting, 3D rendering and photography.  Medium has a strong effect because a single keyword can dramatically change the style.
+    - Additional details: Scene details, or character details, describe the details of the picture, so that the image looks more substantial and reasonable.  This part is optional, pay attention to the overall harmony of the picture, can not conflict with the theme.
+    - Image quality: Always start this section with "(best Quality, 4 k, 8 k, highres, masterpiece: 1.2), ultra - the detailed, realistic, photorealistic, photo - realistic: 1.37), "this is a sign of high quality.  Other commonly used tags to improve quality are those that you can add according to the needs of the theme: HDR,UHD,studio lighting,ultra-fine painting,sharp focus,physically-based rendering,extreme detail  The description, professional, vivid colors, bokeh.
+    - Artistic Style: This section describes the style of the image.  Adding the right art style can enhance the resulting image.  Commonly used art style such as: portraits, landscape, horror, anime, sci - fi, photography, concept artists, etc.
+    - Color tone: Color, by adding color to control the overall color of the picture.
+    - Lighting: The lighting effect of the overall picture.
+    
+    ### 3.  Restrictions:
+    - tag content is described in English words or phrases, not limited to the words I give you.  Note that you can only
+    
+    ### 3. Description copy:{{text}}
+    ```
+    </Accordion>
+
+    ### 5.2 エージェント例
+    コードブロックを使用して、ユーザー入力を加工したり、外部APIの結果を処理するフローの例。
+
+    <Accordion title="Agent Flow JSON Example">
+    ```json
+    {
+      "nodes": [
+        {
+          "id": "simpleInputId",
+          "type": "custom",
+          "initialized": false,
+          "position": { "x": -352.36, "y": 352.41 },
+          "data": {
+            "outputs": [
+              { "valueType": "string", "description": "引用変数：{{userChatInput}}", "label": "テキスト情報", "type": "source", "targets": [], "key": "userChatInput" },
+              { "valueType": "file", "description": "ユーザーがアップロードしたドキュメントリストをJSON配列形式で出力...", "label": "ドキュメント情報", "type": "source", "targets": [], "key": "files" },
+              { "valueType": "image", "description": "ユーザーがアップロードした画像リストをJSON配列形式で出力", "label": "画像情報", "type": "source", "targets": [], "key": "images" },
+              { "valueType": "boolean", "description": "ボタン未クリック時にtrue", "label": "未クリックボタン", "type": "source", "targets": [], "key": "unclickedButton" },
+              { "valueType": "boolean", "description": "実行完了後にスイッチON", "label": "モジュール実行終了", "type": "source", "targets": [{ "targetHandle": "switchAny", "target": "59427879-f101-4629-a670-2bcad6fdb33c" }], "key": "finish" }
+            ],
+            "moduleType": "questionInput",
+            "inputs": [
+              { "connected": true, "valueType": "boolean", "label": "連動アクティブ", "type": "target", "keyType": "trigger", "value": false, "key": "switch" },
+              { "connected": true, "valueType": "boolean", "label": "任意アクティブ", "type": "target", "keyType": "triggerAny", "value": false, "key": "switchAny" },
+              { "valueType": "boolean", "label": "テキスト入力", "type": "switch", "value": true, "key": "inputText" },
+              { "valueType": "boolean", "label": "ドキュメントアップロード", "type": "switch", "value": false, "key": "uploadFile" },
+              { "valueType": "boolean", "label": "画像アップロード", "type": "switch", "value": false, "key": "uploadPicture" }
+            ],
+            "name": "ユーザーの質問",
+            "category": "ユーザーの質問"
+          }
+        },
+        {
+          "id": "59427879-f101-4629-a670-2bcad6fdb33c",
+          "type": "custom",
+          "initialized": false,
+          "position": { "x": 78.98, "y": 528.01 },
+          "data": {
+            "outputs": [
+              { "valueType": "string", "label": "回答内容", "type": "source", "value": "", "targets": [{ "targetHandle": "data", "target": "5deb947b-b0f1-4bfa-9ff8-6403155e5ec8" }], "key": "text" },
+              { "valueType": "boolean", "label": "モジュール実行終了", "type": "source", "targets": [{ "targetHandle": "switchAny", "target": "0c533ed9-360b-49dd-80f2-086083862eee" }], "key": "finish" }
+            ],
+            "moduleType": "confirmreply",
+            "inputs": [
+              { "connected": true, "valueType": "string", "label": "回答内容", "type": "textarea", "value": "{\n  \"cou\":\"China\"\n}", "key": "text" }
+            ],
+            "name": "回答確定",
+            "category": "LLM"
+          }
+        },
+        {
+          "id": "5deb947b-b0f1-4bfa-9ff8-6403155e5ec8",
+          "type": "custom",
+          "initialized": false,
+          "position": { "x": 560.93, "y": 1176.73 },
+          "data": {
+            "outputs": [],
+            "moduleType": "addMemoryVariable",
+            "inputs": [
+              { "connected": true, "valueType": "string", "label": "data", "type": "agentMemoryVar", "targets": [], "key": "data" }
+            ],
+            "name": "メモリ変数追加",
+            "category": "高階能力"
+          }
+        },
+        {
+          "id": "0c533ed9-360b-49dd-80f2-086083862eee",
+          "type": "custom",
+          "initialized": false,
+          "position": { "x": 558.86, "y": 516.64 },
+          "data": {
+            "outputs": [
+              { "valueType": "string", "label": "回答内容", "type": "source", "value": "", "targets": [], "key": "text" },
+              { "valueType": "boolean", "label": "モジュール実行終了", "type": "source", "targets": [{ "targetHandle": "switchAny", "target": "f1c54919-8aab-4a69-a2da-783da604bcf8" }], "key": "finish" }
+            ],
+            "moduleType": "confirmreply",
+            "inputs": [
+              { "connected": true, "valueType": "string", "label": "回答内容", "type": "textarea", "value": "私は:[js[\nname=\"ユーザーJS\"\nreturn name\n]js]...", "key": "text" }
+            ],
+            "name": "回答確定",
+            "category": "LLM"
+          }
+        },
+        {
+          "id": "f1c54919-8aab-4a69-a2da-783da604bcf8",
+          "type": "custom",
+          "initialized": false,
+          "position": { "x": 1013.35, "y": 523.63 },
+          "data": {
+            "outputs": [
+              { "valueType": "string", "label": "回答内容", "type": "source", "value": "", "targets": [], "key": "text" },
+              { "valueType": "boolean", "label": "モジュール実行終了", "type": "source", "targets": [{ "targetHandle": "switchAny", "target": "fbee9bd9-90ef-4cf6-889a-d2816e326ace" }], "key": "finish" }
+            ],
+            "moduleType": "confirmreply",
+            "inputs": [
+              { "connected": true, "valueType": "string", "label": "回答内容", "type": "textarea", "value": "私は:[python[\nname=\"ユーザーpy\"\nreturn name\n]python]...", "key": "text" }
+            ],
+            "name": "回答確定",
+            "category": "LLM"
+          }
+        },
+        {
+          "id": "fbee9bd9-90ef-4cf6-889a-d2816e326ace",
+          "type": "custom",
+          "initialized": false,
+          "position": { "x": 1547.12, "y": 456.58 },
+          "data": {
+            "outputs": [
+              { "valueType": "string", "label": "実行結果", "type": "source", "targets": [{ "targetHandle": "text", "target": "eb6f8e79-f715-4f98-8f50-3c7ec17c559e" }], "key": "_runResult_" }
+            ],
+            "moduleType": "codeFragment",
+            "inputs": [
+              { "valueType": "string", "label": "言語", "type": "radio", "value": "js", "key": "_language_" },
+              { "connected": false, "valueType": "string", "label": "コード内容", "type": "textarea", "value": "(function userFunction(param) { ... })", "key": "_code_" }
+            ],
+            "name": "コードブロック",
+            "category": "高階能力"
+          }
+        },
+        {
+          "id": "eb6f8e79-f715-4f98-8f50-3c7ec17c559e",
+          "type": "custom",
+          "initialized": false,
+          "position": { "x": 1990.28, "y": 599.11 },
+          "data": {
+            "outputs": [
+              { "valueType": "boolean", "label": "モジュール実行終了", "type": "source", "targets": [{ "targetHandle": "switchAny", "target": "7c069630-d12b-4b6c-84cd-273c7f70ef34" }], "key": "finish" }
+            ],
+            "moduleType": "confirmreply",
+            "inputs": [
+              { "connected": true, "valueType": "string", "label": "回答内容", "type": "textarea", "value": "...", "key": "text" }
+            ],
+            "name": "回答確定",
+            "category": "LLM"
+          }
+        },
+        {
+          "id": "7c069630-d12b-4b6c-84cd-273c7f70ef34",
+          "type": "custom",
+          "initialized": false,
+          "position": { "x": 2390.87, "y": 468.53 },
+          "data": {
+            "outputs": [
+              { "valueType": "string", "label": "実行結果", "type": "source", "targets": [{ "targetHandle": "text", "target": "6575bbfe-4bd1-44c0-aa4f-fdca4475b74d" }], "key": "_runResult_" }
+            ],
+            "moduleType": "codeFragment",
+            "inputs": [
+              { "valueType": "string", "label": "言語", "type": "radio", "value": "python", "key": "_language_" },
+              { "connected": false, "valueType": "string", "label": "コード内容", "type": "textarea", "value": "def userFunction(params): ...", "key": "_code_" }
+            ],
+            "name": "コードブロック",
+            "category": "高階能力"
+          }
+        },
+        {
+          "id": "6575bbfe-4bd1-44c0-aa4f-fdca4475b74d",
+          "type": "custom",
+          "initialized": false,
+          "position": { "x": 3003.82, "y": 675.40 },
+          "data": {
+            "outputs": [],
+            "moduleType": "confirmreply",
+            "inputs": [
+              { "connected": true, "valueType": "string", "label": "回答内容", "type": "textarea", "value": "...", "key": "text" }
+            ],
+            "name": "回答確定",
+            "category": "LLM"
+          }
+        }
+      ],
+      "edges": []
+    }
+    ```
+    </Accordion>
+
+    ### 5.3 ナレッジベース高度な検索
+    ナレッジベース検索コンポーネントで、JSONによる高度な設定が可能です。
+
+    **検索設定例:**
+    ```json
+    {
+      "keywords": "2025年3月18日晩峰短信の内容は何ですか？",
+      "overwrite": "true",
+      "kbIdList": [2,3,4,5,6],
+      "searchGroups": [
+        {
+          "kbIdList": [5],
+          "topK": 22,
+          "fileNameKeywords": ["特高圧", "運行規定"]
+        },
+        {
+          "kbIdList": [2,3,4,5,6],
+          "topK": 6
+        }
+      ]
+    }
+    ```
+
+    **フィールド説明:**
+    - **`keywords`**: 検索クエリ
+    - **`overwrite`**: ナレッジベース検索コンポーネントで選択されたナレッジベースを上書きするか。デフォルト `true`。`false` の場合、コンポーネントで選択されたナレッジベースと `kbIdList` がマージされます
+    - **`kbIdList`**: 指定するナレッジベースIDの全体セット。`searchGroups` がある場合、各グループと交差してグループ化されます。固定指定も可能ですし、`{{$kbIdList}}` でユーザーが選択したナレッジベースIDリストを動的に取得することもできます
+    - **`searchGroups[]`**: グループ配列。ナレッジベースをグループ化して並列検索します
+      - **`kbIdList[]`**: このグループのナレッジベースID配列
+      - **`topK`**: 召回数（取得する結果の数）
+      - **`fileNameKeywords[]`**: ファイル名キーワードによる曖昧検索を指定。`%` は曖昧マッチング部分を表します。例: `%年%月%晩峰短信`
+      - **`fileNameKeywordsTopK`**: 指定ファイル関連チャンク召回数。デフォルトは `topK` と同じ。`fileNameKeywords` で指定されたファイルから召回するチャンクの数を表します。この数が `topK` より小さい場合、`(topK - fileNameKeywordsTopK)` は同じライブラリ内の非指定ファイルから召回するチャンクの数を表します
+      - **`similar`**: 類似度閾値。デフォルトはナレッジベース検索コンポーネントの値と一致
+      - **`vectorSimilarWeight`**: ベクトル類似度重み。デフォルトはナレッジベース検索コンポーネントの値と一致
+      - **`enableRerank`**: 再ランキングスイッチ（`true`/`false`）。デフォルトはナレッジベース検索コンポーネントの値と一致
+      - **`rerankModelType`**: 再ランキングモデル。デフォルトはナレッジベース検索コンポーネントの値と一致
+      - **`rerankSimilarLimit`**: 再ランキング閾値。デフォルトはナレッジベース検索コンポーネントの値と一致
+      - **`rerankTopK`**: 再ランキング召回数。デフォルトはナレッジベース検索コンポーネントの値と一致
+
+
+    ### 5.4 データ型変換
+    情報処理コンポーネントを使用して変換します。
+    - **画像URL → 画像情報**: `[{"url":"http://あなたの画像URL"}]`
+    - **ファイルURL → ファイル情報**: `[{"fileName": "ファイル名.docx", "fileUrl": "https://あなたのファイルURL"}]`
+
+    ### 5.5 データ処理プロトコル (v1.9.0.0+)
+    特定のJSONスキーマを返すことで、システムがリッチなメッセージ（画像、ファイル、Web検索結果）として処理します。
+
+    **対応コンポーネント:** 確定回答、コードブロック、カスタムコンポーネントの出力フィールド
+
+    **実装方法:** フィールド値を特定プロトコルのデータ構造に組み立てます
+
+    **共通フィールド:**
+    - **`schema`**: 固定値 `"schema-v1"`。システムがこのデータ処理プロトコルを識別し、異なる機能用途を拡張実装するために使用
+    - **`type`**: データタイプ
+      - `text`: テキスト、Markdown
+      - `file`: ファイル
+      - `image`: 画像
+      - `websearch`: Web検索
+    - **`needSendMessage`**: メッセージを送信する必要があるか（`true`/`false`）。システムはデータタイプに応じて対応するメッセージ形式でエンドユーザーに応答します
+    - **`needEncryptFileUrl`**: 暗号化されたファイルストリームのダウンロードアドレスを返すか。暗号化サービスが有効な場合のみ機能します。ファイルストリーム暗号化サービスがない場合は、カスタム開発が必要です
+    - **`needFullFileUrl`**: ファイルダウンロードアドレスの絶対パスを返すか。デフォルト `false`（相対パス）
+    - **`value`**: データの値
+      - **テキストタイプ**: 文字列値を直接割り当て
+      - **ファイルと画像タイプ**: JSON構造 `{"fileName": "your_file_name", "fileUrl": "your_file_url"}` を割り当て
+        
+        **`fileUrl` がサポートするプロトコル:**
+        - **ローカル一時ファイルプロトコル**（保存後削除）: `tmpfile:/mindSynth/xxxx.docx`
+        - **ローカル永続ファイルプロトコル**: `psfile:/mindSynth/xxxx.docx`
+        - **Base64データストリーム**: `data:xxxxx`
+        - **ネットワークファイルストリームプロトコル**: `http://xxxx` または `https://xxxx`
+
+
+    <AccordionGroup>
+      <Accordion title="Text / File / Image">
+        **Text**: `type: "text", value: "message"`
+        **File**: `type: "file", value: {fileName: "...", fileUrl: "..."}`
+        
+        Python版:
+        ```python
+        {
+            "schema": "schema-v1",
+            "type": "file",
+            "needSendMessage": True,
+            "needEncryptFileUrl": False,
+            "needFullFileUrl": True,
+            "value": {
+                "fileName": "your_file_name",
+                "fileUrl": "tempfile" + your_file_url
+            }
+        }
+        ```
+        **Image**: `type: "image", value: {fileName: "...", fileUrl: "..."}`
+      </Accordion>
+      <Accordion title="WebSearch">
+        **WebSearch**: `type: "websearch", value: [{title: "Webページタイトル", url: "WebページURL"}]`
+      </Accordion>
+      
+      <Accordion title="Example: Random File Generation (Python)">
+      ```python
+      import json
+      import os
+      import uuid
+      
+      def userFunction(params):
+          result = {}
+          try:
+              random_text = str(uuid.uuid4())
+              random_filename = str(uuid.uuid4()) + '.txt'
+              current_dir = os.getcwd()
+              file_path = os.path.join(current_dir, random_filename)
+              
+              with open(file_path, 'w') as f:
+                  f.write(random_text)
+                  
+              result['file_info'] = {
+                  "schema": "schema-v1",
+                  "type": "file",
+                  "needSendMessage": True,
+                  "needEncryptFileUrl": False,
+                  "needFullFileUrl": True, 
+                  "value": {
+                      "fileName": random_filename,
+                      "fileUrl": 'tmpfile:' + os.path.abspath(file_path) 
+                   }
+              }
+          except Exception as e:
+              result['error'] = f'Error: {str(e)}'
+          return result
+      ```
+      </Accordion>
+    </AccordionGroup>
+
+    ### 5.6 Excelエクスポートテンプレート
+    「Excel生成」コンポーネントを使用して、JSONデータでXLSXテンプレートを埋めることができます。
+
+    #### 5.6.1 プレースホルダー置換
+    **形式:** `{{expression}}`
+    
+    Excelセル内でプレースホルダーを使用してデータを置換します。
+    
+    **サポートされるデータアクセス方法:**
+    - **単純変数**: `{{var1}}`
+    - **ネストされたオブジェクト**: `{{other.var3}}`
+    - **配列要素**: `{{list1.[0].var1}}`
+    - **深いネスト**: `{{data.user.profile.name}}`
+
+    #### 5.6.2 縦方向ループ（領域ループ）
+    **形式:** `<for item in list>...</for>`
+    
+    垂直方向に複数行のデータを生成します。
+    
+    **使用例:**
+    ```text
+    <for item in list1>
+    {{item.var1}}  {{item.var2}}  {{item.detail.var3}}
+    </for>
+    ```
+    
+    **特徴:**
+    - 配列の長さに応じて行を自動生成
+    - 複数行テンプレートをサポート（ループ領域内で複数行を定義可能）
+    - ループ内でのネストされたオブジェクトや配列の使用をサポート
+
+    #### 5.6.3 横方向ループ
+    **形式:** `<hfor item in list>...</hfor>`
+    
+    水平方向に複数列のデータを生成します。
+    
+    **使用例:**
+    ```text
+    <hfor item in demo.list2>
+    {{item.var1}}  {{item.detail.var2}}
+    </hfor>
+    ```
+    
+    **特徴:**
+    - データは右方向に展開されます
+    - 表ヘッダーや横方向のデータ表示に適しています
+    - ループ変数 `item` は現在の反復要素を表します
+
+    #### 5.6.4 画像挿入
+    **形式:** `{{@expression}}`
+    
+    Excelの図形内で画像プレースホルダーを使用します。
+    
+    **使用例:**
+    ```text
+    {{@imgurl1}}                // 静的画像
+    {{@item.aaImage}}           // ループ内の動的画像
+    {{@data.other.imgurl2}}     // ネストされたオブジェクト内の画像
+    ```
+    
+    **サポートされる形式:**
+    - **URL画像**: `https://example.com/image.jpg`
+    - **Base64**: `data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA...`
+    
+    **特徴:**
+    - 画像形式（PNG、JPEG）を自動認識
+    - セルサイズに合わせて自動調整
+    - ループ内での動的挿入をサポート
+    - 元の図形の位置とサイズ情報を保持
+
+
+    ### 5.7 Wordドキュメント生成
+    [poi-tl](https://deepoove.com/poi-tl/) の構文に準拠します。
+
+</Accordion>

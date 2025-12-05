@@ -1,0 +1,76 @@
+---
+title: "JSONをスプレッドシートに変換"
+---
+
+<img
+  src="/images/k4.png"
+/>
+
+### **モジュール概要**
+
+* **JSON形式のデータをスプレッドシート（.xlsx）に変換**するためのコンポーネントです。
+
+* **JSONデータの構造を解析し、表形式のデータとしてExcelファイルに出力**します。
+
+
+
+### 🔌 入力とトリガー (Inputs & Triggers)
+
+<CardGroup cols={2}>
+  <Card title="条件をすべて満たした場合に動作を開始" icon="link">
+    **タイプ**: ブール型
+    
+    本ノードは複数のブール型入力を接続可能。**全ての条件が `true`** の場合に本モジュールを実行します（AND条件）。
+  </Card>
+  <Card title="いずれかを満たした場合に動作を開始" icon="bolt">
+    **タイプ**: ブール型
+    
+    本ノードは複数のブール型入力を接続可能。**いずれか1つでも条件が `true`** の場合に本モジュールを実行します（OR条件）。
+  </Card>
+  <Card title="JSONデータ" icon="message">
+    **タイプ**: 文字列型
+    
+    変換対象のJSONデータを入力します。
+  </Card>
+</CardGroup>
+
+### ⚙️ 設定 (Configuration)
+
+<CardGroup cols={2}>
+  <Card title="スプレッドシートドキュメント名" icon="file">
+    **タイプ**: 文字列型
+    
+    生成するExcel文書のファイル名を入力します。 
+  </Card>
+  <Card title="スプレッドシート設定" icon="file">
+    **タイプ**: 文字列型
+    
+    ヘッダー行などを設定します。
+  </Card>
+  <Card title="ドキュメント情報のユーザー表示" icon="eye">
+    ドキュメント情報をユーザーに表示するかどうかを制御します。
+  </Card>
+</CardGroup>
+
+### 📤 出力と動作 (Outputs & Behavior)
+
+<CardGroup cols={2}>
+  <Card title="ドキュメント情報" icon="file">
+    **タイプ**: 文字列型
+    
+    生成された文書のメタデータを出力します。
+  </Card>
+  <Card title="成功" icon="check-double">
+    **タイプ**: ブール型    
+    **本モジュールの成功時、出力値は `True` となります**。
+  </Card>
+<Card title="失敗" icon="check-double">
+    **タイプ**: ブール型    
+    **本モジュールの失敗時、出力値は `True` となります**。
+  </Card>
+  <Card title="モジュール実行終了" icon="check-double">
+    **タイプ**: ブール型
+    
+    **本モジュールの実行完了時、出力値は `True` となります**。
+  </Card> 
+</CardGroup>

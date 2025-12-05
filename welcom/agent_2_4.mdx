@@ -1,24 +1,245 @@
 ---
-title: "ツール"
+title: "🛠️ ツール"
 ---
 
-## ツール概要
 
-左側のナビゲーションパネルにある「ツール」メニューをクリックすると、以下のような**統合ツールライブラリ**が表示されます：
+左側のナビゲーションパネルにある「ツール」メニューをクリックすると、以下のような**統合ツールライブラリ**が表示されます。
 
-1. カスタムツール：ユーザー自身が作成した独自のツール
+<CardGroup cols={2}>
+  <Card title="カスタムツール" icon="wrench">
+    ユーザー自身が作成した独自のツール
+  </Card>
+  <Card title="公式ツール" icon="toolbox">
+    システムが提供するプリセット済みのツールセット
+  </Card>
+</CardGroup>
 
-2. 公式ツール：システムが提供するプリセット済みのツールセット
+<Info>
+  この画面では、**自分で開発したツール**や**利用権限を持つ外部ツール**など、アカウントに関連付けられたすべてのツールが一括して表示されます。
+</Info>
 
-この画面では、**自分で開発したツール**や**利用権限を持つ外部ツール**など、アカウントに関連付けられたすべてのツールが一括して表示されます。
+<img src="/images/41.png" />
 
-<img
-  src="/images/41.png"
-/>
-## ツールモジュール
+## 🔌 ツールモジュール
 
 利用したいツールは、**キャンバス（画面上のフロー設計画面）にドラッグ＆ドロップ**することで簡単に組み込むことができます。
 
-<img
-  src="/images/42.png"
-/>
+<img src="/images/42.png" />
+
+## カスタムツールの作成
+
+<Steps>
+  <Step title="ナビゲーション">
+    左側のナビゲーションバーで「**ツール**」をクリックし、「**カスタムツール**」を選択します。
+    
+    ![](https://uxkpl4cba3j.feishu.cn/space/api/box/stream/download/asynccode/?code=ODNiOGFiNGFhMDk3ODU2ZWY4OGIzYTEzZjUyMTU1MDZfSE54a3lrMG5nOXh0Y0syMENsOG5hdURrZG1pWVhIUHFfVG9rZW46QTBUMWJ6SDZ0b2dIUkJ4TkpqMWNNS0NZblRBXzE3NDMwNDM5NzA6MTc0MzA0NzU3MF9WNA)
+  </Step>
+
+  <Step title="作成方法の選択">
+    現在、作成方法は「**手動入力**」と「**クイックインポート**」の2種類があります。
+    
+    <Info>
+      特に**APIドキュメントやURLがある場合は「クイックインポート」がおすすめ**です。よりスピーディかつ簡単にツールを作成できます。
+    </Info>
+
+    ### インポート方法
+
+    <CardGroup cols={3}>
+      <Card title="ファイルをインポート" icon="file-import">
+        APIドキュメントファイルから自動的にツール設定を読み込みます
+      </Card>
+      <Card title="URLをインポート" icon="link">
+        APIドキュメントのURLを指定して設定を取得します
+      </Card>
+      <Card title="テキストをインポート" icon="text">
+        APIドキュメントのテキストを直接貼り付けて設定します
+      </Card>
+    </CardGroup>
+
+    ![](https://uxkpl4cba3j.feishu.cn/space/api/box/stream/download/asynccode/?code=NWM4ZTUwMmYzMDdlYjE0ODAwZjMwZThmODUwYmUzZTZfazVVYTN6bGQxano4dUtoaENxU3lNUTdLZUFxU0RoOW5fVG9rZW46Wkd6R2JWRjJ1b2x2UEt4bVZWNGN5dGxxbmxoXzE3NDMwNDM5NzA6MTc0MzA0NzU3MF9WNA)
+
+    <Warning>
+      インポート内容が不完全な場合、**必須項目は手動で補完する必要があります。**
+    </Warning>
+
+    ![](https://uxkpl4cba3j.feishu.cn/space/api/box/stream/download/asynccode/?code=M2Y3NWRhNjFkOThiMTM4MWE0ZTliMWJiZjc4ZDVhMTFfc0VkUjBvNm9RUnFGY0JrMUFIQVRRb3kxM2QyWWkwa1hfVG9rZW46VGtiRWI3NUdCb0U4U094azN1TWNmMklVbjJlXzE3NDMwNDM5NzA6MTc0MzA0NzU3MF9WNA)
+  </Step>
+
+  <Step title="リクエスト方式の設定">
+    カスタムツールでは、以下5種類のHTTPリクエスト方式をサポートしています。
+
+    <CardGroup cols={2}>
+      <Card title="GET（取得リクエスト）" icon="download">
+        **定義:** サーバー上の特定リソースへのアクセスを要求するために使用されます。主に情報の取得・検索に用いられ、サーバーの状態を変更しません。
+        
+        **使用シーン:** ユーザー一覧の取得、記事詳細の表示など
+        
+        **例:** 商品価格の取得：`GET https://api.example.com/products/123`
+      </Card>
+      
+      <Card title="POST（新規作成）" icon="plus">
+        **定義:** サーバーにデータを送信して新しいリソースを作成したり、データ処理を行うために使用されます。
+        
+        **使用シーン:** 新規ユーザー登録、フォーム送信、ファイルアップロードなど
+        
+        **例:** 新規ユーザーの作成：`POST https://api.example.com/users`
+      </Card>
+      
+      <Card title="PUT（リソース置換）" icon="arrows-rotate">
+        **定義:** 既存リソースを完全に置換または新規作成する際に使用されます。送信するデータはリソースの全情報が必要です。
+        
+        **使用シーン:** ユーザー情報の更新、ファイルの置き換えなど
+        
+        **例:** ユーザープロフィールの更新：`PUT https://api.example.com/users/456`
+      </Card>
+      
+      <Card title="DELETE（削除）" icon="trash">
+        **定義:** 指定されたリソースを削除するために使用されます。べきとう性を持ち、複数回実行しても結果は変わりません。
+        
+        **使用シーン:** ファイル削除、ユーザーアカウント削除など
+        
+        **例:** ブログ記事の削除：`DELETE https://api.example.com/blogs/789`
+      </Card>
+      
+      <Card title="PATCH（部分更新）" icon="pen-to-square">
+        **定義:** リソースの一部のみを更新する場合に使用されます。PUT よりも柔軟性が高く、変更したい項目だけ送信すればよいのが特徴です。
+        
+        **使用シーン:** 記事タイトルの変更、ユーザー設定の一部更新など
+        
+        **例:** 記事タイトルの変更：`PATCH https://api.example.com/articles/1010`
+      </Card>
+    </CardGroup>
+
+    <Tip>
+      使用するリクエスト方式は、各APIの仕様書（インターフェース定義）を参考に正しく選んでください。
+    </Tip>
+  </Step>
+
+  <Step title="認証方式の設定">
+    Webリクエストにおいて、認証はリクエスト元の正当性を検証する手段です。以下の方式に対応しています。
+
+    <AccordionGroup>
+      <Accordion title="Basic 認証" icon="user-lock">
+        **定義:** ユーザー名とパスワードを使った基本的な認証方式です。
+        
+        **操作方法:** ユーザー名とパスワードを「:」（コロン）で連結し、**Base64でエンコード**します。
+        
+        **例:**
+        ```http
+        Authorization: Basic dXNlcm5hbWU6cGFzc3dvcmQ=
+        ```
+      </Accordion>
+      
+      <Accordion title="Bearer Token 認証" icon="key">
+        **定義:** クライアントが OAuth2.0 などの手段で取得した アクセストークン を使用して認証する方式です。
+        
+        **例:**
+        ```http
+        Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9
+        ```
+      </Accordion>
+      
+      <Accordion title="カスタム認証" icon="sliders">
+        **定義:** 任意のリクエストヘッダーを使用して、開発者が独自に定義した認証方式です。
+        
+        **操作方法:** リクエストヘッダーに任意のキーと値を追加します。
+        
+        **例:**
+        ```http
+        X-Custom-Auth: my-custom-value
+        ```
+      </Accordion>
+    </AccordionGroup>
+
+    <Tip>
+      用途に応じて、適切な認証方式を選択してください。
+    </Tip>
+  </Step>
+
+  <Step title="入力・出力パラメータの設定">
+    ### 対応データ型
+
+    現在サポートされているパラメータのデータ型は、**string（文字列）**、**boolean（真偽値）**、**any（任意型）** の3種類です。
+
+    <CardGroup cols={3}>
+      <Card title="string（文字列）" icon="text">
+        テキストデータを扱う型
+      </Card>
+      <Card title="boolean（真偽値）" icon="toggle-on">
+        true/falseの2値を扱う型
+      </Card>
+      <Card title="any（任意型）" icon="asterisk">
+        任意のデータ型を受け入れる型
+      </Card>
+    </CardGroup>
+
+    <Info>
+      入力または出力のパラメータで明確な型が判別できない場合は、**デフォルトで string 型**として扱われます。
+    </Info>
+
+    ### パラメータの送信方法
+
+    <CardGroup cols={2}>
+      <Card title="form（フォーム形式）" icon="file-lines">
+        フォームデータとしてリクエストボディを送信します。
+        
+        一般的に `application/x-www-form-urlencoded` または `multipart/form-data` の形式で使用され、主にフォーム送信に用いられます。
+      </Card>
+      
+      <Card title="raw（生データ形式）" icon="code">
+        JSON、XML、プレーンテキストなどの生データをそのままリクエストボディに含めて送信します。
+        
+        この場合、`Content-Type` は通常 `application/json` または `text/plain` が使われます。
+      </Card>
+    </CardGroup>
+  </Step>
+
+  <Step title="デバッグと検証">
+    ツールを保存した後は、**デバッグと検証** に進みます。
+    対応する入力項目を入力し、APIリクエストを送信して動作確認を行います。
+
+    <CardGroup cols={2}>
+      <Card title="テスト成功" icon="circle-check" color="#10b981">
+        **公開（リリース）可能**
+      </Card>
+      <Card title="テスト失敗" icon="circle-xmark" color="#ef4444">
+        **保存は可能だが、公開は不可**
+      </Card>
+    </CardGroup>
+  </Step>
+</Steps>
+
+## ツールの公開と管理
+
+保存およびデバッグが完了すると、作成したツールが一覧に表示されます。
+
+### ツール一覧での操作
+
+<CardGroup cols={4}>
+  <Card title="編集" icon="pen-to-square">
+    ツールの設定を変更します
+  </Card>
+  <Card title="削除" icon="trash">
+    ツールを削除します
+  </Card>
+  <Card title="公開" icon="upload">
+    ツールを公開します
+  </Card>
+  <Card title="非公開" icon="eye-slash">
+    下書き状態に戻します
+  </Card>
+</CardGroup>
+
+### 重要な注意点
+
+<Warning>
+  **デバッグに成功したツールのみ公開可能**です。
+</Warning>
+
+<Info>
+  **公開されたツール**は、ワークフロー（フロー設計）画面で**ドラッグ＆ドロップして使用可能**になります。
+</Info>
+
+<Note>
+  ツールが**非公開（下架）**状態になると、サイドバーには表示されなくなりますが、**過去に使用されたエージェントには影響しません**。
+</Note>
