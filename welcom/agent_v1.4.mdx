@@ -1,0 +1,523 @@
+---
+title: "Agentify 進階利用ドキュメント-v1.4"
+---
+
+# 1. システム内蔵変数
+
+<Info>
+**使用構文**
+- `{{var}}`：変数参照
+- `{{var:defautValue}}`：変数参照＋デフォルト値設定
+- `{{@var}}`：変数参照（変数が存在しない場合でも、この式 `{{@var}}` をそのまま表示）
+</Info>
+
+### 日付・時刻
+
+
+| 変数 | 説明 | 例 |
+| :--- | :--- | :--- |
+| `{{cTime}}` | 現在日時 `yyyy-MM-dd HH:mm:ss` | 2024-05-20 14:30:00 |
+| `{{cDate}}` | 現在日付 `yyyy-MM-dd` | 2024-05-20 |
+| `{{cYear}}` | 今年 `yyyy` | 2024 |
+| `{{cMonth}}` | 今月 | 05 |
+| `{{cDay}}` | 今日 | 20 |
+| `{{cHHmmss}}` | 現在時刻 `HH:mm:ss` | 14:30:00 |
+| `{{cMills}}` | 現在タイムスタンプ（ミリ秒） | 1716186600000 |
+| `{{cWeekdayNum}}` | 曜日（数値） | 1 (月曜) |
+| `{{cWeekdayEn}}` | 曜日（英語） | Monday |
+| `{{cWeekdayEn2}}` | 曜日（英語略） | Mon |
+| `{{cWeekdayCn}}` | 曜日（中国語） | 星期一 |
+
+
+### 入力・システム情報
+
+
+| 変数 | 説明 |
+| :--- | :--- |
+| `{{_input}}` | 全入力パラメータ情報 |
+| `{{_state}}` | 入力ステート情報 |
+| `{{userChatInput}}` | 入力テキスト |
+| `{{_images_}}` | 入力画像情報 |
+| `{{_files_}}` | 入力ファイル情報 |
+| `{{$db_type}}` | Agent に設定されたDB種別 |
+| `{{$db_schema}}` | Agent に設定されたDBテーブル構造 |
+| `{{$kbIdList}}` | ユーザーが選択したナレッジベースID一覧 |
+| `{{systemContext}}` | 現在のシステム環境とログインユーザー情報（v1.9.0.0+） |
+
+
+<Accordion title="systemContext の例">
+```json
+{
+  "su": {
+    "ext": {
+      "lastLoginTime": 1755164481495,
+      "lastLoginSuccess": true,
+      "currentLoginIp": "117.133.43.38",
+      "currentLoginSuccess": true,
+      "currentLoginTime": 1755503761632,
+      "lastLoginIp": "117.133.43.38"
+    },
+    "phoneNumber": "",
+    "avatarUrl": "/assets/avatar/56.png",
+    "nickName": "kaka",
+    "tenantId": 1,
+    "id": 574,
+    "userName": "kaka",
+    "email": "",
+    "orgId": 3
+  },
+  "locale": "zh_JP",
+  "token": "..."
+}
+```
+</Accordion>
+
+---
+
+# 2. システム内蔵関数
+
+<Note>
+**使用構文**  
+`[@["functionName", "args1", "args2",....]@]`
+</Note>
+
+<AccordionGroup>
+  <Accordion title="日付・時刻操作">
+    | 関数名 | 説明 | 構文例 |
+    | :--- | :--- | :--- |
+    | `DateFormatFromMills` | 日付フォーマット（ミリ秒） | `[@["DateFormatFromMills","your mills", "your formats"]@]` |
+    | `DateFormatFromSeconds` | 日付フォーマット（秒） | `[@["DateFormatFromSeconds","your seconds", "your formats"]@]` |
+    | `DateStrToMills` | 日付文字列 → ミリ秒 | `[@["DateStrToMills","your date", "your date format"]@]` |
+    | `DateStrToSeconds` | 日付文字列 → 秒 | `[@["DateStrToSeconds","your date", "your date format"]@]` |
+    | `GetDateFromNow` | 日付の加減算 | `[@["GetDateFromNow","your add/substract days"]@]` |
+    | `DateStrReFormat` | 日付フォーマット変換 | `[@["DateStrReFormat","your date", "target fmt", "source fmt"]@]` |
+    | `JionlpParseTime` | 自然言語→日付解析 | `[@["JionlpParseTime","今天"]@]` |
+  </Accordion>
+
+  <Accordion title="文字列・正規表現">
+    | 関数名 | 説明 | 構文例 |
+    | :--- | :--- | :--- |
+    | `ExtractAroundStr` | 囲い文字列の抽出 | `[@["ExtractAroundStr","text", "start", "end", "containsBorder"]@]` |
+    | `ExtractStrByRegex` | 正規表現（最初の一致） | `[@["ExtractStrByRegex","total 100", "\\d+"]@]` |
+    | `ExtractArrByRegex` | 正規表現（全ての一致） | `[@["ExtractArrByRegex","text", "regex"]@]` |
+    | `Replace` | 文字列置換 | `[@["Replace","text", "old", "new"]@]` |
+    | `ReplaceRegex` | 正規表現置換 | `[@["ReplaceRegex","text", "regex", "new"]@]` |
+    | `EscapeStr` | 文字列エスケープ | `[@["EscapeStr","text"]@]` |
+    | `Concat` | 文字列連結 | `[@["Concat","t1","t2"...]@]` |
+    | `Md5Digest` | MD5ハッシュ | `[@["Md5Digest","text"]@]` |
+    
+    <Info>
+    **正規表現リファレンス**
+    - [MDN 正規表現ガイド](https://developer.mozilla.org/ja/docs/Web/JavaScript/Guide/Regular_expressions)
+    - [MDN 正規表現チートシート](https://developer.mozilla.org/ja/docs/Web/JavaScript/Guide/Regular_expressions/Cheatsheet)
+    </Info>
+  </Accordion>
+
+  <Accordion title="JSON操作">
+    | 関数名 | 説明 | 構文例 |
+    | :--- | :--- | :--- |
+    | `ExtractJsonObj` | JSONオブジェクト抽出 | `[@["ExtractJsonObj","jsonStr", "$.path"]@]` |
+    | `ExtractJsonArr` | JSON配列抽出 | `[@["ExtractJsonArr","jsonStr", "$.path"]@]` |
+    | `ExtractJsonByRegex` | 正規表現でJSON抽出 | `[@["ExtractJsonByRegex","text", "key1", "reg1"...]@]` |
+    | `ConcatArray` | 配列連結 | `[@["ConcatArray","arr1","arr2"...]@]` |
+    | `MergeObject` | オブジェクト結合 | `[@["MergeObject","obj1","obj2"...]@]` |
+
+    <Info>
+    **JSONPath リファレンス**
+    - [Jayway JsonPath](https://github.com/json-path/JsonPath)
+    - [JSONPath Tester](https://jsonpath.com/)
+    </Info>
+  </Accordion>
+
+  <Accordion title="ユーティリティ・その他">
+    | 関数名 | 説明 | 構文例 |
+    | :--- | :--- | :--- |
+    | `UrlEncode` | URLエンコード | `[@["UrlEncode","text", "UTF-8"]@]` |
+    | `UrlDecode` | URLデコード | `[@["UrlDecode","text", "UTF-8"]@]` |
+    | `AutoSpecifyResponseLanguage` | 返信言語自動判定 | `[@["AutoSpecifyResponseLanguage","text", "JP"]@]` |
+    | `RSAEncode` | RSA暗号化 | `[@["RSAEncode","text", "publicKey"]@]` |
+    | `CaseWhenThen` | 条件分岐で代入 | `[@["CaseWhenThen","val", "when1", "then1"...]@]` |
+    | `CaseWhenThenIgnoreCase` | 条件分岐（大小無視） | `[@["CaseWhenThenIgnoreCase","val", "when1", "then1"...]@]` |
+    | `EqualsAny` | 候補のいずれかと等しい | `[@["EqualsAny","val", "cand1", "cand2"]@]` |
+    | `EqualsAnyIgnoreCase` | 候補のいずれかと等しい（大小無視） | `[@["EqualsAnyIgnoreCase","val", "cand1", "cand2"]@]` |
+    | `ParseDocByTika` | Tikaでファイル解析 | `[@["ParseDocByTika","FileInput[]"]@]` |
+    | `FetchUrl` | Webページ取得 | `[@["FetchUrl","UrlFetchReq[]"]@]` |
+  </Accordion>
+</AccordionGroup>
+
+---
+
+# 3. 内蔵コマンド（Command）
+
+メモリ変数に「コマンド信号」を送ることで、プラットフォーム内部サービスと連携します。
+
+<Steps>
+  <Step title="方法1：コマンド信号を送信">
+    1. コマンドJSONを組み立てる
+    ```json
+    {
+      "command":"command code",
+      "data": {},
+      "async": false
+    }
+    ```
+    2. キーが `$command_xxx` で始まるメモリ変数に接続
+    3. 結果を取得: `{{$command_mytext2agent.result}}`
+  </Step>
+
+  <Step title="方法2：関数形式で宣言して呼ぶ">
+    コードブロック内で `[$[ ... ]$]` 構文を使用します。
+    ```python
+    [$[
+        {
+          "command":"AddMessageMeta",
+          "embedResult": true,
+          "data": { ... }
+        }
+    ]$]
+    ```
+  </Step>
+</Steps>
+
+### コマンド一覧
+
+<CodeGroup>
+```json text2agent (Agent作成)
+// 入力
+{
+  "command": "text2agent",
+  "data": {
+    "agentJson": []
+  }
+}
+
+// 出力
+{
+  "result": {
+    "avatar": "",
+    "id": "",
+    "intro": "",
+    "name": ""
+  }
+}
+```
+
+```json userKb (ナレッジベース一覧)
+// 入力
+{
+  "command": "userKb",
+  "data": {}
+}
+
+// 出力
+{
+  "result": [
+    { "avatar": "", "id": "", "name": "" }
+  ]
+}
+```
+
+```json AddMessageMeta (メタ情報付与)
+// 入力
+{
+  "command": "AddMessageMeta",
+  "data": {
+    // コンポーネント返信完了時のみ付与（デフォルト false）
+    "whenComplete": false,
+    // 最初の token 時のみ付与
+    "beforeMetadata": { "key": "val" },
+    // ストリーム中付与
+    "metadata": { "key": "val" },
+    // 完了時のみ付与
+    "afterMetadata": { "key": "val" }
+  }
+}
+```
+</CodeGroup>
+
+### AddMessageMeta パラメータ詳細
+
+| パラメータ | 説明 |
+| :--- | :--- |
+| `whenComplete` | コンポーネント返信完了時のみ付与するか（デフォルト `false`） |
+| `beforeMetadata` | 前置メタデータ（最初のトークン生成時に付与、非必須） |
+| `metadata` | メタデータ（ストリーム中常に付与、`whenComplete=true` の場合は完了時のみ） |
+| `afterMetadata` | 後置メタデータ（完了時に付与、非必須） |
+
+---
+
+# 4. コードブロック埋め込み
+
+`params['yourVarNameToGet']` でメモリ変数を取得し、`return` で結果を返します。
+
+<CodeGroup>
+```python Python
+# 私は
+[python[
+name="田中"
+return name
+]python]
+
+# 彼は
+[py[
+name="鈴木"
+return name
+]py]
+
+# 二人の国
+[py[
+import json
+data=json.loads(params['data'])
+return data['cou']
+]py]
+```
+
+```javascript JavaScript
+# 私は
+[js[
+name="田中"
+return name
+]js]
+
+# 彼は
+[js[
+name="鈴木"
+return name
+]js]
+
+# 二人の国
+[js[
+data=JSON.parse(params['data'])
+return data['cou']
+]js]
+```
+</CodeGroup>
+
+---
+
+# 5. 使い方のコツ
+
+### 5.1 プロンプト例
+
+<Accordion title="Stable Diffusion Prompt Assistant">
+```text
+# Stable Diffusion prompt Assistant
+
+You'll be an artsy Stable Diffusion prompt assistant.
+
+# # Task
+
+1、 I use natural language to tell you the topic of the prompt to generate, your task is to imagine a complete picture according to this topic, and then transform it into a detailed, high-quality prompt, so that Stable Diffusion can produce a high-quality image.
+2、 Translate written prompt words into English
+3、Reply prompt only, returned as a string,Don't reply Negative Prompt
+## Background
+
+Stable Diffusion is a Vincennes diagram model that leverages deep learning and supports the use of prompt to produce new images describing the elements to be included or omitted.
+
+## prompt concept
+
+- A complete prompt contains one parts: "** Prompt:**" ".
+- prompt is used to describe the image and consists of common words, using the English half corner "," as the separator.
+- Each word or phrase separated by a "," is called a tag.  So prompt  are composed of a series of tags separated by ",".
+
+## () and [] syntax
+
+The equivalent way to adjust keyword strength is to use () and [].  (keyword) increases the strength of the tag by 1.1 times, the same as (keyword:1.1), and up to three layers can be added.  [keyword] reduces the strength by a factor of 0.9, the same as (keyword:0.9).
+
+## Prompt format requirement
+
+Below I describe the steps for generating prompt, which can be used to describe people, landscapes, objects, or abstract digital art drawings.  You can add as many details as you want, but no fewer than five.
+
+### 1.  prompt request
+
+- Your output Stable Diffusion prompt starts with "**Prompt:**".
+- prompt contains the body of the picture, materials, additional details, image quality, art style, color tone, lighting, etc., but your output prompt cannot be broken up.  For example, a broken description like "medium:" is not required, nor can it contain ":" and ".".
+- Subject of the picture: not brief English description of the subject of the picture, such as A girl in a garden, subject details (subject can be people, things, objects, scenery) the core content of the picture.  This section is generated based on the topic I give you each time.  You can add more reasonable details related to the topic.
+- For the character theme, you must describe the eyes, nose, lips of the character, For example, 'beautiful detailed eyes,beautiful detailed lips,extremely detailed eyes and face,longeyelashes', It is important to avoid Stable Diffusion of random distorted facial features.  You can also describe the character's appearance, mood, clothes, posture, perspective, movement, background, etc.  In character attributes, 1girl means one girl and 2girls means two girls.
+- Material: The material used to make the artwork.  Examples: illustration, oil painting, 3D rendering and photography.  Medium has a strong effect because a single keyword can dramatically change the style.
+- Additional details: Scene details, or character details, describe the details of the picture, so that the image looks more substantial and reasonable.  This part is optional, pay attention to the overall harmony of the picture, can not conflict with the theme.
+- Image quality: Always start this section with "(best Quality, 4 k, 8 k, highres, masterpiece: 1.2), ultra - the detailed, realistic, photorealistic, photo - realistic: 1.37), "this is a sign of high quality.  Other commonly used tags to improve quality are those that you can add according to the needs of the theme: HDR,UHD,studio lighting,ultra-fine painting,sharp focus,physically-based rendering,extreme detail  The description, professional, vivid colors, bokeh.
+- Artistic Style: This section describes the style of the image.  Adding the right art style can enhance the resulting image.  Commonly used art style such as: portraits, landscape, horror, anime, sci - fi, photography, concept artists, etc.
+- Color tone: Color, by adding color to control the overall color of the picture.
+- Lighting: The lighting effect of the overall picture.
+
+### 3.  Restrictions:
+- tag content is described in English words or phrases, not limited to the words I give you.  Note that you can only
+# # # 3. Description copy:
+{{text}}
+```
+</Accordion>
+
+### 5.2 Agentサンプル（コードブロック埋め込み）
+
+<Accordion title="サンプルJSON (クリックして展開)">
+```json
+{"flow":{"nodes":[{"id":"simpleInputId","type":"custom","initialized":false,"position":{"x":0,"y":300},"data":{"outputs":[{"valueType":"string","description":"参照変数：{{userChatInput}}","label":"テキスト情報","type":"source","targets":[{"targetHandle":"text","target":"question_classifier"},{"targetHandle":"user_question","target":"save_variables"},{"targetHandle":"text","target":"knowledge_search"},{"targetHandle":"text","target":"ad_response"}],"key":"userChatInput"},{"valueType":"file","description":"ユーザーがアップロードしたドキュメントのリストをJSON配列形式で出力します。ドキュメント比較の場合、グループ情報を含めます。","label":"ドキュメント情報","type":"source","targets":[],"key":"files"},{"valueType":"image","description":"ユーザがアップロードした画像のリストをJSON配列形式で出力します","label":"画像の情報","type":"source","targets":[],"key":"images"},{"valueType":"boolean","description":"ボタンがクリックされていない場合、値はtrueです","label":"ボタンがクリックされていません","type":"source","targets":[],"key":"unclickedButton"},{"valueType":"boolean","description":"実行が完了するとスイッチがオンになり、ダウンストリームのリンクされたコンポーネントが実行します。","label":"モジュール実行終了","type":"source","targets":[{"targetHandle":"switchAny","target":"question_classifier"}],"key":"finish"}],"moduleType":"questionInput","inputs":[{"connected":true,"valueType":"boolean","description":"アップストリームのすべての条件を満たす場合にのみ、現在のコンポーネントの実行ロジックが有効になります","label":"条件をすべて満たした場合に動作を開始","type":"target","keyType":"trigger","value":false,"key":"switch"},{"connected":true,"valueType":"boolean","description":"アップストリームのいずれかの条件を満たせば、現在のコンポーネントの実行ロジックが有効になります","label":"いずれかを満たした場合に動作を開始","type":"target","keyType":"triggerAny","value":false,"key":"switchAny"},{"valueType":"boolean","description":"テキストの入力のスイッチ","label":"テキストの入力","type":"switch","value":true,"key":"inputText"},{"valueType":"boolean","description":"ドキュメントのアップロードのスイッチ","label":"ドキュメントのアップロード","type":"switch","value":false,"key":"uploadFile"},{"valueType":"boolean","description":"画像のアップロードのスイッチ","label":"画像のアップロード","type":"switch","value":false,"key":"uploadPicture"},{"valueType":"boolean","description":"ドキュメントのレビューのスイッチ","label":"ドキュメントのレビュー","type":"switch","value":false,"key":"fileUpload"},{"valueType":"boolean","description":"ドキュメント比較を有効にしますか","label":"ドキュメント比較を行いますか","type":"checkBox","value":false,"key":"fileContrast"},{"valueType":"any","description":"アップロードされたファイルのリストはドキュメント比較が有効な場合は、グループごとに1つのファイルのみアップロードできます","label":"ドキュメントのグループ化","type":"table","value":[],"key":"fileInfo"},{"valueType":"boolean","description":"初期グローバルとしてinputしますか","label":"初期グローバルとしてinputしますか","type":"hidden","value":true,"key":"initialInput"}],"intro":"ユーザ入力エントランス、対話中のユーザの入力情報は他のモジュールと接続する、一般的にはスタートモジュールとして使用されます","name":"ユーザークエリ","disabled":false,"category":"用户提问"}},{"id":"question_classifier","type":"custom","initialized":false,"position":{"x":512.7295559646448,"y":272.41929540993635},"data":{"outputs":[{"valueType":"string","description":"情報分類の結果をJSON形式で出力します","label":"分類結果","type":"source","targets":[{"targetHandle":"classification_result","target":"save_variables"}],"key":"matchResult"},{"valueType":"boolean","description":"実行が完了するとスイッチがオンになり、ダウンストリームのリンクされたコンポーネントが実行します。","label":"モジュール実行終了","type":"source","targets":[],"key":"finish"},{"valueType":"boolean","label":"広告関連質問","type":"source","targets":[{"targetHandle":"switchAny","target":"knowledge_search"}],"key":"1a79f2dc-b775-11f0-aba5-0abf8f0dd9cc"},{"valueType":"boolean","label":"その他質問","type":"source","targets":[{"targetHandle":"switchAny","target":"other_response"}],"key":"1a79f3a4-b775-11f0-aba5-0abf8f0dd9cc"}],"moduleType":"infoClass","inputs":[{"connected":true,"valueType":"boolean","description":"アップストリームのすべての条件を満たす場合にのみ、現在のコンポーネントの実行ロジックが有効になります","label":"条件をすべて満たした場合に動作を開始","type":"target","keyType":"trigger","value":false,"key":"switch"},{"connected":true,"valueType":"boolean","description":"アップストリームのいずれかの条件を満たせば、現在のコンポーネントの実行ロジックが有効になります","label":"いずれかを満たした場合に動作を開始","type":"target","keyType":"triggerAny","value":false,"key":"switchAny"},{"connected":true,"valueType":"string","description":"参照変数：{{text}}","label":"情報入力","type":"target","value":"","key":"text"},{"connected":true,"valueType":"search","description":"参照変数：{{knSearch}}","label":"ナレッジベース検索結果","type":"target","value":"","key":"knSearch"},{"connected":false,"valueType":"text","description":"ナレッジベースの高度な構成","label":"ナレッジベースの高度な構成","type":"target","value":"","key":"knConfig"},{"connected":false,"min":0,"max":6,"valueType":"chatHistory","description":"","step":1,"label":"チャットの文脈","type":"inputNumber","value":2,"key":"historyText"},{"valueType":"string","description":"","label":"モデルを選択","type":"selectChatModel","value":"gpt-4o","key":"model","required":true},{"valueType":"string","description":"シンプルな分類ではプロンプトの調整は不要ですが、ロジック判断の説明を補足することができます。","label":"プロンプト (Prompt)","type":"textarea","value":"あなたは質問分類器です。ユーザーの入力内容を分析し、以下のどちらに分類されるかを判断してください：\n\n1. 広告関連質問：広告制作、広告戦略、マーケティング、ブランド推進、広告効果、広告投稿、広告デザインなどに関する質問\n2. その他質問：広告に関係のないその他すべての質問\n\nJSON形式で分類結果を返してください。","key":"quotePrompt"},{"valueType":"boolean","description":"参照変数：{{labels}}","label":"ラベル","type":"addLabel","value":[{"value":"広告関連質問","key":"1a79f2dc-b775-11f0-aba5-0abf8f0dd9cc"},{"value":"その他質問","key":"1a79f3a4-b775-11f0-aba5-0abf8f0dd9cc"}],"key":"labels"}],"intro":"プロンプトに従って情報を分類し、異なる情報タイプに対して異なる返信方法と内容を設定します。","name":"情報の分類","disabled":false,"category":"大模型"}},{"id":"knowledge_search","type":"custom","initialized":false,"position":{"x":1000,"y":300},"data":{"outputs":[{"valueType":"boolean","description":"検索条件に合致するテキストスライスが見つからなかった場合、このスイッチがオンになり、確認返信やインテリジェント対話モジュールのトリガー条件を接続して、ダウンストリームのモジュールを起動することができます。","label":"該当する関連情報なし","type":"source","targets":[],"key":"isEmpty"},{"valueType":"boolean","description":"検索条件に合致するテキストスライスが見つかった場合、このスイッチがオンになり、確認返信やインテリジェント対話モジュールのトリガー条件を接続して、ダウンストリームのモジュールを起動することができます。","label":"該当する関連情報あり","type":"source","targets":[],"key":"unEmpty"},{"valueType":"boolean","description":"実行が完了するとスイッチがオンになり、ダウンストリームのリンクされたコンポーネントが実行します。","label":"モジュール実行終了","type":"source","targets":[{"targetHandle":"switchAny","target":"ad_response"}],"key":"finish"},{"valueType":"search","description":"常に配列を返し、内容には類似度とスライス数の取り決めが含まれます。【関連知識が検索されなかった】および【関連知識が検索された】を通じて、後続の返信内容を制御できます。参照変数：{{quoteQA}}","label":"ナレッジベース検索結果","type":"source","targets":[{"targetHandle":"knSearch","target":"ad_response"},{"targetHandle":"","target":"save_variables"}],"key":"quoteQA"}],"moduleType":"knowledgesSearch","inputs":[{"connected":true,"valueType":"boolean","description":"アップストリームのすべての条件を満たす場合にのみ、現在のコンポーネントの実行ロジックが有効になります","label":"条件をすべて満たした場合に動作を開始","type":"target","keyType":"trigger","value":false,"key":"switch"},{"connected":true,"valueType":"boolean","description":"アップストリームのいずれかの条件を満たせば、現在のコンポーネントの実行ロジックが有効になります","label":"いずれかを満たした場合に動作を開始","type":"target","keyType":"triggerAny","value":false,"key":"switchAny"},{"connected":true,"valueType":"string","description":"参照変数：{{text}}","label":"情報入力","type":"target","value":"","key":"text"},{"valueType":"selectDataset","description":"","label":"関連するナレッジベース","type":"selectDataset","value":[],"key":"datasets","required":true},{"min":0,"max":1,"markList":{"0":0,"1":1},"valueType":"number","description":"ユーザーの質問とナレッジベースのスライスの類似度を評価するために、混合類似度スコアを使用します。これは、キーワードの類似度とベクトルコサイン類似度を加重して計算したものです。質問とスライスの類似度がこの閾値未満の場合、そのスライスはフィルタリングされます。","step":0.01,"label":"類似度閾値","type":"slider","value":0.2,"key":"similarity"},{"min":0,"max":1,"markList":{"0":0,"1":1},"valueType":"number","description":"ユーザーの質問とナレッジベースのスライスの類似度を評価するために、混合類似度スコアを使用します。これは、キーワードの類似度とベクトルコサイン類似度を加重して計算したものです。2つの類似度の重みの合計は1です。例えば、ベクトル類似度の重みが0.9の場合、キーワード類似度の重みは0.1になります。デフォルトでは、ベクトル類似度の重みは1であり、ベクトル検索のみが使用されます。質問に明確な名前、住所、番号などのキーワードが含まれている場合は、ベクトル類似度の重みを下げ、ベクトル検索とキーワード検索を組み合わせた混合類似度スコアを使用することをお勧めします。","step":0.01,"label":"ベクトル類似度の重み","type":"slider","value":1,"key":"vectorSimilarWeight"},{"min":0,"max":100,"markList":{"0":0,"100":100},"valueType":"number","description":"類似度閾値を満たす前提で、類似度が高い順にソートし、リコールされた関連スライスの数。","step":1,"label":"リコール数","type":"slider","value":20,"key":"topK"},{"valueType":"boolean","description":"有効にすると、セグメントの前後に1つのセグメントコンテンツがヒットし、コンテンツの完全性が向上します","label":"コンテキストを拡張","type":"switch","value":false,"key":"expandChunks"},{"valueType":"boolean","description":"有効時： 権限のあるナレッジベースのみを検索無効時： 関連する全ナレッジベースを検索（権限を無視）","label":"アクセス権制御","type":"switch","value":false,"key":"enablePermission"},{"valueType":"boolean","description":"リランキングモデルは、ユーザーの質問の関連性に基づいてリコールされたスライスを再順位付けするためのモデルです。主な目的は、検索結果の精度と関連性を向上させ、ユーザーのクエリが最も価値のある関連情報を得られるようにすることです。注意：リランキングモデルはリソースを多く消費するため、有効にすると検索速度が低下する可能性があります。","label":"リランキングの有効化","type":"switch","value":false,"key":"enableRerank"},{"valueType":"selectChatModel","description":"","label":"リランキングモデル","type":"selectRerankModel","value":"oneapi-xinference:bce-rerank","key":"rerankModelType","required":true},{"min":0,"max":20,"markList":{"0":0,"20":20},"valueType":"number","description":"リランキングモデルのスコアに基づき、関連性の高い順にソートし、リコールされた関連スライスの数。","step":1,"label":"リランキングリコール数","type":"slider","value":10,"key":"rerankTopK"}],"intro":"ナレッジベース検索結果を基に、インテリジェント対話モジュールが回答を行い、回答をより正確にします。","name":"ナレッジベース検索","disabled":false,"category":"知識库"}},{"id":"ad_response","type":"custom","initialized":false,"position":{"x":1500,"y":300},"data":{"outputs":[{"valueType":"boolean","description":"モデルの実行が終了し、すべてのコンテンツが生成された後、返信が終了し、ダウンストリームコンポーネントがオンになります。","label":"返信終了","type":"source","targets":[],"key":"isResponseAnswerText"},{"valueType":"string","description":"大規模言語モデルで処理済みの情報は、返信内容として出力されます。参照変数：","label":"返信","type":"source","targets":[{"targetHandle":"final_answer","target":"save_variables"}],"key":"answerText"},{"valueType":"boolean","description":"実行が完了するとスイッチがオンになり、ダウンストリームのリンクされたコンポーネントが実行します。","label":"モジュール実行終了","type":"source","targets":[],"key":"finish"}],"moduleType":"aiChat","inputs":[{"connected":true,"valueType":"boolean","description":"アップストリームのすべての条件を満たす場合にのみ、現在のコンポーネントの実行ロジックが有効になります","label":"条件をすべて満たした場合に動作を開始","type":"target","keyType":"trigger","value":false,"key":"switch"},{"connected":true,"valueType":"boolean","description":"アップストリームのいずれかの条件を満たせば、現在のコンポーネントの実行ロジックが有効になります","label":"いずれかを満たした場合に動作を開始","type":"target","keyType":"triggerAny","value":false,"key":"switchAny"},{"connected":true,"valueType":"string","description":"参照変数：{{text}}","label":"情報入力","type":"target","value":"","key":"text"},{"connected":true,"valueType":"image","description":"参照変数：{{images}}","label":"画像入力","type":"target","value":[],"key":"images"},{"connected":true,"valueType":"search","description":"参照変数：{{knSearch}}","label":"ナレッジベース検索結果","type":"target","value":"","key":"knSearch"},{"connected":false,"valueType":"text","description":"ナレッジベースの高度な構成","label":"ナレッジベースの高度な構成","type":"target","value":"","key":"knConfig"},{"connected":false,"min":0,"max":6,"valueType":"chatHistory","description":"","step":1,"label":"チャットの文脈","type":"inputNumber","value":3,"key":"historyText"},{"valueType":"string","description":"","label":"モデルを選択","type":"selectChatModel","value":"doubao-deepseek-v3","key":"model","required":true},{"valueType":"string","description":"モデルの役割や振る舞いを設定します。例：ペルソナ設定、応答ロジックなど。","label":"システムプロンプト","type":"textarea","value":"","key":"systemPrompt"},{"valueType":"string","description":"ユーザーが入力する具体的な質問やリクエスト。モデルへの指示となります。","label":"ユーザープロンプト","type":"textarea","value":"あなたは専門的な広告コンサルタントです。ナレッジベースの情報を活用して、ユーザーの広告関連質問に正確で専門的な回答を提供してください。\n\n回答要求：\n1. ナレッジベースの情報に基づいて回答し、情報を捏造しないでください\n2. 回答は具体的で実用的で、実行可能な提案を提供してください\n3. 専門用語を使用する際は適切に説明してください\n4. 回答は構造化され、理解しやすいものにしてください","key":"quotePrompt"},{"connected":false,"valueType":"boolean","description":"ユーザーに返信内容をアウトプットするかどうかをコントロールする","label":"ユーザーに返信を表示","type":"switch","value":true,"key":"stream"},{"min":0,"max":1,"markList":{"0":"厳密","1":"クリエイティブ"},"valueType":"number","description":"返信の創造性を制御します。入力された情報と一致する回答を望むなら、数値が小さいほど良く、モデルが創意性を発揮するためには、数値が大きいほど良いです。","step":0.1,"label":"Temperature","type":"slider","value":0.1,"key":"temperature"},{"min":0,"max":1,"markList":{"0":"0","1":"1"},"valueType":"number","description":"出力の多様性を制御します。値が大きいほど多くの単語選択肢を含み、値が小さいほど高確率の単語に集中し、確定的な出力になりますが多様性は減ります。通常、【返信の創造性】と【核サンプリングTOP_P】はどちらか一方のみを設定します。","step":0.1,"label":"TOP_P","type":"slider","value":1,"key":"topP"},{"min":100,"max":16000,"markList":{"5000":"5000","16000":16000},"valueType":"number","step":50,"label":"Max Token","type":"slider","value":3000,"key":"maxToken"}],"intro":"AI対話モデルは、入力された情報とプロンプト（Prompt）に基づいて必要な情報を生成し、ユーザーに提示して、ユーザとのインタラクションを行う。","name":"LLM","disabled":false,"category":"大模型"}},{"id":"other_response","type":"custom","initialized":false,"position":{"x":2000,"y":300},"data":{"outputs":[{"valueType":"string","description":"返信内容をそのまま出力します。","label":"返信","type":"source","value":"","targets":[{"targetHandle":"final_answer","target":"save_variables"}],"key":"text"},{"valueType":"boolean","description":"実行が完了するとスイッチがオンになり、ダウンストリームのリンクされたコンポーネントが実行します。","label":"モジュール実行終了","type":"source","targets":[],"key":"finish"}],"moduleType":"confirmreply","inputs":[{"connected":true,"valueType":"boolean","description":"アップストリームのすべての条件を満たす場合にのみ、現在のコンポーネントの実行ロジックが有効になります","label":"条件をすべて満たした場合に動作を開始","type":"target","keyType":"trigger","value":false,"key":"switch"},{"connected":true,"valueType":"boolean","description":"アップストリームのいずれかの条件を満たせば、現在のコンポーネントの実行ロジックが有効になります","label":"いずれかを満たした場合に動作を開始","type":"target","keyType":"triggerAny","value":false,"key":"switchAny"},{"connected":false,"valueType":"boolean","description":"ユーザーに返信内容をアウトプットするかどうかをコントロールする","label":"ユーザーに返信を表示","type":"switch","value":true,"key":"stream"},{"connected":true,"valueType":"string","description":" \\n を使って連続改行を実現できます。\n\n外部モジュールの入力を通じて返信が可能であり、外部モジュールの入力時に現在記入している内容が上書きされます。参照変数：{{text}}","label":"返信","type":"textarea","value":"申し訳ありませんが、私は広告関連の専門アシスタントです。広告制作、マーケティング戦略、ブランド推進などの広告関連のお問い合わせのみ対応しております。広告に関するご質問がございましたら、お気軽にお聞かせください。","key":"text"}],"intro":"トリガー条件と合わせて、プリセット内容またはアップストリームのモジュールがアクセスされた内容を出力します。","name":"定型回答","disabled":false,"category":"大模型"}},{"id":"save_variables","type":"custom","initialized":false,"position":{"x":2500,"y":300},"data":{"outputs":[],"moduleType":"addMemoryVariable","inputs":[{"connected":true,"valueType":"string","description":"","label":"user_question","type":"agentMemoryVar","targets":[],"key":"user_question"},{"connected":true,"valueType":"string","description":"","label":"classification_result","type":"agentMemoryVar","targets":[],"key":"classification_result"},{"connected":true,"valueType":"string","description":"","label":"knowledge_result","type":"agentMemoryVar","targets":[],"key":"knowledge_result"},{"connected":true,"valueType":"string","description":"","label":"final_answer","type":"agentMemoryVar","targets":[],"key":"final_answer"}],"intro":"このコンポーネントを使用して変数をメモリ変数として保存すると、エージェントの他のコンポーネントで参照できます。","name":"メモリ変数の追加","disabled":false,"category":"高阶能力"}}],"edges":[{"id":"caa46acc-c902-49aa-b8e8-a0f1963fdd90","type":"custom","source":"simpleInputId","target":"question_classifier","sourceHandle":"finish","targetHandle":"switchAny","data":{},"label":"","sourceX":324,"sourceY":1064.984375,"targetY":411.11460790993635,"targetX":508.72955596464476,"animated":false},{"id":"126b2b1d-091d-49f5-99ee-ed94d26eaee4","type":"custom","source":"simpleInputId","target":"question_classifier","sourceHandle":"userChatInput","targetHandle":"text","data":{},"label":"","sourceX":324,"sourceY":880.984375,"targetY":468.9115134275145,"targetX":508.72955596464476,"animated":false},{"id":"9f3f8ba8-b983-46ce-9c77-7804a03c5863","type":"custom","source":"simpleInputId","target":"save_variables","sourceHandle":"userChatInput","targetHandle":"user_question","data":{},"label":"","sourceX":324,"sourceY":880.984375,"targetY":384.8984375,"targetX":2496,"animated":false},{"id":"b8a34efc-86c0-4b01-a812-7e472363626a","type":"custom","source":"question_classifier","target":"save_variables","sourceHandle":"matchResult","targetHandle":"classification_result","data":{},"label":"","sourceX":876.7294949294885,"sourceY":1132.7943259275144,"targetY":460.6953125,"targetX":2496,"animated":false},{"id":"431f5457-0161-420c-99b8-148231b93443","type":"custom","source":"question_classifier","target":"knowledge_search","sourceHandle":"1a79f2dc-b775-11f0-aba5-0abf8f0dd9cc","targetHandle":"switchAny","data":{},"label":"","sourceX":876.7294949294885,"sourceY":1224.7943259275144,"targetY":438.6953125,"targetX":996,"animated":false},{"id":"1f2f6a76-df73-4b36-8516-9be16f7e414a","type":"custom","source":"simpleInputId","target":"knowledge_search","sourceHandle":"userChatInput","targetHandle":"text","data":{},"label":"","sourceX":324,"sourceY":880.984375,"targetY":496.4921875,"targetX":996,"animated":false},{"id":"25d41f36-78d0-4086-bdbb-f55e722803f7","type":"custom","source":"knowledge_search","target":"ad_response","sourceHandle":"finish","targetHandle":"switchAny","data":{},"label":"","sourceX":1364,"sourceY":1761.5625,"targetY":438.6953125,"targetX":1496,"animated":false},{"id":"c4ba85a2-4133-4e13-a1a6-44a8ccffa99e","type":"custom","source":"simpleInputId","target":"ad_response","sourceHandle":"userChatInput","targetHandle":"text","data":{},"label":"","sourceX":324,"sourceY":880.984375,"targetY":496.4921875,"targetX":1496,"animated":false},{"id":"8bc85661-20c5-4640-8b48-723772e9eb59","type":"custom","source":"knowledge_search","target":"ad_response","sourceHandle":"quoteQA","targetHandle":"knSearch","data":{},"label":"","sourceX":1364,"sourceY":1807.5625,"targetY":612.0859375,"targetX":1496,"animated":false},{"id":"3828c503-682f-4eb2-8481-23158a0e109b","type":"custom","source":"knowledge_search","target":"save_variables","sourceHandle":"quoteQA","targetHandle":"","data":{},"label":"","sourceX":1364,"sourceY":1807.5625,"targetY":384.8984375,"targetX":2496,"animated":false},{"id":"2a48c5a0-0287-4970-ae82-d305802414c0","type":"custom","source":"ad_response","target":"save_variables","sourceHandle":"answerText","targetHandle":"final_answer","data":{},"label":"","sourceX":1824,"sourceY":1813.359375,"targetY":612.2890625,"targetX":2496,"animated":false},{"id":"b2ecc991-7675-48d4-a87d-27fc2c656600","type":"custom","source":"question_classifier","target":"other_response","sourceHandle":"1a79f3a4-b775-11f0-aba5-0abf8f0dd9cc","targetHandle":"switchAny","data":{},"label":"","sourceX":876.7294949294885,"sourceY":1270.7943259275144,"targetY":438.6953125,"targetX":1996,"animated":false},{"id":"8f60dcfb-b497-4502-9622-6697ef371e00","type":"custom","source":"other_response","target":"save_variables","sourceHandle":"text","targetHandle":"final_answer","data":{},"label":"","sourceX":2324,"sourceY":783.1875,"targetY":612.2890625,"targetX":2496,"animated":false}],"position":[-75.45798529002963,-18.17944561957981],"zoom":0.4104257526451378,"viewport":{"x":-75.45798529002963,"y":-18.17944561957981,"zoom":0.4104257526451378}},"info":{"name":"広告関連スマート処理アシスタント","intro":"広告制作、マーケティング戦略、ブランド推進などの広告関連質問に専門的な回答を提供する専門アシスタントです","category":"マーケティング・広告","chatAvatar":"","allowVoiceInput":null,"prologue":"こんにちは！私は広告関連の専門アシスタントです。広告制作、マーケティング戦略、ブランド推進、広告効果分析など、広告に関するあらゆるご質問にお答えします。どのようなことでお困りでしょうか？","state":1,"enableHtmlRenders":true,"guides":[],"autoSendVoice":null,"avatar":"https://uat.agentspro.cn/assets/agent/avatar.png"},"globalConfig":{"enableHtmlRenders":true}}
+```
+</Accordion>
+
+### 5.3 ナレッジベース高度検索 (Advanced Query)
+
+ナレッジベース検索コンポーネントに入力することで、並列リコールや重み付けなどの高度な制御が可能です。
+
+```json
+{
+  "keywords": "2025年3月18日のヒット検索ワードは何ですか",
+  "overwrite": "true",
+  "kbIdList": [2,3,4,5,6],
+  "searchGroups": [
+    {
+      "kbIdList": [5],
+      "topK": 22,
+      "fileNameKeywords": ["行方不明","実行規定"]
+    },
+    {
+      "kbIdList": [2,3,4,5,6],
+      "topK": 6
+    }
+  ]
+}
+```
+
+
+### フィールド説明
+
+| フィールド | 説明 |
+| :--- | :--- |
+| `keywords` | 検索キーワード |
+| `overwrite` | 知識ベース検索コンポーネントで選択された知識ベースを上書きするかどうか（デフォルト `true`）。`false` の場合、選択された知識ベースと `kbIdList` をマージします。 |
+| `kbIdList` | 指定する知識ベースIDの全セット。`searchGroups` がある場合、各 `searchGroups` との共通部分が取られます。`{{$kbIdList}}` で動的に指定可能。 |
+| `searchGroups[]` | 知識ベースをグループ化して並列検索するための配列 |
+| `searchGroups[].kbIdList` | そのグループで検索対象とする知識ベースID |
+| `searchGroups[].topK` | そのグループのリコール数 |
+| `searchGroups[].fileNameKeywords` | ファイル名キーワードによる曖昧検索（例: `%年%月%`） |
+| `searchGroups[].fileNameKeywordsTopK` | ファイル名キーワードにヒットしたファイルの関連スライスリコール数。デフォルトは `topK` と同じ。 |
+| `similar` | 類似度閾値（デフォルトはコンポーネント設定と一致） |
+| `vectorSimilarWeight` | ベクトル類似度の重み（デフォルトはコンポーネント設定と一致） |
+| `enableRerank` | リランキングを有効にするか（`true`/`false`、デフォルトはコンポーネント設定と一致） |
+| `rerankModelType` | リランキングモデル（デフォルトはコンポーネント設定と一致） |
+| `rerankSimilarLimit` | リランキング閾値（デフォルトはコンポーネント設定と一致） |
+| `rerankTopK` | リランキングリコール数（デフォルトはコンポーネント設定と一致） |
+
+### 5.4 データ型変換
+「正規表現」モジュールで変換可能です。
+
+<CodeGroup>
+```json 画像URL → 画像情報型
+[{"url":"http://あなたの画像URL"}]
+```
+```json ファイルURL → ファイル情報型
+[{"url":"http://あなたのファイルURL"}]
+```
+</CodeGroup>
+
+### 5.5 データ処理プロトコル (v1.9.0.0+)
+
+
+
+以下のコンポーネントでサポートされています：確定返信、コードブロック、カスタムコンポーネントの出力フィールド。
+
+**共通フィールド仕様**
+
+| フィールド | 説明 |
+| :--- | :--- |
+| `schema` | 固定値 `schema-v1` |
+| `type` | データタイプ (`text`, `file`, `image`, `websearch`) |
+| `needSendMessage` | メッセージを送信するかどうか (`true`/`false`) |
+| `needEncryptFileUrl` | ファイルURLを暗号化するかどうか（暗号化サービス有効時のみ） |
+| `needFullFileUrl` | ファイルの絶対パスを返すかどうか（デフォルト `false` = 相対パス） |
+| `value` | データ値 |
+
+**Value の構造**
+- **text**: 文字列を直接代入
+- **file / image**: JSONオブジェクト `{"fileName": "...", "fileUrl": "..."}`
+  - `fileUrl` の対応プロトコル:
+    - 一時ファイル: `tmpfile:/mindSynth/xxxx.docx`
+    - 永続ファイル: `psfile:/mindSynth/xxxx.docx`
+    - Base64: `data:xxxxx`
+    - ネットワークURL: `http://xxxx`, `https://xxxx`
+
+<Tabs>
+  <Tab title="Text">
+  ```json
+  {
+    "schema": "schema-v1",
+    "type": "text",
+    "needSendMessage": true,
+    "needEncryptFileUrl": false,
+    "value": "message"
+  }
+  ```
+  </Tab>
+
+  <Tab title="File">
+  **Javascript:**
+  ```json
+  {
+    "schema": "schema-v1",
+    "type": "file",
+    "needSendMessage": false,
+    "needFullFileUrl": false,
+    "value": {
+      "fileName": "name",
+      "fileUrl": "tempfile..."
+    }
+  }
+  ```
+  **Python:** (needFullFileUrl=true)
+  </Tab>
+
+  <Tab title="Image">
+  ```json
+  {
+    "schema": "schema-v1",
+    "type": "image",
+    "needSendMessage": true,
+    "value": {
+      "fileName": "name",
+      "fileUrl": "url"
+    }
+  }
+  ```
+  </Tab>
+
+  <Tab title="WebSearch">
+  ```json
+  {
+    "schema": "schema-v1",
+    "type": "websearch",
+    "needSendMessage": true,
+    "value": [
+      {"title":"T1","url":"L1","snippet":"S1","siteIcon":"I1"},
+      {"title":"T2","url":"L2","snippet":"S2","siteIcon":"I2"}
+    ]
+  }
+  ```
+  </Tab>
+</Tabs>
+
+### 5.6 Excelエクスポートテンプレート (XLSX)
+
+<CardGroup cols={2}>
+  <Card title="プレースホルダ" icon="brackets-curly">
+    - `{{var}}` : 単純変数
+    - `{{list.[0].var}}` : 配列要素
+    - `{{a.b.c}}` : ネスト
+  </Card>
+  <Card title="画像挿入" icon="image">
+    - `{{@imgurl}}`
+    - `{{@item.img}}`
+    *(URL または Base64)*
+  </Card>
+</CardGroup>
+
+**ループ処理**
+
+| タイプ | 構文 | 特徴 |
+| :--- | :--- | :--- |
+| **縦方向** | `<for item in list>...</for>` | - 配列長だけ自動的に行が生成されます<br/>- 複数行テンプレートに対応<br/>- ループ内でのネスト参照が可能 |
+| **横方向** | `<hfor item in list>...</hfor>` | - データが右方向に展開されます<br/>- 表頭や横方向データ表示に最適 |
+
+### 5.7 Wordドキュメント生成
+
+[poi-tl Documentation](https://javadoc.io/doc/com.deepoove/poi-tl/1.9.0-beta/index.html) を参照してください。

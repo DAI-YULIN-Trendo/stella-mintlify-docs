@@ -34,7 +34,6 @@
               "welcom/agent_2_1",
               "welcom/agent_2_3",
               "welcom/agent_2_4",
-              "welcom/agent25",
               "welcom/agent_2_6"
             ]
           },
@@ -119,6 +118,13 @@
             "pages": [
               "welcom/database_1",
               "welcom/database_2"
+            ]
+          },
+          {
+            "group": "開発者向け",
+            "pages": [
+              "welcom/agent_v1.4",
+              "welcom/agent_v2.1"
             ]
           }
         ]

@@ -1,0 +1,309 @@
+---
+title: "Agentify Open API v2.0"
+sidebarTitle: "Open API v2.0    "
+description: "AgentifyプラットフォームのOpenAPI仕様書 v2.0"
+---
+
+
+<Info>
+このドキュメントはAgentifyプラットフォームのOpenAPI v2.1の完全な仕様書です。
+チャット、フィードバック、Agent管理、ナレッジベース操作など、全14項目を網羅しています。
+</Info>
+
+## 1. 認証 (Authentication)
+
+<Note>
+**認証方式の概要**  
+認証方式には、MD5、Bearerトークン、およびトークン（ヘッダーまたはクエリパラメータ形式）があります。認証に使用するトークンは、Agentトークン（AuthKeyとAuthSecretのペア）またはパーソナルアクセストークンのいずれかを使用できます。
+</Note>
+
+### 1.1 トークンの取得
+
+#### Agentトークン
+OpenAPI内の特定のAgentにおけるチャット関連インターフェースのみ呼び出し可能です。
+- **取得場所:** Agent編集ページの「OpenAPI」ボタン
+
+#### パーソナルアクセストークン
+- OpenAPIの全てのインターフェースの呼び出しが可能です。
+- 操作可能な範囲は、当該ユーザーがアクセス可能なデータに限定されます。
+
+### 1.2 認証方式の詳細
+
+<AccordionGroup>
+  <Accordion title="1.2.1 MD5方式（推奨）">
+    HTTPリクエストヘッダーに以下のパラメータを渡します。
+
+    | パラメータ | 型 | 必須 | 説明 |
+    | :--- | :--- | :--- | :--- |
+    | `authKey` | string | Yes | お客様のAuthKey |
+    | `timestamp` | integer | Yes | ミリ秒単位のUnixタイムスタンプ |
+    | `sign` | string | Yes | `MD5({authKey}{authSecret}{timestamp})` |
+
+    **署名例:** `sign = MD5("123456789")`
+  </Accordion>
+
+  <Accordion title="1.2.2 Bearerトークン方式">
+    HTTPリクエストヘッダーに以下を指定します。
+    ```http
+    Authorization: Bearer {authKey}.{authSecret}
+    ```
+  </Accordion>
+
+  <Accordion title="1.2.3 トークン方式">
+    **ヘッダー指定:** `token: {authKey}.{authSecret}`  
+    **URLパラメータ:** `` `{{host}}/api/openapi/agent/chat/stream/v1?token={authKey}.{authSecret}` ``
+  </Accordion>
+</AccordionGroup>
+
+### 1.3 環境別ベースURL
+
+| 環境 | URL |
+| :--- | :--- |
+| **PROD環境** | `https://agentify.jp/` |
+| **プライベート環境** | `` `http://{Your Base Url}/` `` |
+
+---
+
+## 2. チャット：ストリーミング形式 (Streaming Chat)
+
+**リクエストURL:**  
+- `` `{{host}}/openapi/agents/chat/stream/v1` ``  
+- `` `{{host}}/openapi/v2/chat/stream` ``
+
+**HTTPメソッド:** `POST`
+
+### 2.1 リクエストパラメータ
+
+| パラメータ | 型 | 必須 | 説明 |
+| :--- | :--- | :--- | :--- |
+| `agentId` | string | Yes | AgentのUUID |
+| `userChatInput` | string | Yes | ユーザー入力テキスト |
+| `chatId` | string | No | 会話ID。継続セッションの場合、前回応答の `chatId` を指定 |
+| `state` | object | No | 環境変数パラメータ。`` `{{_state.yourKey}}` `` で参照可能 |
+| `images` | array | No | 画像入力 `` `[{"url": "..."}]` `` |
+| `files` | array | No | ファイル情報配列 |
+
+<Accordion title="ストリーミング応答ボディの説明">
+  | フィールド | 型 | 必須 | 説明 |
+  | :--- | :--- | :--- | :--- |
+  | `chatId` | string | Yes | 会話ID |
+  | `conversationId` | string | Yes | 会話セッションID |
+  | `messageId` | string | Yes | メッセージID。評価（いいね/低評価）に使用 |
+  | `type` | string | Yes | コンテンツタイプ（`text`, `markdown`, `pic`, `buttons` 等） |
+  | `content` | string/object | Yes | 応答コンテンツ本体 |
+</Accordion>
+
+<Accordion title="リクエスト例">
+```json
+{
+  "agentId": "a2207c2f6d3d44d2b4a5dae5b5593750",
+  "userChatInput": "こんにちは",
+  "state": { "roomId": "123" }
+}
+```
+</Accordion>
+
+---
+
+## 3. チャット：同期形式 (Sync Chat)
+
+完了まで待機し、一度に応答を受け取ります。
+
+**リクエストURL:**  
+- `` `{{host}}/openapi/agents/chat/completions/v1` ``  
+- `` `{{host}}/openapi/v2/chat/completions` ``
+
+**HTTPメソッド:** `POST`
+
+<Accordion title="レスポンスボディの構成">
+  | フィールド | 型 | 説明 |
+  | :--- | :--- | :--- |
+  | `chatId` | string | 会話ID |
+  | `choices` | array | 応答内容の配列。各要素に `content`, `type`, `role`, `bill` 等が含まれます。 |
+  | `state` | object | リクエスト時に渡された環境変数のエコーバック |
+</Accordion>
+
+---
+
+## 4. チャット：非同期形式 (Async Chat)
+
+即座に `requestId` を返し、結果はポーリングまたはコールバックで取得します。
+
+**リクエストURL:**  
+- `` `{{host}}/openapi/agents/chat/completions/async/v1` ``  
+- `` `{{host}}/openapi/v2/chat/completions/async` ``
+
+**HTTPメソッド:** `POST`
+
+### 4.1 追加パラメータ
+| パラメータ | 型 | 必須 | 説明 |
+| :--- | :--- | :--- | :--- |
+| `callbackUrl` | string | No | 処理完了時の結果通知先URL |
+| `callbackHeaders` | object | No | コールバック通知時に付与するHTTPヘッダー |
+
+---
+
+## 5. ポーリング (Polling)
+
+**リクエストURL:**  
+- `` `{{host}}/openapi/agents/chat/completions/async/polling/v1` ``  
+- `` `{{host}}/openapi/v2/chat/completions/async/polling` ``
+
+**HTTPメソッド:** `GET`
+
+### 5.1 実行状態（state）
+| 値 | 状態 | 説明 |
+| :--- | :--- | :--- |
+| `1` | `RUNNING` | 実行中 |
+| `2` | `DONE` | 実行完了（`output` フィールドに結果が含まれる） |
+| `3` | `EXCEPTION` | 実行エラー |
+
+---
+
+## 6. フィードバック (Feedback)
+
+ユーザーからのフィードバック（分岐の選択など）を送信します。
+
+**リクエストURL:**  
+- `` `{{host}}/openapi/agents/chat/feedback` ``  
+- `` `{{host}}/openapi/v2/chat/feedback` ``
+
+**HTTPメソッド:** `POST`
+
+### 6.1 リクエストパラメータ
+| パラメータ | 型 | 必須 | 説明 |
+| :--- | :--- | :--- | :--- |
+| `agentId` | string | Yes | AgentのID |
+| `chatId` | string | Yes | 会話ID |
+| `feedbackKey` | string | Yes | 応答に含まれていた `feedbackKey` |
+| `feedbackType` | string | Yes | `over`, `restart`, `loop` |
+
+---
+
+## 7. Agent一覧 (Agent List)
+
+アクセス可能なAgentの基本情報を取得します。
+
+**リクエストURL:**  
+- `` `{{host}}/openapi/agents` ``  
+- `` `{{host}}/openapi/v2/agents` ``
+
+**HTTPメソッド:** `GET`
+
+<Accordion title="取得可能項目">
+- `agentUuid`: Agentの一意なID
+- `name`: Agent名称
+- `avatar`: アバター画像URL
+- `intro`: 紹介文
+</Accordion>
+
+---
+
+## 8. Agent詳細 (Agent Details)
+
+特定のAgentの設定情報を取得します。
+
+**リクエストURL:**  
+- `` `{{host}}/openapi/agents/{agentUUID}` ``  
+- `` `{{host}}/openapi/v2/agents/{agentUUID}` ``
+
+**HTTPメソッド:** `GET`
+
+---
+
+## 9. 評価：いいね/低評価 (Like/Dislike)
+
+メッセージに対する評価を送信します。
+
+**リクエストURL:**  
+- `` `{{host}}/openapi/agents/likeViewDislike` ``  
+- `` `{{host}}/openapi/v2/agents/likeViewDislike` ``
+
+**HTTPメソッド:** `POST`
+
+### 9.1 リクエストパラメータ
+| パラメータ | 型 | 必須 | 説明 |
+| :--- | :--- | :--- | :--- |
+| `id` | string | Yes | メッセージID |
+| `lvdStatus` | string | Yes | `thumbUp`, `thumbDown`, `none` |
+
+---
+
+## 10. 応答ストリーム終了 (Close Stream)
+
+**リクエストURL:**  
+- `` `{{host}}/openapi/agents/chat/close` ``  
+- `` `{{host}}/openapi/v2/agents/chat/close` ``
+
+**HTTPメソッド:** `GET`
+
+---
+
+## 11. ファイルアップロード (File Upload)
+
+**リクエストURL:** `` `{{host}}/openapi/fs/upload` ``
+
+**HTTPメソッド:** `POST`
+
+### 11.1 フォームパラメータ
+| パラメータ | 型 | 説明 |
+| :--- | :--- | :--- |
+| `file` | file | アップロードするバイナリデータ |
+| `returnType` | string | 返却値のタイプ（`id`, `url`）。デフォルトは `id` |
+
+---
+
+## 12. データセット作成 (KB Task Start)
+
+**リクエストURL:** `` `{{host}}/openapi/kb/createDsAndTask` ``
+
+**HTTPメソッド:** `POST`
+
+### 12.1 リクエストパラメータ
+| パラメータ | 型 | 必須 | 説明 |
+| :--- | :--- | :--- | :--- |
+| `kbId` | integer | Yes | ナレッジベースのID |
+| `fileId` | string | Yes | アップロードしたファイルのID |
+| `name` | string | Yes | データセット名 |
+| `parserType` | string | No | 解析方法（`general`, `qa`, `table` 等） |
+
+<Accordion title="サポートされている解析タイプ">
+- **general:** PDF, Word, TXT, Markdown等
+- **qa:** Excel(Q&A形式)
+- **table:** Excel(テーブル形式)
+- **picture:** 画像(OCR解析)
+</Accordion>
+
+---
+
+## 13. データセット変更 (KB Modify)
+
+**リクエストURL:** `` `{{host}}/openapi/kb/modifyDsAndTask` ``
+
+**HTTPメソッド:** `POST`
+
+### 13.1 リクエストパラメータ
+| パラメータ | 型 | 必須 | 説明 |
+| :--- | :--- | :--- | :--- |
+| `id` | integer | Yes | データセットのID |
+| `fileId` | string | Yes | 新しいファイルのID |
+
+---
+
+## 14. データセット削除 (KB Delete)
+
+**リクエストURL:** `` `{{host}}/openapi/kb/deleteDs` ``
+
+**HTTPメソッド:** `POST`
+
+### 14.1 リクエストパラメータ
+- `dsIdList`: (array of integer, Required) 削除するデータセットIDのリスト
+
+<Accordion title="削除リクエスト例">
+```json
+{
+  "dsIdList": [31212, 31213]
+}
+```
+</Accordion>
+
