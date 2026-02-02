@@ -1,8 +1,10 @@
 ---
-title: "Agentify 進階利用ドキュメント-v1.4"
+title: "Agentify 進階利用ドキュメント"
 ---
 
 # 1. システム内蔵変数
+
+内蔵変数：ユーザー入力、会話情報、前段ノードの出力、環境設定などを参照するための変数
 
 <Info>
 **使用構文**
@@ -10,6 +12,13 @@ title: "Agentify 進階利用ドキュメント-v1.4"
 - `{{var:defautValue}}`：変数参照＋デフォルト値設定
 - `{{@var}}`：変数参照（変数が存在しない場合でも、この式 `{{@var}}` をそのまま表示）
 </Info>
+
+### 内蔵変数を使うケース
+- ユーザーの入力（テキスト/ファイル/画像など）を次のノードに渡したい
+- ノードの実行結果（検索結果、抽出値）を後続処理で再利用したい
+- 条件分岐で「入力がある/ない」「スコアが閾値以上」などを判定したい
+- 本番/検証環境でホストやキーを切り替えたい
+- ログ（traceId、失敗理由、実行時間）を残したい
 
 ### 日付・時刻
 
@@ -76,10 +85,15 @@ title: "Agentify 進階利用ドキュメント-v1.4"
 
 # 2. システム内蔵関数
 
+内蔵関数：文字列処理、JSON変換、日付計算、配列操作など、よく使う処理をノーコードで実行できる関数
 <Note>
 **使用構文**  
 `[@["functionName", "args1", "args2",....]@]`
 </Note>
+
+### 内蔵関数を使うケース
+*一般的には、「正規表現」モジュールで対応できることが多いです。*
+
 
 <AccordionGroup>
   <Accordion title="日付・時刻操作">
@@ -415,7 +429,7 @@ Below I describe the steps for generating prompt, which can be used to describe 
 
 
 
-以下のコンポーネントでサポートされています：確定返信、コードブロック、カスタムコンポーネントの出力フィールド。
+以下のモジュールでサポートされています：定型回答、コードブロック、カスタムコンポーネントの出力フィールド。
 
 **共通フィールド仕様**
 
@@ -509,6 +523,9 @@ Below I describe the steps for generating prompt, which can be used to describe 
     - `{{@item.img}}`
     *(URL または Base64)*
   </Card>
+  <Card title="テンプレート" icon="download" href="../excel_tem.xlsx">
+    ここをクリックして参考用テンプレートをダウンロード
+  </Card>
 </CardGroup>
 
 **ループ処理**
@@ -521,3 +538,68 @@ Below I describe the steps for generating prompt, which can be used to describe 
 ### 5.7 Wordドキュメント生成
 
 [poi-tl Documentation](https://javadoc.io/doc/com.deepoove/poi-tl/1.9.0-beta/index.html) を参照してください。
+
+### 5.8 PPT生成
+
+入力されたJSONフィールドを、あらかじめアップロードされたテンプレートにマッピングして、PPTファイルを生成します。
+
+#### 1. 入力JSONタイプ(例)
+```json
+{
+  "user": {
+    "nickname": "佐藤健太",
+    "age": 32,
+    "department": "製品開発部",
+    "contact": {
+      "email": "kenta.sato@example.co.jp"
+    },
+    "avatar1": "https://agentify.jp/api/fs/68b7ea73a710e1ff90b63edc.png",
+    "hobbies": "写真撮影、サイクリング、ラーメン屋巡り"
+  },
+  "family": {
+    "members": [
+      {
+        "name": "佐藤正雄",
+        "role": "父",
+        "age": 65
+      },
+      {
+        "name": "佐藤恵子",
+        "role": "母",
+        "age": 62
+      }
+    ]
+  },
+  "work": {
+    "projects": [
+      {
+        "name1": "次世代AIアシスタント開発",
+        "status": "計画中",
+        "progress": 25
+      },
+      {
+        "name1": "グローバル市場向けUI/UX改善",
+        "status": "完了",
+        "progress": 100
+      }
+    ]
+  }
+}
+```
+
+#### 2. テンプレート
+<Info>
+  **注記**: テンプレート（pptx）内には、あらかじめ `{{var1}}` のような形式でプレースホルダを記述しておく必要があります。
+</Info>
+
+<CardGroup cols={1}>
+  <Card title="PPTテンプレート" icon="file-powerpoint" href="../demoppt.pptx">
+    参考用テンプレートをダウンロード (demoppt.pptx)
+  </Card>
+</CardGroup>
+
+#### 3. 編成コード例（インポート用）
+
+```json
+{"flow":{"nodes":[{"id":"simpleInputId","type":"custom","initialized":false,"position":{"x":-965.6048384086856,"y":371.2069770754281},"data":{"outputs":[{"valueType":"string","description":"参照変数：{{userChatInput}}","label":"テキスト情報","type":"source","targets":[],"key":"userChatInput"},{"valueType":"file","description":"ユーザーがアップロードしたドキュメントのリストをJSON配列形式で出力します。ドキュメント比較の場合、グループ情報を含めます。","label":"ドキュメント情報","type":"source","targets":[],"key":"files"},{"valueType":"image","description":"ユーザがアップロードした画像のリストをJSON配列形式で出力します","label":"画像の情報","type":"source","targets":[],"key":"images"},{"valueType":"boolean","description":"ボタンがクリックされていない場合、値はtrueです","label":"ボタンがクリックされていません","type":"source","targets":[],"key":"unclickedButton"},{"valueType":"boolean","description":"実行が完了するとスイッチがオンになり、ダウンストリームのリンクされたコンポーネントが実行します。","label":"モジュール実行終了","type":"source","targets":[],"key":"finish"},{"valueType":"boolean","description":"","label":"1","type":"parameter","targets":[{"targetHandle":"switch","target":"32315437-09b8-4f73-8f0a-5c1f06d5bbab"}],"key":"8625c6b1-caca-423b-8cc3-7da71cd1f1ac"}],"moduleType":"questionInput","inputs":[{"connected":true,"valueType":"boolean","description":"アップストリームのすべての条件を満たす場合にのみ、現在のコンポーネントの実行ロジックが有効になります","label":"条件をすべて満たした場合に動作を開始","type":"target","keyType":"trigger","value":false,"key":"switch"},{"connected":true,"valueType":"boolean","description":"アップストリームのいずれかの条件を満たせば、現在のコンポーネントの実行ロジックが有効になります","label":"いずれかを満たした場合に動作を開始","type":"target","keyType":"triggerAny","value":false,"key":"switchAny"},{"valueType":"boolean","description":"テキストの入力のスイッチ","label":"テキストの入力","type":"switch","value":true,"key":"inputText"},{"valueType":"boolean","description":"ドキュメントのアップロードのスイッチ","label":"ドキュメントのアップロード","type":"switch","value":false,"key":"uploadFile"},{"valueType":"boolean","description":"画像のアップロードのスイッチ","label":"画像のアップロード","type":"switch","value":true,"key":"uploadPicture"},{"valueType":"boolean","description":"ドキュメントのレビューのスイッチ","label":"ドキュメントのレビュー","type":"switch","value":false,"key":"fileUpload"},{"valueType":"boolean","description":"ドキュメント比較を有効にしますか","label":"ドキュメント比較を行いますか","type":"checkBox","value":false,"key":"fileContrast"},{"valueType":"any","description":"アップロードされたファイルのリストはドキュメント比較が有効な場合は、グループごとに1つのファイルのみアップロードできます","label":"ドキュメントのグループ化","type":"table","value":[],"key":"fileInfo"},{"valueType":"boolean","description":"初期グローバルとしてinputしますか","label":"初期グローバルとしてinputしますか","type":"hidden","value":true,"key":"initialInput"}],"intro":"ユーザ入力エントランス、対話中のユーザの入力情報は他のモジュールと接続する、一般的にはスタートモジュールとして使用されます","name":"ユーザークエリ","disabled":false,"category":"ユーザークエリ"}},{"id":"52d93f3c-58c6-4f4f-9b56-834b9cd5ad04","type":"custom","initialized":false,"position":{"x":534.8029298166571,"y":613.6452821169357},"data":{"outputs":[{"valueType":"string","description":"ファイル名（fileName）、ファイルのダウンロードURL（fileUrl）などを含む内容をJSON形式で出力します","label":"ドキュメント情報","type":"source","targets":[],"key":"fileInfo"},{"valueType":"boolean","description":"実行が完了するとスイッチがオンになり、ダウンストリームのリンクされたコンポーネントが実行します。","label":"モジュール実行終了","type":"source","targets":[],"key":"finish"}],"moduleType":"external_plugins_pptx","inputs":[{"connected":true,"valueType":"boolean","description":"アップストリームのすべての条件を満たす場合にのみ、現在のコンポーネントの実行ロジックが有効になります","label":"条件をすべて満たした場合に動作を開始","type":"target","keyType":"trigger","value":false,"key":"switch"},{"connected":true,"valueType":"boolean","description":"アップストリームのいずれかの条件を満たせば、現在のコンポーネントの実行ロジックが有効になります","label":"いずれかを満たした場合に動作を開始","type":"target","keyType":"triggerAny","value":false,"key":"switchAny"},{"connected":true,"valueType":"string","description":"PPTXドキュメントテンプレートに必要なJSONデータを入力します。テンプレート内では{{var1}}という構文でデータを埋め込むことができます","label":"情報入力","type":"target","value":"","key":"text"},{"connected":true,"valueType":"string","description":"生成文書のファイル名を定義します","label":"PPT文書名","type":"textarea","value":"ドキュメント","key":"fileName"},{"connected":false,"valueType":"boolean","description":"ドキュメント情報をユーザーに出力するかどうかを制御します","label":"ドキュメント情報をユーザーに表示","type":"switch","value":true,"key":"stream"},{"connected":false,"suportType":["pptx"],"valueType":"string","description":"クリックしてテンプレートをアップロードします。対応ファイル形式はpptxです","label":"PPTXテンプレート","type":"uploadFile","value":{"fileName":"pptdemo.pptx","fileId":"68b97eb0ffb7b9d59dadebe1"},"key":"templateFile"},{"valueType":"string","description":"コンポーネントのコードブロック","label":"codeId","type":"hidden","value":"external_plugins_pptx","key":"codeId"}],"intro":"データとPPTテンプレートに基づいてPPTを作成します","name":"PPT作成","disabled":false,"category":"高度な設定"}},{"id":"32315437-09b8-4f73-8f0a-5c1f06d5bbab","type":"custom","initialized":false,"position":{"x":-252.04205509440808,"y":738.3070723880319},"data":{"outputs":[{"valueType":"string","description":"返信内容をそのまま出力します。","label":"返信","type":"source","value":"","targets":[{"targetHandle":"text","target":"52d93f3c-58c6-4f4f-9b56-834b9cd5ad04"}],"key":"text"},{"valueType":"boolean","description":"実行が完了するとスイッチがオンになり、ダウンストリームのリンクされたコンポーネントが実行します。","label":"モジュール実行終了","type":"source","targets":[{"targetHandle":"switchAny","target":"52d93f3c-58c6-4f4f-9b56-834b9cd5ad04"}],"key":"finish"}],"moduleType":"confirmreply","inputs":[{"connected":true,"valueType":"boolean","description":"アップストリームのすべての条件を満たす場合にのみ、現在のコンポーネントの実行ロジックが有効になります","label":"条件をすべて満たした場合に動作を開始","type":"target","keyType":"trigger","value":false,"key":"switch"},{"connected":true,"valueType":"boolean","description":"アップストリームのいずれかの条件を満たせば、現在のコンポーネントの実行ロジックが有効になります","label":"いずれかを満たした場合に動作を開始","type":"target","keyType":"triggerAny","value":false,"key":"switchAny"},{"connected":false,"valueType":"boolean","description":"ユーザーに返信内容をアウトプットするかどうかをコントロールする","label":"ユーザーに返信を表示","type":"switch","value":true,"key":"stream"},{"connected":true,"valueType":"string","description":" \\n を使って連続改行を実現できます。\n\n外部モジュールの入力を通じて返信が可能であり、外部モジュールの入力時に現在記入している内容が上書きされます。参照変数：{{text}}","label":"返信","type":"textarea","value":"{\n  \"user\": {\n    \"nickname\": \"佐藤健太\",\n    \"age\": 32,\n    \"department\": \"製品開発部\",\n    \"contact\": {\n      \"email\": \"kenta.sato@example.co.jp\"\n    },\n    \"avatar1\": \"https://agentify.jp/api/fs/68b7ea73a710e1ff90b63edc.png\",\n    \"hobbies\": \"写真撮影、サイクリング、ラーメン屋巡り\"\n  },\n  \"family\": {\n    \"members\": [\n      {\n        \"name\": \"佐藤正雄\",\n        \"role\": \"父\",\n        \"age\": 65\n      },\n      {\n        \"name\": \"佐藤恵子\",\n        \"role\": \"母\",\n        \"age\": 62\n      }\n    ]\n  },\n  \"work\": {\n    \"projects\": [\n      {\n        \"name1\": \"次世代AIアシスタント開発\",\n        \"status\": \"計画中\",\n        \"progress\": 25\n      },\n      {\n        \"name1\": \"グローバル市場向けUI/UX改善\",\n        \"status\": \"完了\",\n        \"progress\": 100\n      }\n    ]\n  }\n}","key":"text"}],"intro":"トリガー条件と合わせて、プリセット内容またはアップストリームのモジュールがアクセスされた内容を出力します。","name":"定型回答","disabled":false,"category":"大規模言語モデル"}}],"edges":[{"id":"vueflow__edge-32315437-09b8-4f73-8f0a-5c1f06d5bbabtext-52d93f3c-58c6-4f4f-9b56-834b9cd5ad04text","type":"custom","source":"32315437-09b8-4f73-8f0a-5c1f06d5bbab","target":"52d93f3c-58c6-4f4f-9b56-834b9cd5ad04","sourceHandle":"text","targetHandle":"text","data":{},"label":"","sourceX":71.95794490559192,"sourceY":1221.4946334231881,"targetY":810.1374696169357,"targetX":530.8029298166571,"animated":false},{"id":"vueflow__edge-simpleInputId8625c6b1-caca-423b-8cc3-7da71cd1f1ac-32315437-09b8-4f73-8f0a-5c1f06d5bbabswitch","type":"custom","source":"simpleInputId","target":"32315437-09b8-4f73-8f0a-5c1f06d5bbab","sourceHandle":"8625c6b1-caca-423b-8cc3-7da71cd1f1ac","targetHandle":"switch","data":{},"label":"","sourceX":-641.6048384086856,"sourceY":1182.1914131105843,"targetY":819.2055098880319,"targetX":-256.04205509440806,"animated":false},{"id":"vueflow__edge-32315437-09b8-4f73-8f0a-5c1f06d5bbabfinish-52d93f3c-58c6-4f4f-9b56-834b9cd5ad04switchAny","type":"custom","source":"32315437-09b8-4f73-8f0a-5c1f06d5bbab","target":"52d93f3c-58c6-4f4f-9b56-834b9cd5ad04","sourceHandle":"finish","targetHandle":"switchAny","data":{},"label":"","sourceX":71.95794490559192,"sourceY":1267.4946334231881,"targetY":752.3405946169357,"targetX":530.8029298166571,"animated":false}],"position":[509.0219471735914,-76.78919353680425],"zoom":0.48083300329301903,"viewport":{"x":509.0219471735914,"y":-76.78919353680425,"zoom":0.48083300329301903}},"info":{"name":"PPT作成","intro":"PPT作成demo","category":"デジタル","chatAvatar":"/assets/bgs/1222-5.png","allowVoiceInput":null,"prologue":null,"state":2,"enableHtmlRenders":true,"guides":[],"autoSendVoice":null,"avatar":"/assets/agent/avatarJa.png"},"globalConfig":{"enableHtmlRenders":true}}
+```

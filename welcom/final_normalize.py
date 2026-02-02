@@ -64,4 +64,4 @@ def final_normalize_mdx(file_path):
         f.write('\n'.join(new_lines))
 
 if __name__ == "__main__":
-    final_normalize_mdx('/Users/a1234/Desktop/docs/welcom/agent_v2.1.mdx')
+    final_normalize_mdx('agent_v2.1.mdx')

@@ -1,33 +1,42 @@
 ---
-title: "Agentify Open API v2.0"
-sidebarTitle: "Open API v2.0    "
-description: "AgentifyプラットフォームのOpenAPI仕様書 v2.0"
+title: "Agentify Open API"
+sidebarTitle: "Agentify Open API"
 ---
 
 
-<Info>
-このドキュメントはAgentifyプラットフォームのOpenAPI v2.1の完全な仕様書です。
-チャット、フィードバック、Agent管理、ナレッジベース操作など、全14項目を網羅しています。
-</Info>
-
-## 1. 認証 (Authentication)
-
-<Note>
-**認証方式の概要**  
-認証方式には、MD5、Bearerトークン、およびトークン（ヘッダーまたはクエリパラメータ形式）があります。認証に使用するトークンは、Agentトークン（AuthKeyとAuthSecretのペア）またはパーソナルアクセストークンのいずれかを使用できます。
-</Note>
+## 1. インターフェース仕様と認証
 
 ### 1.1 トークンの取得
 
-#### Agentトークン
-OpenAPI内の特定のAgentにおけるチャット関連インターフェースのみ呼び出し可能です。
-- **取得場所:** Agent編集ページの「OpenAPI」ボタン
+#### 1.1.1 Agentトークンの取得
 
-#### パーソナルアクセストークン
-- OpenAPIの全てのインターフェースの呼び出しが可能です。
-- 操作可能な範囲は、当該ユーザーがアクセス可能なデータに限定されます。
+**OpenAPI内の特定のAgentにおけるチャット関連インターフェースのみ呼び出し可能です。**
+また、権限はそのユーザーがアクセス可能なデータの操作に限定されます。
 
-### 1.2 認証方式の詳細
+Agent編集ページに移動し、ボタンをクリックします。
+
+<img src="/images/api_1.png" alt="Agent Token" />
+
+#### 1.1.2 パーソナルアクセストークンの取得
+
+<Info>
+  **注記**：この（パーソナルアクセス）トークンで実行可能な操作は以下の通りです。
+</Info>
+
+* OpenAPIの全てのインターフェースの呼び出し
+* **ただし、操作可能なデータの範囲は以下に限定されます。**
+    * 当該ユーザーが所有するデータ。
+    * 当該ユーザーのアカウントに紐づく全てのAgentのチャットインターフェース。
+
+<img src="/images/api_2.png" alt="Personal Token 1" />
+<img src="/images/api_3.png" alt="Personal Token 2" />
+
+### 1.2 インターフェース認証
+
+<Tip>
+  認証方式には、**MD5**、**Bearerトークン**、および**トークン**（ヘッダーまたはクエリパラメータ形式）があります。
+  認証に使用するトークンの値は、**Agentトークン**（通常はAuthKeyとAuthSecretのペアを指します）または**パーソナルアクセストークン**（同様にAuthKeyとAuthSecretのペアを指します）のいずれかを使用できます。
+</Tip>
 
 <AccordionGroup>
   <Accordion title="1.2.1 MD5方式（推奨）">
@@ -36,22 +45,36 @@ OpenAPI内の特定のAgentにおけるチャット関連インターフェー�
     | パラメータ | 型 | 必須 | 説明 |
     | :--- | :--- | :--- | :--- |
     | `authKey` | string | Yes | お客様のAuthKey |
-    | `timestamp` | integer | Yes | ミリ秒単位のUnixタイムスタンプ |
-    | `sign` | string | Yes | `MD5({authKey}{authSecret}{timestamp})` |
+    | `timestamp` | integer | Yes | ミリ秒単位のUnixタイムスタンプ。現在時刻との差が**300秒以内**でなければなりません。 |
+    | `sign` | string | Yes | `MD5({authKey}{authSecret}{timestamp})` (MD5ハッシュ値は32文字であること) |
 
-    **署名例:** `sign = MD5("123456789")`
+    **MD5ハッシュ値の計算例：**
+    例：`authKey`が`123`、`authSecret`が`456`、`timestamp`が`789`であると仮定します。
+    この場合、`sign` の値は、文字列 "`123456789`"（`authKey` + `authSecret` + `timestamp`）のMD5ハッシュ値となります。
+    すなわち、`sign` = `MD5("123456789")`
   </Accordion>
 
   <Accordion title="1.2.2 Bearerトークン方式">
-    HTTPリクエストヘッダーに以下を指定します。
+    HTTPリクエストヘッダーに以下のパラメータを渡します。
+
     ```http
     Authorization: Bearer {authKey}.{authSecret}
     ```
+    <Warning>**注記**：`Bearer` の後には半角スペースが必要です。</Warning>
   </Accordion>
 
   <Accordion title="1.2.3 トークン方式">
-    **ヘッダー指定:** `token: {authKey}.{authSecret}`  
-    **URLパラメータ:** `` `{{host}}/api/openapi/agent/chat/stream/v1?token={authKey}.{authSecret}` ``
+    HTTPリクエストヘッダーに以下のパラメータを渡します。
+
+    ```http
+    Authorization: {authKey}.{authSecret}
+    ```
+
+    または、URLクエリパラメータを使用してパラメータを渡すことも可能です。
+
+    ```http
+    {{host}}/api/openapi/agent/chat/stream/v1?token={authKey}.{authSecret}
+    ```
   </Accordion>
 </AccordionGroup>
 
@@ -59,251 +82,1097 @@ OpenAPI内の特定のAgentにおけるチャット関連インターフェー�
 
 | 環境 | URL |
 | :--- | :--- |
-| **PROD環境** | `https://agentify.jp/` |
-| **プライベート環境** | `` `http://{Your Base Url}/` `` |
+| 公開ネットワーク - PROD環境 | `https://agentify.jp/` |
+| プライベート環境 | `http://{Your Base Url}/` |
+
+### 1.4 インターフェースバージョンの説明
+
+| バージョン | 説明 |
+| :--- | :--- |
+| v1 | なし |
+| v2 | 1. インターフェース命名規則の統一<br/>2. チャットインターフェースの`chatId`を数値型から**文字列型**へ変更 |
 
 ---
 
-## 2. チャット：ストリーミング形式 (Streaming Chat)
+## 2. Agentチャット（ストリーミング形式）
 
-**リクエストURL:**  
-- `` `{{host}}/openapi/agents/chat/stream/v1` ``  
-- `` `{{host}}/openapi/v2/chat/stream` ``
+### リクエストURL
 
-**HTTPメソッド:** `POST`
+```http
+POST {{host}}/open/api/agents/chat/stream/v1
+# または
+POST {{host}}/open/api/v2/chat/stream
+```
 
-### 2.1 リクエストパラメータ
+### リクエストヘッダー
+1.1章を参照してください。
+
+### リクエストボディ
 
 | パラメータ | 型 | 必須 | 説明 |
 | :--- | :--- | :--- | :--- |
-| `agentId` | string | Yes | AgentのUUID |
-| `userChatInput` | string | Yes | ユーザー入力テキスト |
-| `chatId` | string | No | 会話ID。継続セッションの場合、前回応答の `chatId` を指定 |
-| `state` | object | No | 環境変数パラメータ。`` `{{_state.yourKey}}` `` で参照可能 |
-| `images` | array | No | 画像入力 `` `[{"url": "..."}]` `` |
-| `files` | array | No | ファイル情報配列 |
+| `agentId` | string | Yes | AgentのUUID。 |
+| `chatId` | string | No | 会話ID。任意入力。最初のセッションでは入力しません。後続のセッションでコンテキストを利用したい場合は、次のリクエスト時に前回セッションのストリーミング応答ボディの`chatId`を付与する必要があります。(v2から文字列型であることに注意) |
+| `userChatInput` | string | Yes | ユーザー入力。 |
+| `state` | object | No | 環境変数パラメータを渡します。キーと値のペア（`key:value`）は呼び出し元が任意に定義します。Agent処理フローでは`{{_state.yourKey}}`の形式で対応するパラメータ値を取得できます。<br/>例：`{"yourKey1":"yourValue1", "yourKey2":"yourValue2"}` |
+| `buttonKey` | string | No | ボタン名またはボタンID。 |
+| `images` | array | No | 画像を含む質問の場合のパラメータ。<br/>例：`[{"url": "画像ファイルのURL"}]` |
+| `files` | array | No | ファイルに関する質問、またはドキュメントレビューを行う際に使用するファイル情報の配列。<br/>(下記詳細参照) |
+| `debug` | boolean | No | デバッグモードを有効にするかどうかを指定します。デフォルトは`false`です。<br/>* 有効にすると、各リクエストの入力パラメータ、出力レスポンス、および例外情報が詳細に記録されるため、ログの内容が多くなります。<br/>* 無効にした場合（または指定しない場合）、例外が発生した呼び出しに関する情報のみが記録されます。<br/>* 本番環境では、このパラメータを`false`に設定するか、または指定しないことを推奨します。 |
 
-<Accordion title="ストリーミング応答ボディの説明">
-  | フィールド | 型 | 必須 | 説明 |
-  | :--- | :--- | :--- | :--- |
-  | `chatId` | string | Yes | 会話ID |
-  | `conversationId` | string | Yes | 会話セッションID |
-  | `messageId` | string | Yes | メッセージID。評価（いいね/低評価）に使用 |
-  | `type` | string | Yes | コンテンツタイプ（`text`, `markdown`, `pic`, `buttons` 等） |
-  | `content` | string/object | Yes | 応答コンテンツ本体 |
+**filesパラメータの詳細**:
+
+```json
+[
+  {
+    "fileId": "66979252197ded4838301ac4", // fileIdまたはfileUrlのいずれか一方が必須です。
+    "fileName": "落札公示.docx", // 指定しない場合、fileUrlから取得されることがあります。
+    "fileUrl": "https://test.agentspro.cn/api/fs/66979252197ded4838301ac4", // fileIdまたはfileUrlのいずれか一方が必須です。
+    "groupName": "落札公示" // 任意入力。主にファイル比較機能で使用されます。
+  },
+  {
+    "fileId": "66979252197ded4838301ac5", // fileIdまたはfileUrlのいずれか一方が必須です。
+    "fileName": "技術契約書.docx", // 指定しない場合、fileUrlから取得されることがあります。
+    "fileUrl": "https://test.agentspro.cn/api/fs/66979252197ded4838301ac5", // fileIdまたはfileUrlのいずれか一方が必須です。
+    "groupName": "契約書類" // 任意入力。主にファイル比較機能で使用されます。
+  }
+]
+```
+
+<Accordion title="リクエストボディの例">
+```json
+{
+  "agentId": "a2207c2f6d3d44d2b4a5dae5b5593750",
+  "chatId": null,
+  "userChatInput": "インターネットとは何ですか", // テキスト入力
+  "images": [{"url": "your image url here"}], // 画像入力
+  "files": [],
+  "state": { // state内の内容はそのまま返却されます
+    "yourKey1": "yourValue1",
+    "yourKey2": "yourValue2"
+  },
+  "buttonKey": "ボタンのIDまたは名前", // ボタンIDまたは名前
+  "debug": false 
+}
+```
 </Accordion>
+
+### ストリーミング応答ボディの説明
+
+| パラメータ | 型 | 必須 | 説明 |
+| :--- | :--- | :--- | :--- |
+| `chatId` | string | Yes | 会話ID。 |
+| `conversationId` | string | Yes | 現在の会話セッションID。一つの会話セッションには複数の応答ターンが含まれることがあります。 |
+| `messageId` | string | Yes | メッセージID。返信されたメッセージを一意に識別します。メッセージ評価（いいね/低評価）などに使用できます。 |
+| `type` | string | Yes | 応答コンテンツのタイプを示します。<br/>`text`: 通常テキスト<br/>`markdown`: Markdown形式のテキスト<br/>`pic`: 画像URL（通常、画像生成AIによる出力に使用されます）<br/>`buttons`: 処理フローで定義されたボタンメッセージ<br/>`feedback`: フィードバック要求。詳細は「6. Agentフィードバックインターフェース」を参照。<br/>`chart`: SQLクエリ結果などのグラフ表示用データ<br/>`table`: SQLクエリ結果などのテーブル表示用データ<br/>`result_file`: 生成されたファイルの情報 |
+| `componentName` | string | No | 現在アクティブなコンポーネントの名称。[注1] |
+| `content` | string | Yes | ストリーミング形式の応答コンテンツ本体。このフィールドの値によって構造や意味が異なります。<br/>(下記詳細参照) |
+| `reasoningContent` | string | No | 思考・推論プロセスで生成された内容。思考モデル（例：`deepseek-R1`）のみがこのフィールドを返します。 |
+| `thinkingElapsedMillSecs` | integer | No | 思考・推論処理に要した時間（単位：ミリ秒）。思考モデル（例：`deepseek-R1`）のみがこのフィールドを返します。 |
+| `complete` | boolean | Yes | `true`の場合、ストリーミング形式の一つの会話セッション内で、特定の応答（思考や処理を含む一連の応答）が完了したことを示します。 |
+| `finish` | boolean | Yes | `true`の場合、ストリーミング形式の会話セッションにおけるリクエスト全体が終了したことを示します。 |
+| `status` | integer | Yes | メッセージの状態を示します。<br/>`1`: 正常なメッセージ<br/>`0`: 失敗したメッセージ<br/>`-1`: 異常なメッセージ |
+| `role` | object | Yes | 現在のメッセージの送信者ロール情報。通常、ユーザー情報またはAgent情報（アバター画像のURL、表示名など）を含むオブジェクトです。 |
+| `bill` | object | No | ストリーミング形式の一つの会話セッション内で、特定の応答が完了した際（通常、`complete=true`となるイベント）のトークン消費状況。`complete=true`の場合にのみ存在します。 |
+| `referenceType` | string | No | 参照タイプ。指定可能な値には、`kb_search`（ナレッジベース検索）、`kb_search_img_list`（ナレッジベース画像検索）などがあります。 |
+| `reference` | string/object | No | 参照コンテンツ。このフィールドの具体的な構造は、`referenceType`の値によって異なります。 |
+| `references` | Map | No | 参照コンテンツのマップ。1回のAPI呼び出しで複数の種類の参照コンテンツが存在する場合にマージされて出力されることがあります。 |
+
+**contentフィールドの詳細 (タイプ別)**:
+
+*   `buttons`:
+    ```json
+    {
+      "buttonConfigs": [
+        {
+          "label": "業務を終了します", // または「現在の業務フローを終了」など
+          "key": "e09b35e8-23f2-412c-8b53-5e45032afe9c"
+        }
+      ],
+      "fileContrast": false,
+      "fileReview": false,
+      "inputText": true,
+      "uploadFile": false,
+      "uploadImage": false
+    }
+    ```
+*   `feedback`:
+    ```json
+    {
+      "feedbackKey": "@.w3e20s0f8as08x",
+      "contentTitle": "今回の返信にご満足いただけましたか？",
+      "restartTitle": "いいえ、最初からやり直す",
+      "loopTitle": "はい、この会話を続ける",
+      "overTitle": "はい、満足です。会話を終了する"
+    }
+    ```
+*   `chart`:
+    ```json
+    {
+      "chartData": {
+        "columns": { "tenant_name": { "label": "tenant_name", "type": "cat" }, "user_count": { "label": "user_count", "type": "linear" } },
+        "rows": [ {"tenant_name": "develop", "user_count": 10}, ... ]
+      },
+      "chartType": "column"
+    }
+    ```
+*   `result_file`:
+    ```json
+    {
+      "fileName": "ドキュメント出力.docx", 
+      "fileUrl": "https://test.agentspro.cn/api/fs/67491cbc423a2a1b2385591f.docx"
+    }
+    ```
+
+<Accordion title="ストリーミング応答ボディの例（詳細）">
+```json
+// ストリーミング開始時の例 (テキスト「互联」を送信中)
+data: {
+  "chatId": 2088,
+  "complete": false,
+  "finish": false,
+  "content": "互",
+  "conversationId": "...",
+  "messageId": "...",
+  "role": { "id": "...", "name": "開発テスト", "avatar":"..." },
+  "type": "text"
+}
+data: {
+  "chatId": 2088,
+  "complete": false,
+  "finish": false,
+  "content": "联",
+  "conversationId": "...",
+  "messageId": "...",
+  "role": { "id": "...", "name": "開発テスト", "avatar":"..." },
+  "type": "text"
+}
+
+// 1回の応答（例：テキストメッセージ）が完了した例 (complete: true)
+data: {
+  "chatId": 2088,
+  "complete": true,
+  "finish": false,
+  "content": "。",
+  "conversationId": "...",
+  "messageId": "...",
+  "role": { "id": "...", "name": "開発テスト", "avatar":"..." },
+  "type": "text"
+}
+
+// 画像を返却する応答の例
+data: {
+  "chatId": 2088,
+  "complete": true,
+  "finish": false,
+  "content": "https://xxxx.png",
+  "conversationId": "...",
+  "messageId": "...",
+  "role": { "id": "...", "name": "開発テスト", "avatar":"..." },
+  "type": "pic"
+}
+
+// ナレッジベース参照情報を含む応答の例 (referenceType: kb_search)
+data: {
+  "bill": { ... },
+  "chatId": 7753,
+  "content": "問",
+  "conversationId": "...",
+  "complete": true,
+  "messageId": "...",
+  "finish": false,
+  "reference": "[{\"fileName\":\"MyBatis3_ユーザーガイド（JavaDB実例付き）.pdf\",...}]",
+  "referenceType": "kb_search",
+  "role": { "id": "...", "name": "開発ガイド", "avatar": "..." },
+  "type": "text"
+}
+
+// 会話セッション全体の終了を示す例 (finish: true)
+data: {
+  "chatId": 2088,
+  "complete": true,
+  "finish": true,
+  "content": "",
+  "conversationId": "...",
+  "messageId": "...",
+  "role": { "id": "...", "name": "開発テスト", "avatar":"..." },
+  "type": "text"
+}
+```
+</Accordion>
+
+---
+
+## 3. Agentチャット 非ストリーミングインターフェース（同期）
+
+### リクエストURL
+
+```http
+POST {{host}}/openapi/agents/chat/completions/v1
+# または
+POST {{host}}/openapi/v2/chat/completions
+```
+
+### リクエストヘッダー
+1.1章を参照してください。
+
+### リクエストボディ
+
+パラメータは「2. Agentチャット（ストリーミング形式）」と同様です。
+
+| パラメータ | 型 | 必須 | 説明 |
+| :--- | :--- | :--- | :--- |
+| `agentId` | string | Yes | AgentのUUID。 |
+| `chatId` | string | No | 会話ID。任意入力。最初のセッションでは入力しません。後続のセッションでコンテキストを利用したい場合は、次のリクエスト時に前回セッションのストリーミング応答ボディの`chatId`を付与する必要があります。(v2から文字列型であることに注意) |
+| `userChatInput` | string | Yes | ユーザー入力。 |
+| `state` | object | No | 環境変数パラメータを渡します。 |
+| `buttonKey` | string | No | ボタン名またはボタンID。 |
+| `imageButtonKey` | string | No | 画像を含む質問の場合のパラメータ。（v2.1の記述に従い`images`ではなく`imageButtonKey`として記載、または統一されている場合は`images`） |
+| `files` | array | No | ドキュメントに関する質問、またはドキュメントレビューを行う際に使用するファイル情報の配列。 |
+| `debug` | boolean | No | デバッグモード。 |
+
+<Accordion title="リクエストボディの例">
+```json
+{
+  "agentId": "a2207c2f6d3d44d2b4a5dae5b5593750",
+  "chatId": null,
+  "userChatInput": "Mybatis",
+  "images": [{"url": "your image url here"}],
+  "files": [],
+  "state": {
+    "yourKey1": "yourValue1",
+    "yourKey2": "yourValue2"
+  },
+  "buttonKey": "ボタンのIDまたは名前",
+  "debug": false
+}
+```
+</Accordion>
+
+### 応答ボディの説明
+
+| パラメータ | 型 | 必須 | 説明 |
+| :--- | :--- | :--- | :--- |
+| `chatId` | string | Yes | 会話ID。 |
+| `conversationId` | string | Yes | 現在の会話セッションID。一つの会話セッションには複数の応答ターンが含まれることがあります。 |
+| `messageId` | string | Yes | メッセージID。返信されたメッセージを一意に識別します。メッセージ評価（いいね／低評価）に使用できます。 |
+| `state` | object | No | リクエストで渡された環境変数パラメータ（キーと値のペア）。呼び出し元が定義したキーと値がそのまま返却されます。 |
+| `memory` | object | No | Agentの実行プロセス中に生成された変数情報（キーと値のペアの式）。 |
+| `choices` | array | Yes | 応答内容の配列（複数の応答内容が含まれる場合があります）。 |
+
+**choices配列内の要素**:
+*   `type`: (string, required) 応答コンテンツのタイプ (`text`, `markdown`, `pic`, `buttons`, `feedback`, `chart`, `table`, `result_file`)
+*   `content`: (string, required) 応答コンテンツ本体。
+*   `role`: (object, required) 送信者ロール情報。
+*   `bill`: (object, optional) 今回の応答におけるトークン消費状況。
+*   `referenceType`: (string, optional) 参照タイプ。
+*   `reference`: (string/object, optional) 参照コンテンツ。
+*   `reasoningContent`: (string, optional) 思考・推論プロセス内容。
+*   `complete`: (boolean, required) 一つの会話セッション内で特定の応答が完了したか。
+*   `finish`: (boolean, required) 会話セッション全体が完了したか。
+*   `status`: (integer, required) メッセージの状態。
+
+<Accordion title="応答ボディの例">
+```json
+{
+  "chatId": 2088,
+  "conversationId": "5923e893a0a24e1b8f0025818249cfea",
+  "state": {
+    "yourKey1": "yourValue1",
+    "yourKey2": "yourValue2"
+  },
+  "memory": {
+    "memoryKey1": "memoryValue1",
+    "memoryKey2": "memoryValue2"
+  },
+  "choices": [
+    {
+      "chatId": 7753,
+      "complete": true,
+      "content": "一",
+      "conversationId": "481c9ad4d076497cb1d977c57dafcdb2",
+      "messageId": "481c9ad4d076497cb1d977c57dafcdb2",
+      "finish": false,
+      "role": {"avatar": "http://...","id": "...","name": "開発テスト"},
+      "type": "text",
+      "bill": {"billType": "chat", "completionTokens": 211}
+    },
+    {
+      "chatId": 7753,
+      "complete": true,
+      "content": "http://xxx.png",
+      "conversationId": "481c9ad4d076497cb1d977c57dafcdb2",
+      "messageId": "481c9ad4d076497cb1d977c57dafcdb2",
+      "finish": false,
+      "role": {"avatar": "http://...","id": "...","name": "開発テスト"},
+      "type": "pic",
+      "bill": {"billType": "chat", "completionTokens": 211}
+    },
+    {
+      "chatId": 7753,
+      "complete": true,
+      "content": "MyBatisは、カスタムSQL...",
+      "conversationId": "481c9ad4d076497cb1d977c57dafcdb2",
+      "finish": false,
+      "reference": "[{\"fileName\":\"MyBatis3_ユーザーガイド（JavaDB実例付き）.pdf\",...}]",
+      "referenceType": "kb_search",
+      "role": {"avatar": "http://...","id": "...","name": "開発テスト"},
+      "type": "text",
+      "bill": {"billType": "chat", "completionTokens": 211}
+    }
+  ]
+}
+```
+</Accordion>
+
+<Accordion title="API呼び出し例（HTTP）">
+```http
+POST /api/openapi/agent/chat/completions/v1 HTTP/1.1
+Host: 120.46.168.100
+Content-Type: application/json
+Authorization: Bearer afdba586a252468d8b3db2bd2a1320fb.5vMQC3yVFZUXCwuwa4xtia927dKiFyUt
+Content-Length: 147
+
+{
+  "agentId": "afdba586a252468d8b3db2bd2a1320fb",
+  "chatId": null,
+  "userChatInput": "mybatis",
+  "state": {
+    "roomId": 123,
+    "roomName": "testRoom"
+  }
+}
+```
+</Accordion>
+
+<Accordion title="APIレスポンス例（HTTP）">
+```json
+{
+  "chatId": 7767,
+  "conversationId": "a8381932cd7f4092a20fad86054fa40c",
+  "choices": [
+    {
+      "chatId": 7767,
+      "conversationId": "a8381932cd7f4092a20fad86054fa40c",
+      "messageId": "a8381932cd7f4092a20fad86054fa40c",
+      "role": {
+        "id": "afdba586a252468d8b3db2bd2a1320fb",
+        "name": "開発テスト",
+        "avatar": "http://120.46.168.100/api/fs/6606960e2e0bcb3ec15a3024.png"
+      },
+      "content": "MyBatisは、カスタムSQL...",
+      "referenceType": "kb_search",
+      "reference": "[{\"fileName\":\"MyBatis3_ユーザーガイド（JavaDB実例付き）.pdf\",...}]",
+      "type": "text",
+      "complete": true,
+      "finish": false,
+      "bill": {
+        "model": "SkyChat-MegaVerse",
+        "billType": "chat",
+        "completionTokens": 150,
+        "promptTokens": 461,
+        "totalTokens": 611
+      }
+    }
+  ],
+  "state": {
+    "roomId": 123,
+    "roomName": "testRoom"
+  }
+}
+```
+</Accordion>
+
+---
+
+## 4. Agentチャット非ストリーミングインターフェース（非同期）
+
+リクエストパラメータは、「3. Agentチャット 非ストリーミングインターフェース（同期）」と基本的に同様です。このインターフェースでは、Agentの処理フローが非同期で実行されます。APIを呼び出すと、初期応答としてバックエンドのログに記録される `requestId` とリクエスト時の `state` が返却されます。
+
+オプションパラメータとして、 `callbackUrl` および `callbackHeaders` を追加できます。
+`callbackUrl` が指定された場合、Agentの非同期処理が正常に完了した後、実行結果がPOSTメソッドで指定された `callbackUrl` に送信されます。このコールバックで送信されるリクエストボディの内容は、「3. Agentチャット 非ストリーミングインターフェース（同期）」の応答ボディと同様の形式です。
+
+### リクエストURL
+
+```http
+POST {{host}}/openapi/agents/chat/completions/async/v1
+# または
+POST {{host}}/openapi/v2/chat/completions/async
+```
+
+### リクエストヘッダー
+1.1章を参照してください。
+
+### リクエストボディ
+
+| パラメータ | 型 | 必須 | 説明 |
+| :--- | :--- | :--- | :--- |
+| `agentId` | string | Yes | AgentのUUID。 |
+| `chatId` | string | No | 会話ID。 |
+| `userChatInput` | string | Yes | ユーザー入力。 |
+| `state` | object | No | 環境変数パラメータ。 |
+| `buttonKey` | string | No | ボタン名またはボタンID。 |
+| `images` | array | No | 画像。 |
+| `files` | array | No | ファイル。 |
+| `debug` | boolean | No | デバッグモード。 |
+| `callbackUrl` | string | No | オプションパラメータ。このパラメータが空でない（指定されている）場合、Agentの非同期処理が正常に完了した後、最終的なメッセージデータ（通常、「3. Agentチャット 非ストリーミングインターフェース（同期）」の応答ボディと同じ形式）が、POSTメソッドを使用してこのURLにプッシュ通知されます。 |
+| `callbackUrlPerComponent` | string | No | オプションパラメータ。このパラメータが空でない（指定されている）場合、Agentが応答情報を持つコンポーネントを実行するたびに、そのコンポーネントからのメッセージデータがPOSTメソッドを使用してこのURLにプッシュ通知されます。 |
+| `callbackHeaders` | object | No | オプションパラメータ。Callback通知をPOSTする際に、ここで指定されたHTTPヘッダーが付与されます。 |
+
+<Accordion title="リクエストボディの例">
+```json
+{
+  "agentId":"a2207c2f6d3d44d2b4a5dae5b5593750",
+  "chatId": null,
+  "userChatInput": "Mybatis",
+  "images": [{"url": "your image url here"}],
+  "files": [],
+  "state":{
+    "yourKey1":"yourValue1",
+    "yourKey2":"yourValue2"
+  },
+  "buttonKey": "ボタンのIDまたは名前",
+  "debug":false,
+  "callbackUrl":"http://example.com/callback",
+  "callbackHeaders": {
+    "token": "token-xxxx"
+  }
+}
+```
+</Accordion>
+
+### 応答ボディの説明
+
+この非同期呼び出しの**初期応答ボディ**は、以下のフィールドで構成されます。
+
+| パラメータ | 型 | 説明 |
+| :--- | :--- | :--- |
+| `code` | integer | 応答結果コード。`1`は成功。 |
+| `msg` | string | エラーメッセージ。 |
+| `requestId` | string | バックエンドログで利用されるリクエストID。ポーリングにも使用します。 |
+| `state` | object | リクエスト時に渡された環境変数パラメータ。 |
+
+<Accordion title="応答ボディの例（初期応答）">
+```json
+{
+  "code": 1,
+  "msg": "success",
+  "requestId": "a2207c2f6d3d44d2b4a5dae5b5593750",
+  "state": {
+    "yourKey1":"yourValue1",
+    "yourKey2":"yourValue2"
+  }
+}
+```
+</Accordion>
+
+---
+
+## 5. Agentチャット 非ストリーミング（非同期）結果ポーリングインターフェース
+
+### リクエストURL
+
+```http
+GET {{host}}/openapi/agents/chat/completions/async/polling/v1?agentId={}&requestId={}
+# または
+GET {{host}}/openapi/v2/chat/completions/async/polling?agentId={}&requestId={}
+```
+
+### リクエストパラメータ
+
+| パラメータ | 型 | 必須 | 説明 |
+| :--- | :--- | :--- | :--- |
+| `agentId` | string | Yes | AgentのID |
+| `requestId` | string | Yes | リクエストID。「4. Agentチャット 非ストリーミング（非同期）」の初期応答で取得したID。 |
+
+### 応答ボディの説明
+
+| パラメータ | 型 | 説明 |
+| :--- | :--- | :--- |
+| `code` | integer | 応答結果コード。`1`は成功。 |
+| `requestId` | string | バックエンドログ内のリクエストID。 |
+| `output` | object | 非同期処理の実行状態。非同期タスクが DONE (完了) の場合にのみ存在します。構造は「3. Agentチャット」と同じです。 |
+| `state` | integer | 非同期タスクの現在の実行状態を示します。<br/>`0`: NOT_EXIST (存在しない)<br/>`1`: RUNNING (実行中)<br/>`2`: DONE (実行完了)<br/>`3`: EXCEPTION (実行エラー) |
+
+<Accordion title="応答ボディの例">
+```json
+{
+  "code": 1,
+  "msg": "操作が正常に完了し、成功した",
+  "data": {
+    "requestId": "29527e2089e84f5888cc3769618f39cd",
+    "output": {
+      "chatId": "29301",
+      "conversationId": "ed11b0ce99064e4180bf01aec722d6f6f1gyobzs",
+      "memory": { "userChatInput": "こんにちは" },
+      "choices": [
+        {
+          "id": "67ea65e9aef53333a8b38ba9",
+          "chatId": "29301",
+          "content": "こんにちは",
+          "complete": true,
+          "status": 1,
+          "bill": { "totalTokens": 33 }
+        }
+      ],
+      "state": null
+    },
+    "state": 2 // 2は DONE: 実行完了
+  }
+}
+```
+</Accordion>
+
+---
+
+## 6. Agentフィードバックインターフェース
+
+複数のAgentが連携するシナリオで、ユーザーからのフィードバックが必要なリクエスト。
+
+### リクエストURL
+
+```http
+GET {{host}}/openapi/agents/chat/feedback
+# または
+GET {{host}}/openapi/v2/chat/feedback
+```
+
+### リクエストボディの例
+
+<Accordion title="リクエストボディの例">
+```json
+{
+  "chatId": 123,
+  "agentId": "addsfaslfjasofasofpoas",
+  "feedbackKey": "@.ksdf9as0f8sd0xxo",
+  "feedbackType":"over" // [over, restart, loop]
+}
+```
+</Accordion>
+
+### 応答ボディの説明
+
+| パラメータ | 型 | 説明 |
+| :--- | :--- | :--- |
+| `code` | integer | 応答結果コード。`1`は成功。 |
+| `msg` | string | エラーメッセージ。 |
+| `data` | boolean | フィードバック処理の成否。`true`は成功。 |
+
+<Accordion title="応答ボディの例">
+```json
+{
+  "code": 1,
+  "msg": "success",
+  "data": true
+}
+```
+</Accordion>
+
+---
+
+## 7. Agent基本情報一覧インターフェース
+
+このインターフェースは、より上位レベルのトークンを申請する必要があります。
+
+### リクエストURL
+
+```http
+GET {{host}}/openapi/agents
+# または
+GET {{host}}/openapi/v2/agents
+```
+
+### 応答ボディの説明
+
+| パラメータ | 型 | 説明 |
+| :--- | :--- | :--- |
+| `code` | integer | 応答結果コード。 |
+| `agentUuid` | string | エージェントUUID |
+| `name` | string | エージェントの名称 |
+| `intro` | string | エージェントの紹介 |
+| `guides` | array | エージェントへの推奨質問 |
+| `prologue` | string | 開始の挨拶 |
+
+<Accordion title="応答ボディの例">
+```json
+{
+  "code":1,
+  "msg":"success",
+  "data": [
+    {
+      "agentUuid":"agwerwr34rq3434234sf",
+      "avatar":"https://xxx.png",
+      "name":"エージェントの名称",
+      "intro":"エージェントの紹介",
+      "guides":["質問1","質問2"],
+      "prologue":"welcome agent",
+      "chatAvatar":"https://xxx.png"
+    }
+  ]
+}
+```
+</Accordion>
+
+---
+
+## 8. Agent個別基本情報インターフェース
+
+### リクエストURL
+
+```http
+GET {{host}}/openapi/agents/{agentUUID}
+# または
+GET {{host}}/openapi/v2/agents/{agentUUID}
+```
+
+### クエリパラメータ
+
+* `agentUUID`: エージェントUUID
+
+<Accordion title="応答ボディの例">
+```json
+{
+  "code":1,
+  "msg":"success",
+  "data": {
+    "agentUuid":"agwerwr34rq3434234sf",
+    "avatar":"https://xxx.png",
+    "name":"エージェントの名称",
+    "intro":"エージェントの紹介",
+    "guides":["質問1","質問2"],
+    "prologue":"welcome agent",
+    "chatAvatar":"https://xxx.png"
+  }
+}
+```
+</Accordion>
+
+---
+
+## 9. メッセージ「いいね」／「低評価」インターフェース
+
+### リクエストURL
+
+```http
+POST {{host}}/openapi/agents/likeViewDislike
+# または
+POST {{host}}/openapi/v2/agents/likeViewDislike
+```
+
+### リクエストボディの説明
+
+* `id`: メッセージの一意な識別子です。messageIdに対応します。
+* `lvdStatus`: 評価（いいね／よくない）のステータス。`thumbUp`, `thumbDown`, `none`。
+* `agentId`: エージェントID。
+
+<Accordion title="リクエストボディの例">
+```json
+{
+  "id":"67ea65e9aef53333a8b38ba9",
+  "lvdStatus":"thumbUp",
+  "agentId":"agwerwr34rq3434234sf"
+}
+```
+</Accordion>
+
+<Accordion title="応答ボディの例">
+```json
+{
+  "code":1,
+  "msg":"操作が正常に完了し、成功した",
+  "data":null
+}
+```
+</Accordion>
+
+---
+
+## 10. 応答ストリーム終了インターフェース
+
+### リクエストURL
+
+```http
+GET {{host}}/openapi/agents/chat/close?agentId={agentId}&conversationId={conversationId}
+# または
+GET {{host}}/openapi/v2/agents/chat/close?agentId={agentId}&conversationId={conversationId}
+```
+
+### クエリパラメータ
+
+* `agentId`: エージェントID
+* `conversationId`: 対話ID
+
+<Accordion title="応答ボディの例">
+```json
+{
+  "code":1,
+  "msg":"操作が正常に完了し、成功した",
+  "data":null
+}
+```
+</Accordion>
+
+---
+
+## 11. ファイルアップロードインターフェース
+
+### リクエストURL
+
+```http
+POST {{host}}/openapi/fs/upload
+```
+
+**Content-Type**: `multipart/form-data`
+
+### クエリパラメータ
+
+* `file`：アップロードするファイル
+* `returnType`：返却値のタイプ。`id` または `url`。デフォルトはファイルID。
+* `metadata`：ファイルのメタデータ（JSON形式）。
+
+<Accordion title="応答ボディの例">
+```json
+{
+  "code":1,
+  "msg":"操作が正常に完了し、成功した",
+  "data":"67dccd3ae1138d0f6d12ca6a"
+}
+```
+</Accordion>
+
+---
+
+## 12. データセット作成とタスク開始
+
+### リクエストURL
+
+```http
+POST {{host}}/openapi/kb/createDsAndTask
+```
+
+### クエリパラメータ
+
+| パラメータ | 説明 |
+| :--- | :--- |
+| `kbId` | データセットID |
+| `fileId` | アップロードされたファイルのID |
+| `name` | データセット名 |
+| `parserType` | パースタイプ（デフォルト: `general`）。<br/>指定可能な値: `general`, `custom`, `presentation`, `laws`, `manual`, `paper`, `book`, `qa`, `table`, `picture`, `one`, `voice` |
+| `skipIfExists` | 既存のデータセットが存在する場合にスキップします（デフォルト: `true`）。 |
+| `autoStartChunkTask` | チャンク化タスクを動的に開始します（デフォルト: `true`）。 |
+| `alwaysCreateNew` | 毎回新しいデータセットを作成します（デフォルト: `false`）。 |
 
 <Accordion title="リクエスト例">
 ```json
 {
-  "agentId": "a2207c2f6d3d44d2b4a5dae5b5593750",
-  "userChatInput": "こんにちは",
-  "state": { "roomId": "123" }
+  "kbId": 123,
+  "fileId": "67dccd3ae1138d0f6d12ca6a",
+  "name": "データセット名",
+  "parserType": "custom"
 }
 ```
 </Accordion>
 
----
-
-## 3. チャット：同期形式 (Sync Chat)
-
-完了まで待機し、一度に応答を受け取ります。
-
-**リクエストURL:**  
-- `` `{{host}}/openapi/agents/chat/completions/v1` ``  
-- `` `{{host}}/openapi/v2/chat/completions` ``
-
-**HTTPメソッド:** `POST`
-
-<Accordion title="レスポンスボディの構成">
-  | フィールド | 型 | 説明 |
-  | :--- | :--- | :--- |
-  | `chatId` | string | 会話ID |
-  | `choices` | array | 応答内容の配列。各要素に `content`, `type`, `role`, `bill` 等が含まれます。 |
-  | `state` | object | リクエスト時に渡された環境変数のエコーバック |
-</Accordion>
-
----
-
-## 4. チャット：非同期形式 (Async Chat)
-
-即座に `requestId` を返し、結果はポーリングまたはコールバックで取得します。
-
-**リクエストURL:**  
-- `` `{{host}}/openapi/agents/chat/completions/async/v1` ``  
-- `` `{{host}}/openapi/v2/chat/completions/async` ``
-
-**HTTPメソッド:** `POST`
-
-### 4.1 追加パラメータ
-| パラメータ | 型 | 必須 | 説明 |
-| :--- | :--- | :--- | :--- |
-| `callbackUrl` | string | No | 処理完了時の結果通知先URL |
-| `callbackHeaders` | object | No | コールバック通知時に付与するHTTPヘッダー |
-
----
-
-## 5. ポーリング (Polling)
-
-**リクエストURL:**  
-- `` `{{host}}/openapi/agents/chat/completions/async/polling/v1` ``  
-- `` `{{host}}/openapi/v2/chat/completions/async/polling` ``
-
-**HTTPメソッド:** `GET`
-
-### 5.1 実行状態（state）
-| 値 | 状態 | 説明 |
-| :--- | :--- | :--- |
-| `1` | `RUNNING` | 実行中 |
-| `2` | `DONE` | 実行完了（`output` フィールドに結果が含まれる） |
-| `3` | `EXCEPTION` | 実行エラー |
-
----
-
-## 6. フィードバック (Feedback)
-
-ユーザーからのフィードバック（分岐の選択など）を送信します。
-
-**リクエストURL:**  
-- `` `{{host}}/openapi/agents/chat/feedback` ``  
-- `` `{{host}}/openapi/v2/chat/feedback` ``
-
-**HTTPメソッド:** `POST`
-
-### 6.1 リクエストパラメータ
-| パラメータ | 型 | 必須 | 説明 |
-| :--- | :--- | :--- | :--- |
-| `agentId` | string | Yes | AgentのID |
-| `chatId` | string | Yes | 会話ID |
-| `feedbackKey` | string | Yes | 応答に含まれていた `feedbackKey` |
-| `feedbackType` | string | Yes | `over`, `restart`, `loop` |
-
----
-
-## 7. Agent一覧 (Agent List)
-
-アクセス可能なAgentの基本情報を取得します。
-
-**リクエストURL:**  
-- `` `{{host}}/openapi/agents` ``  
-- `` `{{host}}/openapi/v2/agents` ``
-
-**HTTPメソッド:** `GET`
-
-<Accordion title="取得可能項目">
-- `agentUuid`: Agentの一意なID
-- `name`: Agent名称
-- `avatar`: アバター画像URL
-- `intro`: 紹介文
-</Accordion>
-
----
-
-## 8. Agent詳細 (Agent Details)
-
-特定のAgentの設定情報を取得します。
-
-**リクエストURL:**  
-- `` `{{host}}/openapi/agents/{agentUUID}` ``  
-- `` `{{host}}/openapi/v2/agents/{agentUUID}` ``
-
-**HTTPメソッド:** `GET`
-
----
-
-## 9. 評価：いいね/低評価 (Like/Dislike)
-
-メッセージに対する評価を送信します。
-
-**リクエストURL:**  
-- `` `{{host}}/openapi/agents/likeViewDislike` ``  
-- `` `{{host}}/openapi/v2/agents/likeViewDislike` ``
-
-**HTTPメソッド:** `POST`
-
-### 9.1 リクエストパラメータ
-| パラメータ | 型 | 必須 | 説明 |
-| :--- | :--- | :--- | :--- |
-| `id` | string | Yes | メッセージID |
-| `lvdStatus` | string | Yes | `thumbUp`, `thumbDown`, `none` |
-
----
-
-## 10. 応答ストリーム終了 (Close Stream)
-
-**リクエストURL:**  
-- `` `{{host}}/openapi/agents/chat/close` ``  
-- `` `{{host}}/openapi/v2/agents/chat/close` ``
-
-**HTTPメソッド:** `GET`
-
----
-
-## 11. ファイルアップロード (File Upload)
-
-**リクエストURL:** `` `{{host}}/openapi/fs/upload` ``
-
-**HTTPメソッド:** `POST`
-
-### 11.1 フォームパラメータ
-| パラメータ | 型 | 説明 |
-| :--- | :--- | :--- |
-| `file` | file | アップロードするバイナリデータ |
-| `returnType` | string | 返却値のタイプ（`id`, `url`）。デフォルトは `id` |
-
----
-
-## 12. データセット作成 (KB Task Start)
-
-**リクエストURL:** `` `{{host}}/openapi/kb/createDsAndTask` ``
-
-**HTTPメソッド:** `POST`
-
-### 12.1 リクエストパラメータ
-| パラメータ | 型 | 必須 | 説明 |
-| :--- | :--- | :--- | :--- |
-| `kbId` | integer | Yes | ナレッジベースのID |
-| `fileId` | string | Yes | アップロードしたファイルのID |
-| `name` | string | Yes | データセット名 |
-| `parserType` | string | No | 解析方法（`general`, `qa`, `table` 等） |
-
-<Accordion title="サポートされている解析タイプ">
-- **general:** PDF, Word, TXT, Markdown等
-- **qa:** Excel(Q&A形式)
-- **table:** Excel(テーブル形式)
-- **picture:** 画像(OCR解析)
-</Accordion>
-
----
-
-## 13. データセット変更 (KB Modify)
-
-**リクエストURL:** `` `{{host}}/openapi/kb/modifyDsAndTask` ``
-
-**HTTPメソッド:** `POST`
-
-### 13.1 リクエストパラメータ
-| パラメータ | 型 | 必須 | 説明 |
-| :--- | :--- | :--- | :--- |
-| `id` | integer | Yes | データセットのID |
-| `fileId` | string | Yes | 新しいファイルのID |
-
----
-
-## 14. データセット削除 (KB Delete)
-
-**リクエストURL:** `` `{{host}}/openapi/kb/deleteDs` ``
-
-**HTTPメソッド:** `POST`
-
-### 14.1 リクエストパラメータ
-- `dsIdList`: (array of integer, Required) 削除するデータセットIDのリスト
-
-<Accordion title="削除リクエスト例">
+<Accordion title="応答ボディの例">
 ```json
 {
-  "dsIdList": [31212, 31213]
+  "code":1,
+  "msg":"操作が正常に完了し、成功した",
+  "data":31212
 }
 ```
 </Accordion>
 
+---
+
+## 13. データセットの変更とタスクの開始
+
+### リクエストURL
+
+```http
+POST {{host}}/openapi/kb/modifyDsAndTask
+```
+
+### クエリパラメータ
+
+* `id`：データセットID
+* `fileId`：アップロードされたファイルのID
+* `name`：データセット名
+* `extJson`：拡張フィールド（チャンク解析方法の設定など）
+
+<Accordion title="リクエスト例">
+```json
+{
+  "id": 123,
+  "fileId": "67dccd3ae1138d0f6d12ca6a",
+  "name": "データセット名",
+  "extJson": "{}"
+}
+```
+</Accordion>
+
+<Accordion title="応答ボディの例">
+```json
+{
+  "code":1,
+  "msg":"操作が正常に完了し、成功した",
+  "data":123
+}
+```
+</Accordion>
+
+---
+
+## 14. データセットの削除
+
+### リクエストURL
+
+```http
+POST {{host}}/openapi/kb/deleteDs
+```
+
+### クエリパラメータ
+
+* `dsIdList`：データセットIDリスト
+
+<Accordion title="リクエスト例">
+```json
+{
+  "dsIdList": [123, 456]
+}
+```
+</Accordion>
+
+<Accordion title="応答ボディの例">
+```json
+{
+  "code":1,
+  "msg":"操作が正常に完了し、成功した",
+  "data":true
+}
+```
+</Accordion>
+
+---
+
+## 15. 音声認識インターフェース
+
+### リクエストURL
+
+```http
+POST {{host}}/openapi/voice/recognize
+```
+
+**Content-Type**: `multipart/form-data`
+**認証**: ❌ Agent Token | ✅ 個人トークン（パーソナルキー）
+
+### パラメータ
+
+* `file`：アップロードされたファイル（音声ファイル、wav形式、16kHz、モノラル）
+
+<Accordion title="応答ボディの例">
+```json
+{
+    "code": 1,
+    "msg": "操作が正常に完了し、成功した",
+    "data": "東京の天気を教えて"
+}
+```
+</Accordion>
+
+---
+
+## 16. ファイルタイプ変換
+
+### リクエストURL
+
+```http
+POST {{host}}/openapi/deepdoc/fileTransfer
+```
+
+**認証**: ❌ Agent Token | ✅ 個人トークン（パーソナルキー）
+
+### パラメータ
+
+* `fileName`：入力ファイル名
+* `fileUrl`：入力ファイルURL
+* `format`：変換後のファイル形式（例：doc, docx, xls, xlsx, pdf）
+
+<Accordion title="リクエスト例">
+```json
+ { 
+   "fileName": "111.xls", 
+   "fileUrl": "https://uat.agentspro.cn/api/fs/xxxxx", 
+   "format": "xlsx" 
+ }
+```
+</Accordion>
+
+<Accordion title="応答ボディの例">
+```json
+{
+    "code": 1,
+    "msg": "success",
+    "data": "https://uat.agentspro.cn/api/fs/xxxxx"
+}
+```
+</Accordion>
+
+---
+
+## 17. データセットリストの照会
+
+### リクエストURL
+
+```http
+POST {{host}}/openapi/kb/ds/query
+```
+
+**認証**: ❌ Agent Token | ✅ 個人トークン（パーソナルキー）
+
+### パラメータ
+
+* `kbId`: ナレッジベースID
+* `fileIds`: ファイルIDリスト
+* `dsIds`: データセットIDリスト
+* `taskStatus`: タスク状態
+* `approvalState`: 承認状態
+* `notSelf`: 自分が作成したデータセットを除外するか
+* `keywords`: データセット名
+
+<Accordion title="リクエスト例">
+```json
+{
+  "pageNum": 1,
+  "pageSize": 20,
+  "keywords": "機械学習データセット",
+  "kbId": 123,
+  "parentId": 456,
+  "fileIds": ["file_001", "file_002"],
+  "dsIds": [1001, 1002],
+  "taskStatus": 1,
+  "approvalState": 2,
+  "notSelf": false
+}
+```
+</Accordion>
+
+<Accordion title="応答ボディの例">
+```json
+{
+  "code": 1,
+  "msg": "success",
+  "data": {
+    "pageNum": 1,
+    "pageSize": 20,
+    "count": true,
+    "list": [
+      {
+        "id": 1001,
+        "name": "機械学習データセット",
+        "createAt": "2024-01-15T10:30:00",
+        "type": "file",
+        "dataAmount": 1500,
+        "uuid": "550e8400-e29b-41d4-a716-446655440001"
+      }
+    ],
+    "total": 3
+  }
+}
+```
+</Accordion>
+
+---
+
+## 18. ナレッジベース検索
+
+### リクエストURL
+
+```http
+POST {{host}}/openapi/kb/search
+```
+
+**認証**: ❌ Agent Token | ✅ 個人トークン（パーソナルキー）
+
+### パラメータ
+
+* `kbId`: ナレッジベースID
+* `keywords`: 検索キーワード
+* `vectorSimilarLimit`: ベクトル類似度しきい値
+* `topK`: 取得件数
+* `enableRerank`: リランキング有効化
+
+<Accordion title="リクエスト例">
+```json
+{
+    "vectorSimilarLimit": 0.15,
+    "vectorSimilarWeight": 0.72,
+    "topK": 20,
+    "enableRerank": false,
+    "keywords": "テスト",
+    "kbId": "1827"
+}
+```
+</Accordion>
+
+<Accordion title="応答ボディの例">
+```json
+{
+  "code": 1,
+  "msg": "操作が正常に完了しました",
+  "data": [
+    {
+      "q": "ドキュメント解析...",
+      "id": "342504",
+      "kbId": 1827,
+      "score": 0.49
+    }
+  ]
+}
+```
+</Accordion>
+
+---
+
+## 19. Agent使用記録
+
+### リクエストURL
+
+```http
+POST {{host}}/openapi/v2/chatHistory
+```
+
+**認証**: ❌ Agent Token | ✅ 個人トークン（パーソナルキー）
+
+<Accordion title="リクエスト例">
+```json
+{
+    "page": 1,
+    "pageSize": 10,
+    "agentId": 2378
+}
+```
+</Accordion>
+
+<Accordion title="応答ボディの例">
+```json
+{
+    "code": 1,
+    "msg": "操作成功",
+    "data":
+    {
+        "pageNum": 1,
+        "pageSize": 10,
+        "list":
+        [
+            {
+                "userName": "cuipusan",
+                "time": "2025-11-27 16:25:10",
+                "conversationId": "f1412e36ef274d1785d7c041060ffc85fltegqlo"
+            }
+        ],
+        "total": 177
+    }
+}
+```
+</Accordion>
