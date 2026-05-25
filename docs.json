@@ -28,6 +28,12 @@
             ]
           },
           {
+            "group": "実践チュートリアル",
+            "pages": [
+              "welcom/ai-soumu"
+            ]
+          },
+          {
             "group": "エージェント作成ガイド",
             "pages": [
               "welcom/agent_1",

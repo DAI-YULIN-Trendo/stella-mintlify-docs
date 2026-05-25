@@ -1,0 +1,614 @@
+---
+title: "AI総務 Agent 構築手順書"
+description: "ナレッジベースとデータベースを組み合わせた AI総務 Agent の構築チュートリアル"
+---
+
+# AI総務 Agent 構築手順書
+
+## 1. Agentify へのログインと事前設定
+
+### 1.1 Agentify にログインする
+
+![AI総務 Agent 手順 1](/images/ai-soumu/image1.png)
+
+### 1.2 新しい Agent を作成する
+
+左側メニューから「新Agent作成」に入り、表示された Agent 作成画面で「Agentワークフロー」と「最初から開始」を選択し、「確認」をクリックします。
+
+![AI総務 Agent 手順 2](/images/ai-soumu/image2.png)
+
+![AI総務 Agent 手順 3](/images/ai-soumu/image3.png)
+
+![AI総務 Agent 手順 4](/images/ai-soumu/image4.png)
+
+今回は従来版、つまりワークフロー形式で構築します。新しい Agent を作成する際に Agent 名を設定して保存します。本チュートリアルでは「AI総務 Agent」を構築します。
+
+![AI総務 Agent 手順 5](/images/ai-soumu/image5.png)
+
+ワークフローの「プランニング」では、デフォルトの構成として「ユーザー入力」と「LLM」の2つのモジュールが表示されます。「プランニング」の機能概要は、[プランニングのドキュメント](https://docs.agentify.jp/welcom/agent_2_1)を参照してください。
+
+基本モジュールの説明は、[基本モジュールのドキュメント](https://docs.agentify.jp/welcom/agent_2_2_1)を参照してください。
+
+![AI総務 Agent 手順 6](/images/ai-soumu/image6.png)
+
+次に、AI総務 Agent の構築に進みます。まず、この Agent に求める input と output を整理します。
+
+Agentify では、Agent の input としてテキスト、画像、ドキュメントを利用できます。
+
+![AI総務 Agent 手順 7](/images/ai-soumu/image7.png)
+
+手動トリガーでは、input による起動に加えて、ボタンを追加して Agent を起動できます。
+
+![AI総務 Agent 手順 8](/images/ai-soumu/image8.png)
+
+また、Agent を公開したあとにトリガーを設定することで、定期実行も可能です。
+
+![AI総務 Agent 手順 9](/images/ai-soumu/image9.png)
+
+![AI総務 Agent 手順 10](/images/ai-soumu/image10.png)
+
+![AI総務 Agent 手順 11](/images/ai-soumu/image11.png)
+
+公開後の Agent は、HTTP App、API、または MCP Server として呼び出せます。Agent の公開については、[Agent 公開のドキュメント](https://docs.agentify.jp/welcom/agent_2_6)を参照してください。
+
+![AI総務 Agent 手順 12](/images/ai-soumu/image12.png)
+
+![AI総務 Agent 手順 13](/images/ai-soumu/image13.png)
+
+## 2. Agent 構築
+
+### 2.1 はじめに
+
+AI を構築する前に、業務の基本フレームを整理します。特定の input やトリガーに対して、Agent 全体の業務フローがどのように進み、どのような output を返すべきかを明確にしておきます。
+
+本チュートリアルで構築する AI総務 Agent は、ナレッジベースとデータベースを組み合わせて利用する場面を想定しています。
+
+ナレッジベースは通常、社内規則や業務手順などの「変更頻度が低い情報」を参照する用途に適しています。Agentify のナレッジベース機能については、[ナレッジベース機能のドキュメント](https://docs.agentify.jp/welcom/knowledgebase21)を参照してください。
+
+一方、データベースは申請内容、対応状況、備品在庫などの「随時変化する情報」の確認や更新に利用します。Agentify のデータベース機能については、[データベース機能のドキュメント](https://docs.agentify.jp/welcom/database_2)を参照してください。
+
+そのため、AI総務 Agent は単なる FAQ ではなく、社内問い合わせへの対応から申請受付、ステータス確認までを支援する業務支援 Agent として設計します。
+
+### 2.2 Step 1: ナレッジベースを準備する
+
+まず、AI総務 Agent が社内ルールを参照できるように、総務業務に関する資料をナレッジベースに登録します。
+
+登録する資料の例は以下です。
+
+- 有給休暇の申請ルール
+- 経費精算ルール
+- 備品申請ルール
+- 入社手続き
+- 退社手続き
+- 設備トラブル対応方法
+- よくある質問
+
+参考資料のダウンロード先: [Google Drive](https://drive.google.com/file/d/1m0L5EDjCNVx1YShxk6dqht0AmxxmAXbM/view?usp=drive_link)
+
+![AI総務 Agent 手順 14](/images/ai-soumu/image14.png)
+
+![AI総務 Agent 手順 15](/images/ai-soumu/image15.png)
+
+![AI総務 Agent 手順 16](/images/ai-soumu/image16.png)
+
+解析ステータスが成功と表示されたら、ナレッジベースの準備は完了です。ファイルをクリックするとチャンクの詳細も確認できます。
+
+![AI総務 Agent 手順 17](/images/ai-soumu/image17.png)
+
+### 2.3 Step 2: データベースを準備する
+
+次に、申請内容や対応状況を保存するためのデータベースを準備します。
+
+本チュートリアルでは、以下の2つのテーブルを使用します。
+
+- 総務申請テーブル
+- 備品在庫テーブル
+
+ナレッジベースが「ルール」を管理するのに対して、データベースは「現在の申請状況」や「在庫数」など、随時変化する情報を管理します。
+
+![AI総務 Agent 手順 18](/images/ai-soumu/image18.png)
+
+![AI総務 Agent 手順 19](/images/ai-soumu/image19.png)
+
+構築を簡単にするため、本チュートリアルでは [Neon](https://neon.com/) の無料データベースを事前に用意して利用します。テスト用のテーブル定義 SQL は以下です。
+
+```sql
+CREATE TABLE general_affairs_requests (
+  id SERIAL PRIMARY KEY,
+  request_no TEXT UNIQUE,
+  request_type TEXT NOT NULL,
+  applicant_name TEXT,
+  department TEXT,
+  request_content TEXT NOT NULL,
+  item_name TEXT,
+  quantity INTEGER DEFAULT 1,
+  preferred_date DATE,
+  urgency TEXT DEFAULT '中',
+  status TEXT DEFAULT '受付済み',
+  assignee TEXT,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+```
+
+```sql
+CREATE TABLE office_assets (
+  id SERIAL PRIMARY KEY,
+  asset_name TEXT NOT NULL,
+  category TEXT,
+  stock_quantity INTEGER DEFAULT 0,
+  status TEXT DEFAULT '利用可能',
+  location TEXT,
+  owner TEXT,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+```
+
+![AI総務 Agent 手順 20](/images/ai-soumu/image20.png)
+
+データベースでは「追加」「更新」「削除」の3つの権限を有効にします。
+
+<Warning>
+本番環境では、データベース更新権限を慎重に設定してください。
+</Warning>
+
+### 2.4 Step 3: テストデータを登録する
+
+備品在庫を確認する動作をテストするため、備品在庫テーブルにサンプルデータを登録します。
+
+```sql
+INSERT INTO office_assets 
+(asset_name, category, stock_quantity, status, location)
+VALUES
+('ノートPC', 'PC', 3, '利用可能', '総務倉庫'),
+('モニター', '周辺機器', 5, '利用可能', '総務倉庫'),
+('マウス', '周辺機器', 10, '利用可能', '総務倉庫'),
+('キーボード', '周辺機器', 8, '利用可能', '総務倉庫'),
+('社員証カード', '社員証', 20, '利用可能', '総務倉庫');
+```
+
+![AI総務 Agent 手順 21](/images/ai-soumu/image21.png)
+
+### 2.5 Step 4: 情報分類モジュールを設定する
+
+次に、ユーザーの入力内容を判定するために、情報分類モジュールを設定します。
+
+AI総務 Agent では、ユーザーの問い合わせ内容によって利用する処理が異なります。
+
+たとえば、社内ルールに関する質問であればナレッジベースを参照し、備品在庫の確認であればデータベースを参照します。また、備品申請や設備トラブルの受付では、必要情報を整理したうえでデータベースに登録します。
+
+情報分類モジュールを利用することで、ユーザーの入力内容に応じて、ナレッジベース参照、データベース検索、申請登録などの処理を自動的に切り替えることができます。
+
+そのため、最初に情報分類モジュールでユーザーの意図を判定し、後続の処理を切り替えます。
+
+本チュートリアルで使用する情報分類モジュールのプロンプトは以下です。
+
+```text
+あなたは AI総務 Agent の意図分類を行う分類器です。
+
+ユーザーの入力内容を読み取り、以下のラベルのうち最も適切なものを1つだけ選択してください。
+
+ラベル一覧
+
+- 社内ルール質問
+- 備品在庫確認
+- 申請登録
+- 申請状況確認
+- 社内通知文作成
+- その他
+
+判定基準
+
+社内ルール質問
+社内制度、申請ルール、手続き方法、必要書類、期限などに関する質問です。
+
+例：
+- 有給は何日前までに申請すればいいですか？
+- 経費精算には領収書が必要ですか？
+- 入社手続きには何が必要ですか？
+- 備品申請には何を入力すればいいですか？
+
+備品在庫確認
+備品の在庫数、利用可能状況、保管場所を確認する質問です。
+
+例：
+- ノートPCの在庫はありますか？
+- モニターは今何台ありますか？
+- マウスは借りられますか？
+
+申請登録
+備品申請、設備トラブル、証明書発行、入社準備、退社手続きなど、何らかの申請や依頼を登録する内容です。
+
+例：
+- ノートPCを1台申請したいです。
+- 会議室Aのプロジェクターが映りません。
+- 在職証明書を発行してほしいです。
+- 新入社員用のPCを準備したいです。
+
+申請状況確認
+受付番号や申請内容に基づき、現在の対応状況を確認する質問です。
+
+例：
+- 受付番号 GA-20260525-001 の状況を教えてください。
+- 先週申請したノートPCはどうなっていますか？
+- 備品申請の対応状況を確認したいです。
+
+社内通知文作成
+社内向けのお知らせ、リマインド、案内文、メール文の作成依頼です。
+
+例：
+- 経費精算の締切案内を作成してください。
+- 健康診断のお知らせ文を作ってください。
+- 年末年始休業のお知らせを作成してください。
+
+その他
+上記のいずれにも該当しない内容です。
+
+出力ルール
+
+必ず上記のラベルの中から1つだけ選択してください。
+説明文や理由は出力しないでください。
+説明文や補足は出力しないでください。
+```
+
+![AI総務 Agent 手順 22](/images/ai-soumu/image22.png)
+
+### 2.6 Step 5: 条件分岐を設定する
+
+情報分類モジュールの「ラベル」欄で「追加」をクリックし、以下のラベルを1つずつ追加します。
+
+- 社内ルール質問
+- 備品在庫確認
+- 申請登録
+- 申請状況確認
+- 社内通知文作成
+- その他
+
+追加したラベルは、後続の条件分岐で使用します。
+
+![AI総務 Agent 手順 23](/images/ai-soumu/image23.png)
+
+情報分類モジュールで設定した各ラベルは、後続のワークフローにおける分岐条件として使用します。
+
+たとえば、ユーザーが「有給は何日前までに申請すればいいですか？」と入力した場合、「社内ルール質問」ラベルが選択され、ナレッジベースを参照する処理へ進みます。
+
+一方、「ノートPCの在庫はありますか？」と入力した場合は、「備品在庫確認」ラベルが選択され、データベースから在庫情報を取得する処理へ進みます。
+
+### 2.7 Step 6: 社内ルール質問のワークフロー
+
+まず、「社内ルール質問」ラベルが活性化になった場合の処理を作成します。
+
+この分岐では、ユーザーの質問に対してナレッジベースを検索し、検索結果をもとに LLM モジュールで回答を生成します。
+
+ナレッジベース検索モジュールでは、ユーザー入力を検索クエリとして使用します。これにより、有給休暇、経費精算、備品申請ルール、入社手続きなど、登録済みの総務ルールから関連情報を取得できます。
+
+![AI総務 Agent 手順 24](/images/ai-soumu/image24.png)
+
+![AI総務 Agent 手順 25](/images/ai-soumu/image25.png)
+
+この分岐では、情報分類モジュールで「社内ルール質問」と判定された入力に対して、ナレッジベースを参照し、LLM モジュールで回答を生成します。
+
+この時点で LLM モジュールへ接続する入力は、ナレッジベース検索結果に加えて、ユーザー入力のテキスト情報も必要です。LLM モジュールにはナレッジベース回答用のデフォルトプロンプトがあるため、ここでは接続以外の追加設定は不要です。
+
+![AI総務 Agent 手順 26](/images/ai-soumu/image26.png)
+
+![AI総務 Agent 手順 27](/images/ai-soumu/image27.png)
+
+<Tip>
+接続が多いと感じる場合は、Agentify の組み込み変数を参照できます。変数を直接書き込む方法や、メモリ変数モジュールで独自変数を定義して、プロンプトや定型回答から呼び出す方法もあります。本チュートリアルでは、初心者が構築しやすいように変数受け渡しのテクニックは使っていません。興味がある場合は、[組み込み変数のドキュメント](https://docs.agentify.jp/welcom/agent_v1.4)を参照してください。
+</Tip>
+
+![AI総務 Agent 手順 28](/images/ai-soumu/image28.png)
+
+![AI総務 Agent 手順 29](/images/ai-soumu/image29.png)
+
+接続が完了すると、現在のロジックではナレッジベースに関連情報が存在する場合のみ LLM モジュールが起動することを確認できます。
+
+![AI総務 Agent 手順 30](/images/ai-soumu/image30.png)
+
+そのため、関連情報が存在しない場合にもユーザーへ通知できるよう、戻り値を設定します。
+
+![AI総務 Agent 手順 31](/images/ai-soumu/image31.png)
+
+![AI総務 Agent 手順 32](/images/ai-soumu/image32.png)
+
+保存後にテストします。テスト結果を分かりやすく確認するため、Agent 設定の左側メニューからナレッジベースの引用元表示を有効にします。
+
+![AI総務 Agent 手順 33](/images/ai-soumu/image33.png)
+
+![AI総務 Agent 手順 34](/images/ai-soumu/image34.png)
+
+今回のテスト input: 有給は何日前までに申請すればいいですか？
+
+![AI総務 Agent 手順 35](/images/ai-soumu/image35.png)
+
+角のマークをクリックすると、参照されたファイルと引用元を確認できます。
+
+![AI総務 Agent 手順 36](/images/ai-soumu/image36.png)
+
+![AI総務 Agent 手順 37](/images/ai-soumu/image37.png)
+
+### 2.8 Step 7.1: 備品在庫確認分岐を作成する
+
+次に、「備品在庫確認」ラベルが活性化になった場合の処理を作成します。
+
+この分岐では、ユーザー入力から備品名を抽出し、データベースの備品在庫テーブルを検索します。検索結果は LLM モジュールで自然な回答文に変換し、ユーザーに返答します。
+
+処理の流れは以下です。
+
+```text
+ユーザー入力
+↓
+情報分類モジュール
+↓
+備品在庫確認ラベル
+↓
+備品名抽出
+↓
+備品在庫データベース検索
+↓
+在庫回答 LLM
+↓
+ユーザーへ返答
+```
+
+ここでは Agentify の「データフィールド抽出」モジュールを利用します。「備品在庫確認」と判定された場合に起動します。
+
+![AI総務 Agent 手順 38](/images/ai-soumu/image38.png)
+
+このモジュールでは、prompt と抽出フィールドを定義して抽出ルールを設定します。以下は prompt 例です。
+
+```text
+あなたは備品在庫確認のためのデータフィールド抽出AIです。
+ユーザーの入力文から、在庫確認の対象となる備品名を抽出してください。
+抽出対象は、データベース検索に使用する備品名です。
+
+抽出ルール
+備品名のみを抽出してください。
+「在庫ありますか」「何台ありますか」「借りられますか」などの表現は備品名に含めないでください。
+備品名が明確でない場合は「不明」としてください。
+ユーザーが複数の備品を聞いている場合は、主な備品名を抽出してください。
+
+例
+ユーザー入力：
+ノートPCの在庫はありますか？
+抽出結果：
+asset_name = ノートPC
+
+ユーザー入力：
+モニターは今何台ありますか？
+抽出結果：
+asset_name = モニター
+
+ユーザー入力：
+マウスを借りられますか？
+抽出結果：
+asset_name = マウス
+
+ユーザー入力：
+在庫ありますか？
+抽出結果：
+asset_name = 不明
+```
+
+![AI総務 Agent 手順 39](/images/ai-soumu/image39.png)
+
+![AI総務 Agent 手順 40](/images/ai-soumu/image40.png)
+
+### 2.9 Step 7.2: データベースに接続する
+
+次に、データフィールド抽出で取得した項目を使ってデータベース検索を行います。データベース検索には SQL が必要なため、ここでは NL2SQL とデータベース検索の2つのコンポーネントを利用します。
+
+![AI総務 Agent 手順 41](/images/ai-soumu/image41.png)
+
+![AI総務 Agent 手順 42](/images/ai-soumu/image42.png)
+
+それぞれのコンポーネントで、検索対象のデータベースを設定します。
+
+![AI総務 Agent 手順 43](/images/ai-soumu/image43.png)
+
+![AI総務 Agent 手順 44](/images/ai-soumu/image44.png)
+
+![AI総務 Agent 手順 45](/images/ai-soumu/image45.png)
+
+接続が完了したら、出力結果をテストします。
+
+![AI総務 Agent 手順 46](/images/ai-soumu/image46.png)
+
+![AI総務 Agent 手順 47](/images/ai-soumu/image47.png)
+
+自然言語で回答したい場合は、データベース検索モジュールの後ろに LLM モジュールを追加して応答を整形します。この場合、データベース検索モジュール自体の出力は閉じても構いません。
+
+![AI総務 Agent 手順 48](/images/ai-soumu/image48.png)
+
+LLM の参考プロンプトは以下です。
+
+```text
+あなたは会社の総務業務を支援する AI総務アシスタントです。
+ユーザーは備品の在庫状況を確認しています。
+以下のデータベース検索結果をもとに、在庫状況を日本語で回答してください。
+
+回答ルール
+データベース検索結果に基づいて回答してください。
+在庫がある場合は、備品名、在庫数、保管場所を伝えてください。
+在庫数が0の場合は、現在在庫がないことを伝えてください。
+検索結果が空の場合は、該当する備品が見つからなかったことを伝えてください。
+抽出された備品名が「不明」の場合は、確認したい備品名をユーザーに質問してください。
+回答は日本語で、丁寧かつ簡潔にしてください。
+```
+
+![AI総務 Agent 手順 49](/images/ai-soumu/image49.png)
+
+### 2.10 Step 8: 「申請登録」分岐
+
+申請登録分岐では一般に、ユーザー入力を直接 SQL に渡すのではなく、まずデータフィールド抽出モジュールで申請情報を構造化します。
+
+その後、抽出された各フィールドをデータベース更新モジュールの INSERT SQL に差し込み、総務申請テーブルへ登録します。
+
+本チュートリアルでは構成を簡単にするため、LLM モジュールの prompt を使って INSERT SQL を直接生成します。
+
+<Warning>
+データベース更新時の誤操作を防ぐため、「定型回答」と「ユーザー入力」の2つのモジュールを追加して操作を制御することをおすすめします。
+</Warning>
+
+![AI総務 Agent 手順 50](/images/ai-soumu/image50.png)
+
+ユーザー入力モジュールのボタン追加方法と実際の操作イメージは以下です。
+
+![AI総務 Agent 手順 51](/images/ai-soumu/image51.png)
+
+![AI総務 Agent 手順 52](/images/ai-soumu/image52.png)
+
+後続の LLM モジュールの接続方法と prompt は以下です。
+
+```text
+あなたは PostgreSQL 用の INSERT SQL を生成するAIです。
+ユーザーの入力内容を読み取り、総務申請テーブル general_affairs_requests に登録するための INSERT SQL を1つだけ生成してください。
+
+テーブル定義
+テーブル名：general_affairs_requests
+使用できるカラムは以下のみです。
+
+- request_no
+- request_type
+- applicant_name
+- department
+- request_content
+- item_name
+- quantity
+- preferred_date
+- urgency
+- status
+- assignee
+
+登録ルール
+生成するSQLは、必ず INSERT INTO general_affairs_requests の1文のみとしてください。
+UPDATE、DELETE、DROP、ALTER、TRUNCATE、CREATE は絶対に生成しないでください。
+Markdown、説明文、コードブロックは出力しないでください。
+SQLのみを出力してください。
+request_no はSQL内で自動生成してください。
+status は必ず '受付済み' にしてください。
+assignee は必ず '総務部' にしてください。
+分からない項目は '不明' としてください。
+数量が不明な場合、quantity は 1 にしてください。
+緊急度が不明な場合、urgency は '中' にしてください。
+preferred_date は無理に日付型へ変換せず、ユーザー入力の表現をそのまま文字列として登録してください。
+文字列内のシングルクォートは、PostgreSQL形式で '' にエスケープしてください。
+最後に RETURNING で登録結果を返してください。
+
+request_type の分類
+request_type は以下のいずれかにしてください。
+
+- 備品申請
+- 設備トラブル
+- 入社手続き
+- 退社手続き
+- 証明書発行
+- その他
+
+request_no の生成方法
+以下の形式で生成してください。
+
+'GA-' || TO_CHAR(CURRENT_TIMESTAMP, 'YYYYMMDDHH24MISS') || '-' || LPAD(CAST(FLOOR(RANDOM() * 1000) AS TEXT), 3, '0')
+
+出力SQLの形式
+以下の形式に従ってください。
+
+INSERT INTO general_affairs_requests (
+request_no,
+request_type,
+applicant_name,
+department,
+request_content,
+item_name,
+quantity,
+preferred_date,
+urgency,
+status,
+assignee
+)
+VALUES (
+'GA-' || TO_CHAR(CURRENT_TIMESTAMP, 'YYYYMMDDHH24MISS') || '-' || LPAD(CAST(FLOOR(RANDOM() * 1000) AS TEXT), 3, '0'),
+'申請種別',
+'申請者名',
+'所属部署',
+'申請内容',
+'対象備品または対象物',
+数量,
+'希望日',
+'緊急度',
+'受付済み',
+'総務部'
+)
+RETURNING
+request_no,
+request_type,
+applicant_name,
+department,
+request_content,
+item_name,
+quantity,
+preferred_date,
+urgency,
+status,
+assignee,
+created_at;
+```
+
+![AI総務 Agent 手順 53](/images/ai-soumu/image53.png)
+
+同時に、データベース更新モジュールにも接続します。
+
+![AI総務 Agent 手順 54](/images/ai-soumu/image54.png)
+
+最後に、操作結果を LLM モジュールで自然言語に加工し、ユーザーへ返します。
+
+```text
+あなたは会社の総務業務を支援する AI総務アシスタントです。
+以下のデータベース登録結果をもとに、ユーザーへ申請受付完了の回答をしてください。
+
+回答ルール
+申請を受け付けたことを伝えてください。
+受付番号、申請種別、ステータス、担当者を含めてください。
+登録結果に含まれる情報だけを使用してください。
+回答は日本語で、丁寧かつ簡潔にしてください。
+```
+
+![AI総務 Agent 手順 55](/images/ai-soumu/image55.png)
+
+テスト入力: 営業部の田中です。新入社員用にノートPCを1台申請したいです。6月1日から使いたいです。
+
+![AI総務 Agent 手順 56](/images/ai-soumu/image56.png)
+
+![AI総務 Agent 手順 57](/images/ai-soumu/image57.png)
+
+![AI総務 Agent 手順 58](/images/ai-soumu/image58.png)
+
+### 2.11 Step 9: 動作確認
+
+最後に、作成した AI総務 Agent の動作確認を行います。
+
+本チュートリアルでは、以下の3つのパターンを確認します。
+
+- 社内ルール質問
+- 備品在庫確認
+- 申請登録
+
+今回作成した構成は、AI総務 Agent の基本形です。
+
+必要に応じて、以下のような機能を追加することで、さらに実務に近い Agent へ拡張できます。
+
+- 受付番号による申請状況確認
+- 申請ステータスの更新
+- 社内通知文の自動作成
+- Slack やメールへの通知
+- 承認フローとの連携
+- 入社・退社手続きチェックリストの自動生成
+
+まずは、社内ルール質問、備品在庫確認、申請登録の3つを基本機能として構築することで、ナレッジベースとデータベースを活用した AI Agent の動作を確認できます。
+
+本チュートリアルの Agent 全体ワークフローのリソースコード: [Google Drive](https://drive.google.com/file/d/166XjIkwEr6KRtryw1b4gqYogjCkAFpAb/view?usp=sharing)
+
+ダウンロード後、ファイル内のコードをインポートして利用できます。学習用のサンプルのため、ナレッジベースとデータベースのテストファイルは別途手動で設定してください。
+
+![AI総務 Agent 手順 59](/images/ai-soumu/image59.png)
