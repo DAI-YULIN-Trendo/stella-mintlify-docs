@@ -1,0 +1,35 @@
+---
+title: "NL2SQL"
+description: "自然言語のリクエストから SQL を生成するデータベース向けモジュールです。"
+---
+
+NL2SQL モジュールは、ユーザーの自然言語リクエストをもとに SQL を生成するモジュールです。データベース検索や分析の前段で利用し、SQL を直接書かなくてもデータ取得フローを構築できます。
+
+<Frame>
+  <img src="/images/update-1-0/image10.png" alt="NL2SQL モジュールの設定画面" />
+</Frame>
+
+## 使いどころ
+
+<CardGroup cols={2}>
+  <Card title="自然言語検索" icon="magnifying-glass">
+    「今月の申請件数を教えて」のような入力から SQL を生成します。
+  </Card>
+  <Card title="データベースクエリ連携" icon="database">
+    生成した SQL をデータベースクエリモジュールへ渡して実行します。
+  </Card>
+</CardGroup>
+
+## 接続例
+
+```text
+ユーザー入力
+  -> NL2SQL
+  -> データベースクエリ
+  -> LLM
+  -> 回答
+```
+
+<Warning>
+  更新系 SQL を生成させる場合は、権限と安全条件を明確に設定してください。検索のみの場合は SELECT を中心に制限することを推奨します。
+</Warning>

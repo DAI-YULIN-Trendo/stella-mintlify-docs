@@ -1,100 +1,162 @@
 ---
-title: "クローラーコマンドスクリプト使用マニュアル"
+title: "クローラーマニュアル"
+description: "Webスクレイピングツールで利用する getHtml、xpath、regex、jsonPath などのコマンド記法を説明します。"
 ---
 
-# 1. 概要
+このマニュアルでは、クローラーのフィールド抽出ルールで利用するコマンドスクリプトの書き方を説明します。各コマンドは1行ずつ記述し、最後は `get`、`all`、`rawText` などの終端コマンドで終了します。
 
-## 1.1 言語（文法）紹介
+## 1. 概要
 
-スクリプトの文法は、**コマンド（命令）とそのパラメータ**で構成されます。**各コマンドは必ず1行ずつ記述**してください。
+### 1.1 構文
 
-**構文形式：`<コマンド> [=> コマンドパラメータ]`**
+スクリプトは、コマンドと任意のパラメータで構成されます。
 
-* **コマンド：**&#x5FC5;須項目です。1行に1つのコマンドのみ記述できます。**&#xA;** 　　　   コマンドの戻り値が「セレクタ型」の場合は、チェーン操作（連続処理）が可能です。**&#xA;**              非セレクタ型の場合はそこで処理が終了し、最終結果が返されます。**&#xA;**           　スクリプトの最後の行は、必ず非セレクタ型のコマンドで終了する必要があります。
+```text
+<コマンド> [=> コマンドパラメータ]
+```
 
-* **=>：**&#x4EFB;意。パラメータを指定する際に使用します。
+<CardGroup cols={3}>
+  <Card title="コマンド" icon="terminal">
+    必須項目です。1行に1つだけ記述します。戻り値がセレクタ型の場合は、次の行へチェーンできます。
+  </Card>
+  <Card title="=>" icon="code">
+    パラメータを指定するための記号です。パラメータが不要なコマンドでは省略します。
+  </Card>
+  <Card title="コマンドパラメータ" icon="sliders">
+    XPath、正規表現、jsonPath など、コマンドに渡す具体的な条件です。
+  </Card>
+</CardGroup>
 
-* **コマンドパラメータ：**&#x4EFB;意。引数が不要なコマンドの場合は省略可能です。
+<Warning>
+  最後のコマンドは必ず終端型にしてください。セレクタ型のまま終わると、抽出結果として利用できません。
+</Warning>
 
+### 1.2 サンプル
 
+<AccordionGroup>
+  <Accordion title="サンプル 1: 記事リンクだけを抽出する" icon="link">
+    すべてのリンクを取得し、`/articles/` を含むリンクだけを抽出します。
 
-### **サンプル1：**
+    ```shell
+    getHtml
+    links
+    regex=>.*/articles/.*
+    all
+    ```
+  </Accordion>
+  <Accordion title="サンプル 2: タイトルを取得する" icon="heading">
+    任意の article タグ内で、`class="article-body"` の要素配下にある h1 のテキストを取得します。
 
-すべてのリンクを取得し、その中から **`/articles/` を含むリンクのみを抽出**
+    ```shell
+    getHtml
+    xpath=>//article[@class='articlePage']//h1/allText()
+    get
+    ```
+  </Accordion>
+  <Accordion title="サンプル 3: 本文全体を取得する" icon="file-lines">
+    任意の div タグ内で、`class="article-body"` の要素配下にある記事本文全体を取得します。
+
+    ```shell
+    getHtml
+    xpath=>//div[@class='article-body']/allText()
+    get
+    ```
+  </Accordion>
+</AccordionGroup>
+
+## 2. コマンド一覧
+
+| コマンド | パラメータ | 戻り値タイプ | 説明 | 使用例 |
+| --- | --- | --- | --- | --- |
+| `getHtml` | なし | セレクタ | HTML コンテンツをセレクタとして取得します。 | `getHtml` |
+| `getJson` | なし | セレクタ | JSON コンテンツをセレクタとして取得します。 | `getJson` |
+| `rawText` | なし | String | 終端コマンド。ページ全体のテキストを取得します。 | `rawText` |
+| `xpath` | XPath 式 | セレクタ | XPath 式に従って要素を選択します。 | `xpath=>//div[@class='article-body']/allText()` |
+| `regex` | 正規表現 | セレクタ | 正規表現で内容を選択します。 | `regex=>.*/articles/.*` |
+| `jsonPath` | jsonPath 式 | セレクタ | jsonPath 式に従って JSON の内容を選択します。 | `jsonPath=>$.data.content` |
+| `links` | なし | セレクタ | ページ内のリンク URL を取得します。 | `links` |
+| `get` | なし | String | 終端コマンド。選択された要素の内容を1件取得します。 | `get` |
+| `all` | なし | String のリスト | 終端コマンド。選択された要素の集合を取得します。主に `links` の後で利用します。 | `all` |
+
+## 3. 関連構文
+
+### 3.1 XPath 構文
+
+XPath は Xsoup の構文仕様に準拠しています。HTML の要素、属性、テキストを指定して抽出できます。
+
+<CardGroup cols={2}>
+  <Card title="要素を指定" icon="code">
+    `//h1`、`//div` のようにタグ名で要素を指定します。
+  </Card>
+  <Card title="属性で絞り込む" icon="filter">
+    `//div[@class='article-body']` のように属性値で対象を絞り込みます。
+  </Card>
+  <Card title="テキストを取得" icon="text">
+    `text()` や `allText()` を使って、要素内のテキストを取得します。
+  </Card>
+  <Card title="階層をたどる" icon="diagram-project">
+    `/` や `//` を使って、親子関係や子孫要素を指定します。
+  </Card>
+</CardGroup>
+
+<Frame>
+  <img src="/images/crawler-script-guide/image1.jpeg" alt="XPath 1.0 のサポート構文一覧" />
+</Frame>
+
+#### よく使う XPath 例
+
+| 目的 | XPath 例 |
+| --- | --- |
+| h1 のテキストを取得 | `//h1/text()` |
+| id 指定で本文を取得 | `//div[@id='press-release-body']/allText()` |
+| class 指定で本文を取得 | `//div[@class='article-body']/allText()` |
+| a タグの href 属性を取得 | `//a/@href` |
+
+<Frame>
+  <img src="/images/crawler-script-guide/image2.jpeg" alt="Xsoup で利用できる関数一覧" />
+</Frame>
+
+<Frame>
+  <img src="/images/crawler-script-guide/image3.jpeg" alt="Xsoup の拡張構文一覧" />
+</Frame>
+
+### 3.2 regex 構文
+
+`regex` は、取得済みのテキストやリンク一覧から、条件に一致する内容だけを抽出するために使います。
 
 ```shell
 getHtml
 links
-regex=>.*/articles/.*
+regex=>https://example\.com/articles/\d+\.html
 all
 ```
 
-### **サンプル2：**
+正規表現の学習や動作確認には、以下のような練習サイトを利用できます。
 
-任意の `<article>` タグ内で、`class` 属性が `article-body` の要素に含まれる
-&#x20;任意の `<h1>` タグから、**タイトルのテキストを取得**
+<Card title="正規表現の学習サイト" icon="arrow-up-right-from-square" href="https://www.hituzi.co.jp/560regex/regex_lesson/index.html">
+  基本的な正規表現を確認しながら練習できます。
+</Card>
+
+<Frame>
+  <img src="/images/crawler-script-guide/image4.png" alt="正規表現の練習サイト画面" />
+</Frame>
+
+### 3.3 jsonPath 構文
+
+`jsonPath` は、JSON 形式のレスポンスから特定の値を抽出するために使います。
 
 ```shell
-getHtml
-xpath=>//article[@class='articlePage']//h1/allText()
+getJson
+jsonPath=>$.data.content
 get
 ```
 
-### **サンプル3：**
+jsonPath の動作確認には、以下のサイトを利用できます。
 
-任意の `<div>` タグ内で、`class` 属性が `article-body` の要素に含まれる**記事本文全体のテキストを取得**
+<Card title="jsonPath の確認サイト" icon="arrow-up-right-from-square" href="https://jsonpath.com/">
+  JSON データと jsonPath 式を入力して、抽出結果を確認できます。
+</Card>
 
-```shell
-getHtml
-xpath=>//div[@class='article-body']/allText()
-get
-```
-
-
-
-## 1.2 コマンド一覧
-
-| コマンド     | パラメータ     | 戻り値タイプ                      | 説明                                  | 使用例                                              |
-| -------- | --------- | --------------------------- | ----------------------------------- | ------------------------------------------------ |
-| getHtml  | なし        | セレクタ                        | HTMLコンテンツのセレクタを取得                   | getHtml                                          |
-| getJson  | なし        | セレクタ                        | JSONコンテンツのセレクタを取得                   | getJson                                          |
-| rawText  | なし        | 文字列（String）                 | **終端コマンド：** ページ全体のテキストを取得           | getRawText                                       |
-| xpath    | xpath式    | セレクタ                        | xpath式に従って要素を選択（2.1章参照）             | xpath => //div\[@class='article-body']/allText() |
-| regex    | 正規表現      | セレクタ                        | 正規表現で要素を選択（2.2章参照）                  | regex => .\**/articles/.\**                      |
-| jsonPath | jsonPath式 | セレクタ                        | jsonPathで要素を選択（2.3章参照）              | jsonPath => $.data.content                       |
-| links    | なし        | セレクタ                        | ページ内のリンクURLを取得                      | links                                            |
-| get      | なし        | 文字列（String）                 | **終端コマンド：** 選択された要素の内容を取得           | get                                              |
-| all      | なし        | 文字列のリスト&#xA;(List\<String>) | **終端コマンド：** 要素の集合を取得（例：`links`の後など） | all                                              |
-
-
-
-# 2. 関連構文について
-
-## 2.1 XPath 構文
-
-XPath は **Xsoup** の構文仕様に準拠しています。
-
-### **XPath1.0:**
-
-### **サポートされている関数：**
-
-Xsoup では、標準の XPath 1.0 には含まれていない一部の関数も利用可能です。
-
-### **拡張構文のサポート：**
-
-Xsoup では、HTML 抽出の利便性を高めるため、**Jsoup の CSS セレクタを参考にした独自の XPath 拡張構文** がサポートされています。
-
-## 2.2 正規表現（Regex）構文
-
-構文の学習・練習：https://regexlearn-com.vercel.app/zh/cheatsheet
-
-![](https://uxkpl4cba3j.feishu.cn/space/api/box/stream/download/asynccode/?code=NDBiZjNhMGUzNzVjZGU4ODRhNjZiZjc5MzdkMTE5NjVfZDFSMnZQajR5ZEUzWlRHWW1SNXJLdU9RVllNcHNBZUVfVG9rZW46Q1RTS2JXcjVyb1o3MEN4eWNvZGN6bVNLbjJmXzE3NDMwNDM5MjE6MTc0MzA0NzUyMV9WNA)
-
-
-
-## 2.3 JSONPath 構文
-
-構文の学習・練習：https://jsonpath.com/
-
-![](https://uxkpl4cba3j.feishu.cn/space/api/box/stream/download/asynccode/?code=ZDkyOTQ3ZmJmZTY2ZWFjNTdhZGNlYWNjZjYxZjhjNjdfSms0b2l2SHVFeTh1N2V2VmNXTTVnZ0J3V1NnSlh6V3BfVG9rZW46UnpKeWJnQjVIb3Yxc3J4RVhYMWNCWDR6bkJmXzE3NDMwNDM5MjE6MTc0MzA0NzUyMV9WNA)
-
+<Frame>
+  <img src="/images/crawler-script-guide/image5.png" alt="jsonPath の確認サイト画面" />
+</Frame>

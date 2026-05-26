@@ -1,0 +1,2890 @@
+{
+  "flow": {
+    "nodes": [
+      {
+        "data": {
+          "outputs": [
+            {
+              "valueType": "string",
+              "description": "参照変数：{{userChatInput}}",
+              "label": "テキスト情報",
+              "type": "source",
+              "targets": [],
+              "key": "userChatInput"
+            },
+            {
+              "valueType": "file",
+              "description": "ユーザーがアップロードしたドキュメントのリストをJSON配列形式で出力します。ドキュメント比較の場合、グループ情報を含めます。",
+              "label": "ドキュメント情報",
+              "type": "source",
+              "targets": [],
+              "key": "files"
+            },
+            {
+              "valueType": "image",
+              "description": "ユーザがアップロードした画像のリストをJSON配列形式で出力します",
+              "label": "画像の情報",
+              "type": "source",
+              "targets": [],
+              "key": "images"
+            },
+            {
+              "valueType": "boolean",
+              "description": "ボタンがクリックされていない場合、値はtrueです",
+              "label": "ボタンがクリックされていません",
+              "type": "source",
+              "targets": [],
+              "key": "unclickedButton"
+            },
+            {
+              "valueType": "boolean",
+              "description": "実行が完了するとスイッチがオンになり、ダウンストリームのリンクされたコンポーネントが実行します。",
+              "label": "モジュール実行終了",
+              "type": "source",
+              "targets": [
+                {
+                  "targetHandle": "switchAny",
+                  "target": "312c1ec6-eb86-406e-99d2-4395c680ff0c"
+                },
+                {
+                  "targetHandle": "switchAny",
+                  "target": "a37ab19e-641b-4a3b-a93e-5197ef38e8a8"
+                }
+              ],
+              "key": "finish"
+            }
+          ],
+          "moduleType": "questionInput",
+          "inputs": [
+            {
+              "connected": true,
+              "valueType": "boolean",
+              "description": "アップストリームのすべての条件を満たす場合にのみ、現在のコンポーネントの実行ロジックが有効になります",
+              "label": "条件をすべて満たした場合に動作を開始",
+              "type": "target",
+              "keyType": "trigger",
+              "value": false,
+              "key": "switch"
+            },
+            {
+              "connected": true,
+              "valueType": "boolean",
+              "description": "アップストリームのいずれかの条件を満たせば、現在のコンポーネントの実行ロジックが有効になります",
+              "label": "いずれかを満たした場合に動作を開始",
+              "type": "target",
+              "keyType": "triggerAny",
+              "value": false,
+              "key": "switchAny"
+            },
+            {
+              "valueType": "boolean",
+              "description": "テキストの入力のスイッチ",
+              "label": "テキストの入力",
+              "type": "switch",
+              "value": false,
+              "key": "inputText"
+            },
+            {
+              "valueType": "boolean",
+              "description": "ドキュメントのアップロードのスイッチ",
+              "label": "ドキュメントのアップロード",
+              "type": "switch",
+              "value": false,
+              "key": "uploadFile"
+            },
+            {
+              "valueType": "boolean",
+              "description": "画像のアップロードのスイッチ",
+              "label": "画像のアップロード",
+              "type": "switch",
+              "value": false,
+              "key": "uploadPicture"
+            },
+            {
+              "valueType": "boolean",
+              "description": "ドキュメントのレビューのスイッチ",
+              "label": "ドキュメントのレビュー",
+              "type": "switch",
+              "value": false,
+              "key": "fileUpload"
+            },
+            {
+              "valueType": "boolean",
+              "description": "ドキュメント比較を有効にしますか",
+              "label": "ドキュメント比較を行いますか",
+              "type": "checkBox",
+              "value": false,
+              "key": "fileContrast"
+            },
+            {
+              "valueType": "any",
+              "description": "アップロードされたファイルのリストはドキュメント比較が有効な場合は、グループごとに1つのファイルのみアップロードできます",
+              "label": "ドキュメントのグループ化",
+              "type": "table",
+              "value": [],
+              "key": "fileInfo"
+            },
+            {
+              "valueType": "boolean",
+              "description": "初期グローバルとしてinputしますか",
+              "label": "初期グローバルとしてinputしますか",
+              "type": "hidden",
+              "value": true,
+              "key": "initialInput"
+            }
+          ],
+          "intro": "ユーザ入力エントランス、対話中のユーザの入力情報は他のモジュールと接続する、一般的にはスタートモジュールとして使用されます",
+          "name": "ユーザークエリ",
+          "disabled": false,
+          "category": "ユーザークエリ"
+        },
+        "initialized": true,
+        "id": "simpleInputId",
+        "position": {
+          "x": -1689.8879890302508,
+          "y": -351.31085753092566
+        },
+        "type": "custom"
+      },
+      {
+        "data": {
+          "outputs": [
+            {
+              "valueType": "boolean",
+              "description": "実行が完了するとスイッチがオンになり、ダウンストリームのリンクされたコンポーネントが実行します。",
+              "label": "モジュール実行終了",
+              "type": "source",
+              "targets": [],
+              "key": "finish"
+            }
+          ],
+          "moduleType": "storeToKnowledgeBase",
+          "inputs": [
+            {
+              "connected": true,
+              "valueType": "boolean",
+              "description": "アップストリームのすべての条件を満たす場合にのみ、現在のコンポーネントの実行ロジックが有効になります",
+              "label": "条件をすべて満たした場合に動作を開始",
+              "type": "target",
+              "keyType": "trigger",
+              "value": false,
+              "key": "switch"
+            },
+            {
+              "connected": true,
+              "valueType": "boolean",
+              "description": "アップストリームのいずれかの条件を満たせば、現在のコンポーネントの実行ロジックが有効になります",
+              "label": "いずれかを満たした場合に動作を開始",
+              "type": "target",
+              "keyType": "triggerAny",
+              "value": false,
+              "key": "switchAny"
+            },
+            {
+              "connected": true,
+              "valueType": "string",
+              "description": "必須項目。接続がない場合、このコンポーネントは有効になりません",
+              "label": "データの内容",
+              "type": "target",
+              "value": "",
+              "key": "data"
+            },
+            {
+              "connected": true,
+              "valueType": "string",
+              "description": "必須項目、ナレッジベース内のデータセット名。同じ名前のデータセットは上書きされます",
+              "label": "データセット名",
+              "type": "target",
+              "key": "dsName",
+              "required": true
+            },
+            {
+              "connected": false,
+              "valueType": "object",
+              "description": "データをナレッジベースの高度な構成に保存",
+              "label": "詳細設定",
+              "type": "target",
+              "value": {
+                "chunkSize": 8000,
+                "coverageRate": 0.15,
+                "sliceType": 0
+              },
+              "key": "kbConfig",
+              "required": true
+            },
+            {
+              "valueType": "array",
+              "description": "",
+              "label": "ナレッジベースの選択",
+              "type": "selectKnowledgeBase",
+              "value": [],
+              "key": "knowledgeBase",
+              "required": true
+            }
+          ],
+          "intro": "データをナレッジベースに保存",
+          "name": "ナレッジベースに保存",
+          "disabled": false,
+          "category": "ナレッジベース"
+        },
+        "initialized": true,
+        "id": "97b0093b-ad87-48bf-b3d4-77abcca7fff2",
+        "position": {
+          "x": 614.1120109697492,
+          "y": -400.31085753092566
+        },
+        "type": "custom"
+      },
+      {
+        "data": {
+          "outputs": [
+            {
+              "valueType": "string",
+              "description": "返信内容をそのまま出力します。",
+              "label": "返信",
+              "type": "source",
+              "value": "",
+              "targets": [
+                {
+                  "targetHandle": "text",
+                  "target": "58a4cbf7-ee4a-402a-b488-61f455734dbc"
+                }
+              ],
+              "key": "text"
+            },
+            {
+              "valueType": "boolean",
+              "description": "実行が完了するとスイッチがオンになり、ダウンストリームのリンクされたコンポーネントが実行します。",
+              "label": "モジュール実行終了",
+              "type": "source",
+              "targets": [
+                {
+                  "targetHandle": "switchAny",
+                  "target": "58a4cbf7-ee4a-402a-b488-61f455734dbc"
+                }
+              ],
+              "key": "finish"
+            }
+          ],
+          "moduleType": "confirmreply",
+          "inputs": [
+            {
+              "connected": true,
+              "valueType": "boolean",
+              "description": "アップストリームのすべての条件を満たす場合にのみ、現在のコンポーネントの実行ロジックが有効になります",
+              "label": "条件をすべて満たした場合に動作を開始",
+              "type": "target",
+              "keyType": "trigger",
+              "value": false,
+              "key": "switch"
+            },
+            {
+              "connected": true,
+              "valueType": "boolean",
+              "description": "アップストリームのいずれかの条件を満たせば、現在のコンポーネントの実行ロジックが有効になります",
+              "label": "いずれかを満たした場合に動作を開始",
+              "type": "target",
+              "keyType": "triggerAny",
+              "value": false,
+              "key": "switchAny"
+            },
+            {
+              "connected": false,
+              "valueType": "boolean",
+              "description": "ユーザーに返信内容をアウトプットするかどうかをコントロールする",
+              "label": "ユーザーに返信を表示",
+              "type": "switch",
+              "value": false,
+              "key": "stream"
+            },
+            {
+              "connected": true,
+              "enableVariables": true,
+              "valueType": "string",
+              "description": " \\n を使って連続改行を実現できます。\n\n外部モジュールの入力を通じて返信が可能であり、外部モジュールの入力時に現在記入している内容が上書きされます。参照変数：{{text}}",
+              "label": "返信",
+              "type": "textarea",
+              "value": "タイトル：{{_state.data.title}}\n公開日時：{{_state.data.published_at}}\n元記事URL：{{_state.url}}\n\n本文：\n{{_state.data.press_release_body}}\n",
+              "key": "text"
+            }
+          ],
+          "intro": "トリガー条件と合わせて、プリセット内容またはアップストリームのモジュールがアクセスされた内容を出力します。",
+          "name": "定型回答",
+          "disabled": false,
+          "category": "大規模言語モデル"
+        },
+        "initialized": true,
+        "id": "312c1ec6-eb86-406e-99d2-4395c680ff0c",
+        "position": {
+          "x": -1305.8879890302508,
+          "y": -426.31085753092566
+        },
+        "type": "custom"
+      },
+      {
+        "data": {
+          "outputs": [
+            {
+              "valueType": "string",
+              "description": "返信内容をそのまま出力します。",
+              "label": "返信",
+              "type": "source",
+              "value": "",
+              "targets": [
+                {
+                  "targetHandle": "dsName",
+                  "target": "97b0093b-ad87-48bf-b3d4-77abcca7fff2"
+                }
+              ],
+              "key": "text"
+            },
+            {
+              "valueType": "boolean",
+              "description": "実行が完了するとスイッチがオンになり、ダウンストリームのリンクされたコンポーネントが実行します。",
+              "label": "モジュール実行終了",
+              "type": "source",
+              "targets": [
+                {
+                  "targetHandle": "switch",
+                  "target": "97b0093b-ad87-48bf-b3d4-77abcca7fff2"
+                }
+              ],
+              "key": "finish"
+            }
+          ],
+          "moduleType": "confirmreply",
+          "inputs": [
+            {
+              "connected": true,
+              "valueType": "boolean",
+              "description": "アップストリームのすべての条件を満たす場合にのみ、現在のコンポーネントの実行ロジックが有効になります",
+              "label": "条件をすべて満たした場合に動作を開始",
+              "type": "target",
+              "keyType": "trigger",
+              "value": false,
+              "key": "switch"
+            },
+            {
+              "connected": true,
+              "valueType": "boolean",
+              "description": "アップストリームのいずれかの条件を満たせば、現在のコンポーネントの実行ロジックが有効になります",
+              "label": "いずれかを満たした場合に動作を開始",
+              "type": "target",
+              "keyType": "triggerAny",
+              "value": false,
+              "key": "switchAny"
+            },
+            {
+              "connected": false,
+              "valueType": "boolean",
+              "description": "ユーザーに返信内容をアウトプットするかどうかをコントロールする",
+              "label": "ユーザーに返信を表示",
+              "type": "switch",
+              "value": false,
+              "key": "stream"
+            },
+            {
+              "connected": true,
+              "enableVariables": true,
+              "valueType": "string",
+              "description": " \\n を使って連続改行を実現できます。\n\n外部モジュールの入力を通じて返信が可能であり、外部モジュールの入力時に現在記入している内容が上書きされます。参照変数：{{text}}",
+              "label": "返信",
+              "type": "textarea",
+              "value": "{{_state.data.title}}｜{{_state.data.published_at}}",
+              "key": "text"
+            }
+          ],
+          "intro": "トリガー条件と合わせて、プリセット内容またはアップストリームのモジュールがアクセスされた内容を出力します。",
+          "name": "定型回答",
+          "disabled": false,
+          "category": "大規模言語モデル"
+        },
+        "initialized": true,
+        "id": "a37ab19e-641b-4a3b-a93e-5197ef38e8a8",
+        "position": {
+          "x": 230.11201096974924,
+          "y": -273.31085753092566
+        },
+        "type": "custom"
+      },
+      {
+        "data": {
+          "outputs": [
+            {
+              "valueType": "boolean",
+              "description": "モデルの実行が終了し、すべてのコンテンツが生成された後、返信が終了し、ダウンストリームコンポーネントがオンになります。",
+              "label": "返信終了",
+              "type": "source",
+              "targets": [],
+              "key": "isResponseAnswerText"
+            },
+            {
+              "valueType": "string",
+              "description": "大規模言語モデルで処理済みの情報は、返信内容として出力されます。参照変数：",
+              "label": "返信",
+              "type": "source",
+              "targets": [
+                {
+                  "targetHandle": "aitext",
+                  "target": "b4272646-ab47-42a0-9ba2-ceca6621c30b"
+                }
+              ],
+              "key": "answerText"
+            },
+            {
+              "valueType": "boolean",
+              "description": "実行が完了するとスイッチがオンになり、ダウンストリームのリンクされたコンポーネントが実行します。",
+              "label": "モジュール実行終了",
+              "type": "source",
+              "targets": [
+                {
+                  "targetHandle": "switchAny",
+                  "target": "04f5e208-55c4-4104-8852-87115e368fb9"
+                }
+              ],
+              "key": "finish"
+            }
+          ],
+          "moduleType": "aiChat",
+          "inputs": [
+            {
+              "connected": true,
+              "valueType": "boolean",
+              "description": "アップストリームのすべての条件を満たす場合にのみ、現在のコンポーネントの実行ロジックが有効になります",
+              "label": "条件をすべて満たした場合に動作を開始",
+              "type": "target",
+              "keyType": "trigger",
+              "value": false,
+              "key": "switch"
+            },
+            {
+              "connected": true,
+              "valueType": "boolean",
+              "description": "アップストリームのいずれかの条件を満たせば、現在のコンポーネントの実行ロジックが有効になります",
+              "label": "いずれかを満たした場合に動作を開始",
+              "type": "target",
+              "keyType": "triggerAny",
+              "value": false,
+              "key": "switchAny"
+            },
+            {
+              "connected": true,
+              "valueType": "string",
+              "description": "参照変数：{{text}}",
+              "label": "情報入力",
+              "type": "target",
+              "value": "",
+              "key": "text"
+            },
+            {
+              "connected": true,
+              "valueType": "image",
+              "description": "参照変数：{{images}}",
+              "label": "画像入力",
+              "type": "target",
+              "value": "",
+              "key": "images"
+            },
+            {
+              "connected": true,
+              "valueType": "search",
+              "description": "参照変数：{{knSearch}}",
+              "label": "ナレッジベース検索結果",
+              "type": "target",
+              "value": "",
+              "key": "knSearch"
+            },
+            {
+              "connected": false,
+              "enableVariables": true,
+              "valueType": "text",
+              "description": "ナレッジベースの高度な構成",
+              "label": "ナレッジベースの高度な構成",
+              "type": "target",
+              "value": "## Role:ナレッジQ&Aエキスパート\n        ## Goals:\n        - ナレッジベースで検索された知識に基づいて，チャットの文脈情報を組み合わせてユーザの質問に回答します\n        ## Constrains：\n        - ナレッジベースの内容に厳密に基づいて質問に回答します\n        - ナレッジベースからの情報が質問に対して不十分な場合、慎重に回答します\n        ## Rules\n        - ナレッジベースの検索において、 instruction は関連する知識内容またはQ&Aペアの質問、answer は期待される回答です。\n        ## 参考内容：\n        ### ナレッジベースでの知識検索：\n        \"\"\"\n        {{quote}}\n        \"\"\"\n        ## ユーザーの質問：\n        \"{{question}}\"\n",
+              "key": "knConfig"
+            },
+            {
+              "connected": false,
+              "min": 0,
+              "max": 100,
+              "valueType": "chatHistory",
+              "description": "",
+              "step": 1,
+              "label": "チャットの文脈",
+              "type": "inputNumber",
+              "value": 0,
+              "key": "historyText"
+            },
+            {
+              "valueType": "string",
+              "description": "",
+              "label": "モデルを選択",
+              "type": "selectChatModel",
+              "value": "gpt-4o",
+              "key": "model",
+              "required": true
+            },
+            {
+              "enableVariables": true,
+              "valueType": "string",
+              "description": "モデルの役割や振る舞いを設定します。例：ペルソナ設定、応答ロジックなど。",
+              "label": "システムプロンプト",
+              "type": "textarea",
+              "value": "## 役割\nあなたは企業のPR記事を整理するアシスタントです。\n\n## タスク\n入力されたPR記事の内容をもとに、以下を整理してください。\n\n1. 要約\n記事の要点を2～4文で簡潔にまとめてください。\n\n2. カテゴリ\n以下の中から最も適切なものを1つ選んでください。\n- AI製品リリース\n- 企業動向\n- 技術アップデート\n- マーケティング/キャンペーン\n- 提携/エコシステム\n- その他\n\n3. キーワード\n3～5個抽出してください。\n\n4. 主要ポイント\n重要なポイントを3つに整理してください。\n\n## 出力形式\n要約：\nXXX\n\nカテゴリ：\nXXX\n\nキーワード：\nXXX、XXX、XXX\n\n主要ポイント：\n1. XXX\n2. XXX\n3. XXX",
+              "key": "systemPrompt"
+            },
+            {
+              "enableVariables": true,
+              "valueType": "string",
+              "description": "ユーザーが入力する具体的な質問やリクエスト。モデルへの指示となります。",
+              "label": "ユーザープロンプト",
+              "type": "textarea",
+              "value": "",
+              "key": "quotePrompt"
+            },
+            {
+              "connected": false,
+              "valueType": "boolean",
+              "description": "ユーザーに返信内容をアウトプットするかどうかをコントロールする",
+              "label": "ユーザーに返信を表示",
+              "type": "switch",
+              "value": false,
+              "key": "stream"
+            },
+            {
+              "min": 0,
+              "max": 1,
+              "markList": {
+                "0": "厳密",
+                "1": "クリエイティブ"
+              },
+              "valueType": "number",
+              "description": "返信の創造性を制御します。入力された情報と一致する回答を望むなら、数値が小さいほど良く、モデルが創意性を発揮するためには、数値が大きいほど良いです。",
+              "step": 0.1,
+              "label": "Temperature",
+              "type": "slider",
+              "value": 0,
+              "key": "temperature"
+            },
+            {
+              "min": 0,
+              "max": 1,
+              "markList": {
+                "0": "0",
+                "1": "1"
+              },
+              "valueType": "number",
+              "description": "出力の多様性を制御します。値が大きいほど多くの単語選択肢を含み、値が小さいほど高確率の単語に集中し、確定的な出力になりますが多様性は減ります。通常、【返信の創造性】と【核サンプリングTOP_P】はどちらか一方のみを設定します。",
+              "step": 0.1,
+              "label": "TOP_P",
+              "type": "slider",
+              "value": 1,
+              "key": "topP"
+            },
+            {
+              "min": 100,
+              "max": 4000,
+              "markList": {
+                "100": "100",
+                "4000": "4000"
+              },
+              "valueType": "number",
+              "step": 50,
+              "label": "Max Token",
+              "type": "slider",
+              "value": 4000,
+              "key": "maxToken"
+            }
+          ],
+          "intro": "AI対話モデルは、入力された情報とプロンプト（Prompt）に基づいて必要な情報を生成し、ユーザーに提示して、ユーザとのインタラクションを行う。",
+          "name": "LLM",
+          "disabled": false,
+          "category": "大規模言語モデル"
+        },
+        "initialized": true,
+        "id": "58a4cbf7-ee4a-402a-b488-61f455734dbc",
+        "position": {
+          "x": -921.8879890302508,
+          "y": -474.31085753092566
+        },
+        "type": "custom"
+      },
+      {
+        "data": {
+          "outputs": [],
+          "moduleType": "addMemoryVariable",
+          "inputs": [
+            {
+              "connected": true,
+              "valueType": "string",
+              "description": "",
+              "label": "aitext",
+              "type": "agentMemoryVar",
+              "targets": [],
+              "key": "aitext"
+            }
+          ],
+          "intro": "このコンポーネントを使用して変数をメモリ変数として保存すると、エージェントの他のコンポーネントで参照できます。",
+          "name": "メモリ変数の追加",
+          "disabled": false,
+          "category": "高度な設定"
+        },
+        "initialized": true,
+        "id": "b4272646-ab47-42a0-9ba2-ceca6621c30b",
+        "position": {
+          "x": -537.8879890302508,
+          "y": -330.31085753092566
+        },
+        "type": "custom"
+      },
+      {
+        "data": {
+          "outputs": [
+            {
+              "valueType": "string",
+              "description": "返信内容をそのまま出力します。",
+              "label": "返信",
+              "type": "source",
+              "value": "",
+              "targets": [
+                {
+                  "targetHandle": "data",
+                  "target": "97b0093b-ad87-48bf-b3d4-77abcca7fff2"
+                }
+              ],
+              "key": "text"
+            },
+            {
+              "valueType": "boolean",
+              "description": "実行が完了するとスイッチがオンになり、ダウンストリームのリンクされたコンポーネントが実行します。",
+              "label": "モジュール実行終了",
+              "type": "source",
+              "targets": [],
+              "key": "finish"
+            }
+          ],
+          "moduleType": "confirmreply",
+          "inputs": [
+            {
+              "connected": true,
+              "valueType": "boolean",
+              "description": "アップストリームのすべての条件を満たす場合にのみ、現在のコンポーネントの実行ロジックが有効になります",
+              "label": "条件をすべて満たした場合に動作を開始",
+              "type": "target",
+              "keyType": "trigger",
+              "value": false,
+              "key": "switch"
+            },
+            {
+              "connected": true,
+              "valueType": "boolean",
+              "description": "アップストリームのいずれかの条件を満たせば、現在のコンポーネントの実行ロジックが有効になります",
+              "label": "いずれかを満たした場合に動作を開始",
+              "type": "target",
+              "keyType": "triggerAny",
+              "value": false,
+              "key": "switchAny"
+            },
+            {
+              "connected": false,
+              "valueType": "boolean",
+              "description": "ユーザーに返信内容をアウトプットするかどうかをコントロールする",
+              "label": "ユーザーに返信を表示",
+              "type": "switch",
+              "value": false,
+              "key": "stream"
+            },
+            {
+              "connected": true,
+              "enableVariables": true,
+              "valueType": "string",
+              "description": " \\n を使って連続改行を実現できます。\n\n外部モジュールの入力を通じて返信が可能であり、外部モジュールの入力時に現在記入している内容が上書きされます。参照変数：{{text}}",
+              "label": "返信",
+              "type": "textarea",
+              "value": "【タイトル】\n{{_state.data.title}}\n\n【公開日時】\n{{_state.data.published_at}}\n\n\n【AI整理結果】\n{{aitext}}\n\n【本文】\n{{_state.data.press_release_body}}\n\n",
+              "key": "text"
+            }
+          ],
+          "intro": "トリガー条件と合わせて、プリセット内容またはアップストリームのモジュールがアクセスされた内容を出力します。",
+          "name": "定型回答",
+          "disabled": false,
+          "category": "大規模言語モデル"
+        },
+        "initialized": true,
+        "id": "04f5e208-55c4-4104-8852-87115e368fb9",
+        "position": {
+          "x": -537.8879890302508,
+          "y": -548.3108575309257
+        },
+        "type": "custom"
+      }
+    ],
+    "edges": [
+      {
+        "sourceHandle": "finish",
+        "animated": false,
+        "id": "vueflow__edge-simpleInputIdfinish-312c1ec6-eb86-406e-99d2-4395c680ff0cswitchAny",
+        "source": "simpleInputId",
+        "type": "custom",
+        "targetHandle": "switchAny",
+        "target": "312c1ec6-eb86-406e-99d2-4395c680ff0c",
+        "sourceNode": {
+          "data": {
+            "outputs": [
+              {
+                "valueType": "string",
+                "description": "参照変数：{{userChatInput}}",
+                "label": "テキスト情報",
+                "type": "source",
+                "targets": [],
+                "key": "userChatInput"
+              },
+              {
+                "valueType": "file",
+                "description": "ユーザーがアップロードしたドキュメントのリストをJSON配列形式で出力します。ドキュメント比較の場合、グループ情報を含めます。",
+                "label": "ドキュメント情報",
+                "type": "source",
+                "targets": [],
+                "key": "files"
+              },
+              {
+                "valueType": "image",
+                "description": "ユーザがアップロードした画像のリストをJSON配列形式で出力します",
+                "label": "画像の情報",
+                "type": "source",
+                "targets": [],
+                "key": "images"
+              },
+              {
+                "valueType": "boolean",
+                "description": "ボタンがクリックされていない場合、値はtrueです",
+                "label": "ボタンがクリックされていません",
+                "type": "source",
+                "targets": [],
+                "key": "unclickedButton"
+              },
+              {
+                "valueType": "boolean",
+                "description": "実行が完了するとスイッチがオンになり、ダウンストリームのリンクされたコンポーネントが実行します。",
+                "label": "モジュール実行終了",
+                "type": "source",
+                "targets": [
+                  {
+                    "targetHandle": "switchAny",
+                    "target": "312c1ec6-eb86-406e-99d2-4395c680ff0c"
+                  },
+                  {
+                    "targetHandle": "switchAny",
+                    "target": "a37ab19e-641b-4a3b-a93e-5197ef38e8a8"
+                  }
+                ],
+                "key": "finish"
+              }
+            ],
+            "moduleType": "questionInput",
+            "inputs": [
+              {
+                "connected": true,
+                "valueType": "boolean",
+                "description": "アップストリームのすべての条件を満たす場合にのみ、現在のコンポーネントの実行ロジックが有効になります",
+                "label": "条件をすべて満たした場合に動作を開始",
+                "type": "target",
+                "keyType": "trigger",
+                "value": false,
+                "key": "switch"
+              },
+              {
+                "connected": true,
+                "valueType": "boolean",
+                "description": "アップストリームのいずれかの条件を満たせば、現在のコンポーネントの実行ロジックが有効になります",
+                "label": "いずれかを満たした場合に動作を開始",
+                "type": "target",
+                "keyType": "triggerAny",
+                "value": false,
+                "key": "switchAny"
+              },
+              {
+                "valueType": "boolean",
+                "description": "テキストの入力のスイッチ",
+                "label": "テキストの入力",
+                "type": "switch",
+                "value": false,
+                "key": "inputText"
+              },
+              {
+                "valueType": "boolean",
+                "description": "ドキュメントのアップロードのスイッチ",
+                "label": "ドキュメントのアップロード",
+                "type": "switch",
+                "value": false,
+                "key": "uploadFile"
+              },
+              {
+                "valueType": "boolean",
+                "description": "画像のアップロードのスイッチ",
+                "label": "画像のアップロード",
+                "type": "switch",
+                "value": false,
+                "key": "uploadPicture"
+              },
+              {
+                "valueType": "boolean",
+                "description": "ドキュメントのレビューのスイッチ",
+                "label": "ドキュメントのレビュー",
+                "type": "switch",
+                "value": false,
+                "key": "fileUpload"
+              },
+              {
+                "valueType": "boolean",
+                "description": "ドキュメント比較を有効にしますか",
+                "label": "ドキュメント比較を行いますか",
+                "type": "checkBox",
+                "value": false,
+                "key": "fileContrast"
+              },
+              {
+                "valueType": "any",
+                "description": "アップロードされたファイルのリストはドキュメント比較が有効な場合は、グループごとに1つのファイルのみアップロードできます",
+                "label": "ドキュメントのグループ化",
+                "type": "table",
+                "value": [],
+                "key": "fileInfo"
+              },
+              {
+                "valueType": "boolean",
+                "description": "初期グローバルとしてinputしますか",
+                "label": "初期グローバルとしてinputしますか",
+                "type": "hidden",
+                "value": true,
+                "key": "initialInput"
+              }
+            ],
+            "intro": "ユーザ入力エントランス、対話中のユーザの入力情報は他のモジュールと接続する、一般的にはスタートモジュールとして使用されます",
+            "name": "ユーザークエリ",
+            "disabled": false,
+            "category": "ユーザークエリ"
+          },
+          "initialized": true,
+          "id": "simpleInputId",
+          "position": {
+            "x": -1689.8879890302508,
+            "y": -351.31085753092566
+          },
+          "type": "custom"
+        },
+        "targetNode": {
+          "data": {
+            "outputs": [
+              {
+                "valueType": "string",
+                "description": "返信内容をそのまま出力します。",
+                "label": "返信",
+                "type": "source",
+                "value": "",
+                "targets": [
+                  {
+                    "targetHandle": "text",
+                    "target": "58a4cbf7-ee4a-402a-b488-61f455734dbc"
+                  }
+                ],
+                "key": "text"
+              },
+              {
+                "valueType": "boolean",
+                "description": "実行が完了するとスイッチがオンになり、ダウンストリームのリンクされたコンポーネントが実行します。",
+                "label": "モジュール実行終了",
+                "type": "source",
+                "targets": [
+                  {
+                    "targetHandle": "switchAny",
+                    "target": "58a4cbf7-ee4a-402a-b488-61f455734dbc"
+                  }
+                ],
+                "key": "finish"
+              }
+            ],
+            "moduleType": "confirmreply",
+            "inputs": [
+              {
+                "connected": true,
+                "valueType": "boolean",
+                "description": "アップストリームのすべての条件を満たす場合にのみ、現在のコンポーネントの実行ロジックが有効になります",
+                "label": "条件をすべて満たした場合に動作を開始",
+                "type": "target",
+                "keyType": "trigger",
+                "value": false,
+                "key": "switch"
+              },
+              {
+                "connected": true,
+                "valueType": "boolean",
+                "description": "アップストリームのいずれかの条件を満たせば、現在のコンポーネントの実行ロジックが有効になります",
+                "label": "いずれかを満たした場合に動作を開始",
+                "type": "target",
+                "keyType": "triggerAny",
+                "value": false,
+                "key": "switchAny"
+              },
+              {
+                "connected": false,
+                "valueType": "boolean",
+                "description": "ユーザーに返信内容をアウトプットするかどうかをコントロールする",
+                "label": "ユーザーに返信を表示",
+                "type": "switch",
+                "value": false,
+                "key": "stream"
+              },
+              {
+                "connected": true,
+                "enableVariables": true,
+                "valueType": "string",
+                "description": " \\n を使って連続改行を実現できます。\n\n外部モジュールの入力を通じて返信が可能であり、外部モジュールの入力時に現在記入している内容が上書きされます。参照変数：{{text}}",
+                "label": "返信",
+                "type": "textarea",
+                "value": "タイトル：{{_state.data.title}}\n公開日時：{{_state.data.published_at}}\n元記事URL：{{_state.url}}\n\n本文：\n{{_state.data.press_release_body}}\n",
+                "key": "text"
+              }
+            ],
+            "intro": "トリガー条件と合わせて、プリセット内容またはアップストリームのモジュールがアクセスされた内容を出力します。",
+            "name": "定型回答",
+            "disabled": false,
+            "category": "大規模言語モデル"
+          },
+          "initialized": true,
+          "id": "312c1ec6-eb86-406e-99d2-4395c680ff0c",
+          "position": {
+            "x": -1305.8879890302508,
+            "y": -426.31085753092566
+          },
+          "type": "custom"
+        }
+      },
+      {
+        "sourceHandle": "finish",
+        "animated": false,
+        "id": "vueflow__edge-simpleInputIdfinish-a37ab19e-641b-4a3b-a93e-5197ef38e8a8switchAny",
+        "source": "simpleInputId",
+        "type": "custom",
+        "targetHandle": "switchAny",
+        "target": "a37ab19e-641b-4a3b-a93e-5197ef38e8a8",
+        "sourceNode": {
+          "data": {
+            "outputs": [
+              {
+                "valueType": "string",
+                "description": "参照変数：{{userChatInput}}",
+                "label": "テキスト情報",
+                "type": "source",
+                "targets": [],
+                "key": "userChatInput"
+              },
+              {
+                "valueType": "file",
+                "description": "ユーザーがアップロードしたドキュメントのリストをJSON配列形式で出力します。ドキュメント比較の場合、グループ情報を含めます。",
+                "label": "ドキュメント情報",
+                "type": "source",
+                "targets": [],
+                "key": "files"
+              },
+              {
+                "valueType": "image",
+                "description": "ユーザがアップロードした画像のリストをJSON配列形式で出力します",
+                "label": "画像の情報",
+                "type": "source",
+                "targets": [],
+                "key": "images"
+              },
+              {
+                "valueType": "boolean",
+                "description": "ボタンがクリックされていない場合、値はtrueです",
+                "label": "ボタンがクリックされていません",
+                "type": "source",
+                "targets": [],
+                "key": "unclickedButton"
+              },
+              {
+                "valueType": "boolean",
+                "description": "実行が完了するとスイッチがオンになり、ダウンストリームのリンクされたコンポーネントが実行します。",
+                "label": "モジュール実行終了",
+                "type": "source",
+                "targets": [
+                  {
+                    "targetHandle": "switchAny",
+                    "target": "312c1ec6-eb86-406e-99d2-4395c680ff0c"
+                  },
+                  {
+                    "targetHandle": "switchAny",
+                    "target": "a37ab19e-641b-4a3b-a93e-5197ef38e8a8"
+                  }
+                ],
+                "key": "finish"
+              }
+            ],
+            "moduleType": "questionInput",
+            "inputs": [
+              {
+                "connected": true,
+                "valueType": "boolean",
+                "description": "アップストリームのすべての条件を満たす場合にのみ、現在のコンポーネントの実行ロジックが有効になります",
+                "label": "条件をすべて満たした場合に動作を開始",
+                "type": "target",
+                "keyType": "trigger",
+                "value": false,
+                "key": "switch"
+              },
+              {
+                "connected": true,
+                "valueType": "boolean",
+                "description": "アップストリームのいずれかの条件を満たせば、現在のコンポーネントの実行ロジックが有効になります",
+                "label": "いずれかを満たした場合に動作を開始",
+                "type": "target",
+                "keyType": "triggerAny",
+                "value": false,
+                "key": "switchAny"
+              },
+              {
+                "valueType": "boolean",
+                "description": "テキストの入力のスイッチ",
+                "label": "テキストの入力",
+                "type": "switch",
+                "value": false,
+                "key": "inputText"
+              },
+              {
+                "valueType": "boolean",
+                "description": "ドキュメントのアップロードのスイッチ",
+                "label": "ドキュメントのアップロード",
+                "type": "switch",
+                "value": false,
+                "key": "uploadFile"
+              },
+              {
+                "valueType": "boolean",
+                "description": "画像のアップロードのスイッチ",
+                "label": "画像のアップロード",
+                "type": "switch",
+                "value": false,
+                "key": "uploadPicture"
+              },
+              {
+                "valueType": "boolean",
+                "description": "ドキュメントのレビューのスイッチ",
+                "label": "ドキュメントのレビュー",
+                "type": "switch",
+                "value": false,
+                "key": "fileUpload"
+              },
+              {
+                "valueType": "boolean",
+                "description": "ドキュメント比較を有効にしますか",
+                "label": "ドキュメント比較を行いますか",
+                "type": "checkBox",
+                "value": false,
+                "key": "fileContrast"
+              },
+              {
+                "valueType": "any",
+                "description": "アップロードされたファイルのリストはドキュメント比較が有効な場合は、グループごとに1つのファイルのみアップロードできます",
+                "label": "ドキュメントのグループ化",
+                "type": "table",
+                "value": [],
+                "key": "fileInfo"
+              },
+              {
+                "valueType": "boolean",
+                "description": "初期グローバルとしてinputしますか",
+                "label": "初期グローバルとしてinputしますか",
+                "type": "hidden",
+                "value": true,
+                "key": "initialInput"
+              }
+            ],
+            "intro": "ユーザ入力エントランス、対話中のユーザの入力情報は他のモジュールと接続する、一般的にはスタートモジュールとして使用されます",
+            "name": "ユーザークエリ",
+            "disabled": false,
+            "category": "ユーザークエリ"
+          },
+          "initialized": true,
+          "id": "simpleInputId",
+          "position": {
+            "x": -1689.8879890302508,
+            "y": -351.31085753092566
+          },
+          "type": "custom"
+        },
+        "targetNode": {
+          "data": {
+            "outputs": [
+              {
+                "valueType": "string",
+                "description": "返信内容をそのまま出力します。",
+                "label": "返信",
+                "type": "source",
+                "value": "",
+                "targets": [
+                  {
+                    "targetHandle": "dsName",
+                    "target": "97b0093b-ad87-48bf-b3d4-77abcca7fff2"
+                  }
+                ],
+                "key": "text"
+              },
+              {
+                "valueType": "boolean",
+                "description": "実行が完了するとスイッチがオンになり、ダウンストリームのリンクされたコンポーネントが実行します。",
+                "label": "モジュール実行終了",
+                "type": "source",
+                "targets": [
+                  {
+                    "targetHandle": "switch",
+                    "target": "97b0093b-ad87-48bf-b3d4-77abcca7fff2"
+                  }
+                ],
+                "key": "finish"
+              }
+            ],
+            "moduleType": "confirmreply",
+            "inputs": [
+              {
+                "connected": true,
+                "valueType": "boolean",
+                "description": "アップストリームのすべての条件を満たす場合にのみ、現在のコンポーネントの実行ロジックが有効になります",
+                "label": "条件をすべて満たした場合に動作を開始",
+                "type": "target",
+                "keyType": "trigger",
+                "value": false,
+                "key": "switch"
+              },
+              {
+                "connected": true,
+                "valueType": "boolean",
+                "description": "アップストリームのいずれかの条件を満たせば、現在のコンポーネントの実行ロジックが有効になります",
+                "label": "いずれかを満たした場合に動作を開始",
+                "type": "target",
+                "keyType": "triggerAny",
+                "value": false,
+                "key": "switchAny"
+              },
+              {
+                "connected": false,
+                "valueType": "boolean",
+                "description": "ユーザーに返信内容をアウトプットするかどうかをコントロールする",
+                "label": "ユーザーに返信を表示",
+                "type": "switch",
+                "value": false,
+                "key": "stream"
+              },
+              {
+                "connected": true,
+                "enableVariables": true,
+                "valueType": "string",
+                "description": " \\n を使って連続改行を実現できます。\n\n外部モジュールの入力を通じて返信が可能であり、外部モジュールの入力時に現在記入している内容が上書きされます。参照変数：{{text}}",
+                "label": "返信",
+                "type": "textarea",
+                "value": "{{_state.data.title}}｜{{_state.data.published_at}}",
+                "key": "text"
+              }
+            ],
+            "intro": "トリガー条件と合わせて、プリセット内容またはアップストリームのモジュールがアクセスされた内容を出力します。",
+            "name": "定型回答",
+            "disabled": false,
+            "category": "大規模言語モデル"
+          },
+          "initialized": true,
+          "id": "a37ab19e-641b-4a3b-a93e-5197ef38e8a8",
+          "position": {
+            "x": 230.11201096974924,
+            "y": -273.31085753092566
+          },
+          "type": "custom"
+        }
+      },
+      {
+        "sourceHandle": "text",
+        "animated": false,
+        "id": "vueflow__edge-312c1ec6-eb86-406e-99d2-4395c680ff0ctext-58a4cbf7-ee4a-402a-b488-61f455734dbctext",
+        "source": "312c1ec6-eb86-406e-99d2-4395c680ff0c",
+        "type": "custom",
+        "targetHandle": "text",
+        "target": "58a4cbf7-ee4a-402a-b488-61f455734dbc",
+        "sourceNode": {
+          "data": {
+            "outputs": [
+              {
+                "valueType": "string",
+                "description": "返信内容をそのまま出力します。",
+                "label": "返信",
+                "type": "source",
+                "value": "",
+                "targets": [
+                  {
+                    "targetHandle": "text",
+                    "target": "58a4cbf7-ee4a-402a-b488-61f455734dbc"
+                  }
+                ],
+                "key": "text"
+              },
+              {
+                "valueType": "boolean",
+                "description": "実行が完了するとスイッチがオンになり、ダウンストリームのリンクされたコンポーネントが実行します。",
+                "label": "モジュール実行終了",
+                "type": "source",
+                "targets": [
+                  {
+                    "targetHandle": "switchAny",
+                    "target": "58a4cbf7-ee4a-402a-b488-61f455734dbc"
+                  }
+                ],
+                "key": "finish"
+              }
+            ],
+            "moduleType": "confirmreply",
+            "inputs": [
+              {
+                "connected": true,
+                "valueType": "boolean",
+                "description": "アップストリームのすべての条件を満たす場合にのみ、現在のコンポーネントの実行ロジックが有効になります",
+                "label": "条件をすべて満たした場合に動作を開始",
+                "type": "target",
+                "keyType": "trigger",
+                "value": false,
+                "key": "switch"
+              },
+              {
+                "connected": true,
+                "valueType": "boolean",
+                "description": "アップストリームのいずれかの条件を満たせば、現在のコンポーネントの実行ロジックが有効になります",
+                "label": "いずれかを満たした場合に動作を開始",
+                "type": "target",
+                "keyType": "triggerAny",
+                "value": false,
+                "key": "switchAny"
+              },
+              {
+                "connected": false,
+                "valueType": "boolean",
+                "description": "ユーザーに返信内容をアウトプットするかどうかをコントロールする",
+                "label": "ユーザーに返信を表示",
+                "type": "switch",
+                "value": false,
+                "key": "stream"
+              },
+              {
+                "connected": true,
+                "enableVariables": true,
+                "valueType": "string",
+                "description": " \\n を使って連続改行を実現できます。\n\n外部モジュールの入力を通じて返信が可能であり、外部モジュールの入力時に現在記入している内容が上書きされます。参照変数：{{text}}",
+                "label": "返信",
+                "type": "textarea",
+                "value": "タイトル：{{_state.data.title}}\n公開日時：{{_state.data.published_at}}\n元記事URL：{{_state.url}}\n\n本文：\n{{_state.data.press_release_body}}\n",
+                "key": "text"
+              }
+            ],
+            "intro": "トリガー条件と合わせて、プリセット内容またはアップストリームのモジュールがアクセスされた内容を出力します。",
+            "name": "定型回答",
+            "disabled": false,
+            "category": "大規模言語モデル"
+          },
+          "initialized": true,
+          "id": "312c1ec6-eb86-406e-99d2-4395c680ff0c",
+          "position": {
+            "x": -1305.8879890302508,
+            "y": -426.31085753092566
+          },
+          "type": "custom"
+        },
+        "targetNode": {
+          "data": {
+            "outputs": [
+              {
+                "valueType": "boolean",
+                "description": "モデルの実行が終了し、すべてのコンテンツが生成された後、返信が終了し、ダウンストリームコンポーネントがオンになります。",
+                "label": "返信終了",
+                "type": "source",
+                "targets": [],
+                "key": "isResponseAnswerText"
+              },
+              {
+                "valueType": "string",
+                "description": "大規模言語モデルで処理済みの情報は、返信内容として出力されます。参照変数：",
+                "label": "返信",
+                "type": "source",
+                "targets": [
+                  {
+                    "targetHandle": "aitext",
+                    "target": "b4272646-ab47-42a0-9ba2-ceca6621c30b"
+                  }
+                ],
+                "key": "answerText"
+              },
+              {
+                "valueType": "boolean",
+                "description": "実行が完了するとスイッチがオンになり、ダウンストリームのリンクされたコンポーネントが実行します。",
+                "label": "モジュール実行終了",
+                "type": "source",
+                "targets": [
+                  {
+                    "targetHandle": "switchAny",
+                    "target": "04f5e208-55c4-4104-8852-87115e368fb9"
+                  }
+                ],
+                "key": "finish"
+              }
+            ],
+            "moduleType": "aiChat",
+            "inputs": [
+              {
+                "connected": true,
+                "valueType": "boolean",
+                "description": "アップストリームのすべての条件を満たす場合にのみ、現在のコンポーネントの実行ロジックが有効になります",
+                "label": "条件をすべて満たした場合に動作を開始",
+                "type": "target",
+                "keyType": "trigger",
+                "value": false,
+                "key": "switch"
+              },
+              {
+                "connected": true,
+                "valueType": "boolean",
+                "description": "アップストリームのいずれかの条件を満たせば、現在のコンポーネントの実行ロジックが有効になります",
+                "label": "いずれかを満たした場合に動作を開始",
+                "type": "target",
+                "keyType": "triggerAny",
+                "value": false,
+                "key": "switchAny"
+              },
+              {
+                "connected": true,
+                "valueType": "string",
+                "description": "参照変数：{{text}}",
+                "label": "情報入力",
+                "type": "target",
+                "value": "",
+                "key": "text"
+              },
+              {
+                "connected": true,
+                "valueType": "image",
+                "description": "参照変数：{{images}}",
+                "label": "画像入力",
+                "type": "target",
+                "value": "",
+                "key": "images"
+              },
+              {
+                "connected": true,
+                "valueType": "search",
+                "description": "参照変数：{{knSearch}}",
+                "label": "ナレッジベース検索結果",
+                "type": "target",
+                "value": "",
+                "key": "knSearch"
+              },
+              {
+                "connected": false,
+                "enableVariables": true,
+                "valueType": "text",
+                "description": "ナレッジベースの高度な構成",
+                "label": "ナレッジベースの高度な構成",
+                "type": "target",
+                "value": "## Role:ナレッジQ&Aエキスパート\n        ## Goals:\n        - ナレッジベースで検索された知識に基づいて，チャットの文脈情報を組み合わせてユーザの質問に回答します\n        ## Constrains：\n        - ナレッジベースの内容に厳密に基づいて質問に回答します\n        - ナレッジベースからの情報が質問に対して不十分な場合、慎重に回答します\n        ## Rules\n        - ナレッジベースの検索において、 instruction は関連する知識内容またはQ&Aペアの質問、answer は期待される回答です。\n        ## 参考内容：\n        ### ナレッジベースでの知識検索：\n        \"\"\"\n        {{quote}}\n        \"\"\"\n        ## ユーザーの質問：\n        \"{{question}}\"\n",
+                "key": "knConfig"
+              },
+              {
+                "connected": false,
+                "min": 0,
+                "max": 100,
+                "valueType": "chatHistory",
+                "description": "",
+                "step": 1,
+                "label": "チャットの文脈",
+                "type": "inputNumber",
+                "value": 0,
+                "key": "historyText"
+              },
+              {
+                "valueType": "string",
+                "description": "",
+                "label": "モデルを選択",
+                "type": "selectChatModel",
+                "value": "gpt-4o",
+                "key": "model",
+                "required": true
+              },
+              {
+                "enableVariables": true,
+                "valueType": "string",
+                "description": "モデルの役割や振る舞いを設定します。例：ペルソナ設定、応答ロジックなど。",
+                "label": "システムプロンプト",
+                "type": "textarea",
+                "value": "## 役割\nあなたは企業のPR記事を整理するアシスタントです。\n\n## タスク\n入力されたPR記事の内容をもとに、以下を整理してください。\n\n1. 要約\n記事の要点を2～4文で簡潔にまとめてください。\n\n2. カテゴリ\n以下の中から最も適切なものを1つ選んでください。\n- AI製品リリース\n- 企業動向\n- 技術アップデート\n- マーケティング/キャンペーン\n- 提携/エコシステム\n- その他\n\n3. キーワード\n3～5個抽出してください。\n\n4. 主要ポイント\n重要なポイントを3つに整理してください。\n\n## 出力形式\n要約：\nXXX\n\nカテゴリ：\nXXX\n\nキーワード：\nXXX、XXX、XXX\n\n主要ポイント：\n1. XXX\n2. XXX\n3. XXX",
+                "key": "systemPrompt"
+              },
+              {
+                "enableVariables": true,
+                "valueType": "string",
+                "description": "ユーザーが入力する具体的な質問やリクエスト。モデルへの指示となります。",
+                "label": "ユーザープロンプト",
+                "type": "textarea",
+                "value": "",
+                "key": "quotePrompt"
+              },
+              {
+                "connected": false,
+                "valueType": "boolean",
+                "description": "ユーザーに返信内容をアウトプットするかどうかをコントロールする",
+                "label": "ユーザーに返信を表示",
+                "type": "switch",
+                "value": false,
+                "key": "stream"
+              },
+              {
+                "min": 0,
+                "max": 1,
+                "markList": {
+                  "0": "厳密",
+                  "1": "クリエイティブ"
+                },
+                "valueType": "number",
+                "description": "返信の創造性を制御します。入力された情報と一致する回答を望むなら、数値が小さいほど良く、モデルが創意性を発揮するためには、数値が大きいほど良いです。",
+                "step": 0.1,
+                "label": "Temperature",
+                "type": "slider",
+                "value": 0,
+                "key": "temperature"
+              },
+              {
+                "min": 0,
+                "max": 1,
+                "markList": {
+                  "0": "0",
+                  "1": "1"
+                },
+                "valueType": "number",
+                "description": "出力の多様性を制御します。値が大きいほど多くの単語選択肢を含み、値が小さいほど高確率の単語に集中し、確定的な出力になりますが多様性は減ります。通常、【返信の創造性】と【核サンプリングTOP_P】はどちらか一方のみを設定します。",
+                "step": 0.1,
+                "label": "TOP_P",
+                "type": "slider",
+                "value": 1,
+                "key": "topP"
+              },
+              {
+                "min": 100,
+                "max": 4000,
+                "markList": {
+                  "100": "100",
+                  "4000": "4000"
+                },
+                "valueType": "number",
+                "step": 50,
+                "label": "Max Token",
+                "type": "slider",
+                "value": 4000,
+                "key": "maxToken"
+              }
+            ],
+            "intro": "AI対話モデルは、入力された情報とプロンプト（Prompt）に基づいて必要な情報を生成し、ユーザーに提示して、ユーザとのインタラクションを行う。",
+            "name": "LLM",
+            "disabled": false,
+            "category": "大規模言語モデル"
+          },
+          "initialized": true,
+          "id": "58a4cbf7-ee4a-402a-b488-61f455734dbc",
+          "position": {
+            "x": -921.8879890302508,
+            "y": -474.31085753092566
+          },
+          "type": "custom"
+        }
+      },
+      {
+        "sourceHandle": "answerText",
+        "animated": false,
+        "id": "vueflow__edge-58a4cbf7-ee4a-402a-b488-61f455734dbcanswerText-b4272646-ab47-42a0-9ba2-ceca6621c30baitext",
+        "source": "58a4cbf7-ee4a-402a-b488-61f455734dbc",
+        "type": "custom",
+        "targetHandle": "aitext",
+        "target": "b4272646-ab47-42a0-9ba2-ceca6621c30b",
+        "sourceNode": {
+          "data": {
+            "outputs": [
+              {
+                "valueType": "boolean",
+                "description": "モデルの実行が終了し、すべてのコンテンツが生成された後、返信が終了し、ダウンストリームコンポーネントがオンになります。",
+                "label": "返信終了",
+                "type": "source",
+                "targets": [],
+                "key": "isResponseAnswerText"
+              },
+              {
+                "valueType": "string",
+                "description": "大規模言語モデルで処理済みの情報は、返信内容として出力されます。参照変数：",
+                "label": "返信",
+                "type": "source",
+                "targets": [
+                  {
+                    "targetHandle": "aitext",
+                    "target": "b4272646-ab47-42a0-9ba2-ceca6621c30b"
+                  }
+                ],
+                "key": "answerText"
+              },
+              {
+                "valueType": "boolean",
+                "description": "実行が完了するとスイッチがオンになり、ダウンストリームのリンクされたコンポーネントが実行します。",
+                "label": "モジュール実行終了",
+                "type": "source",
+                "targets": [
+                  {
+                    "targetHandle": "switchAny",
+                    "target": "04f5e208-55c4-4104-8852-87115e368fb9"
+                  }
+                ],
+                "key": "finish"
+              }
+            ],
+            "moduleType": "aiChat",
+            "inputs": [
+              {
+                "connected": true,
+                "valueType": "boolean",
+                "description": "アップストリームのすべての条件を満たす場合にのみ、現在のコンポーネントの実行ロジックが有効になります",
+                "label": "条件をすべて満たした場合に動作を開始",
+                "type": "target",
+                "keyType": "trigger",
+                "value": false,
+                "key": "switch"
+              },
+              {
+                "connected": true,
+                "valueType": "boolean",
+                "description": "アップストリームのいずれかの条件を満たせば、現在のコンポーネントの実行ロジックが有効になります",
+                "label": "いずれかを満たした場合に動作を開始",
+                "type": "target",
+                "keyType": "triggerAny",
+                "value": false,
+                "key": "switchAny"
+              },
+              {
+                "connected": true,
+                "valueType": "string",
+                "description": "参照変数：{{text}}",
+                "label": "情報入力",
+                "type": "target",
+                "value": "",
+                "key": "text"
+              },
+              {
+                "connected": true,
+                "valueType": "image",
+                "description": "参照変数：{{images}}",
+                "label": "画像入力",
+                "type": "target",
+                "value": "",
+                "key": "images"
+              },
+              {
+                "connected": true,
+                "valueType": "search",
+                "description": "参照変数：{{knSearch}}",
+                "label": "ナレッジベース検索結果",
+                "type": "target",
+                "value": "",
+                "key": "knSearch"
+              },
+              {
+                "connected": false,
+                "enableVariables": true,
+                "valueType": "text",
+                "description": "ナレッジベースの高度な構成",
+                "label": "ナレッジベースの高度な構成",
+                "type": "target",
+                "value": "## Role:ナレッジQ&Aエキスパート\n        ## Goals:\n        - ナレッジベースで検索された知識に基づいて，チャットの文脈情報を組み合わせてユーザの質問に回答します\n        ## Constrains：\n        - ナレッジベースの内容に厳密に基づいて質問に回答します\n        - ナレッジベースからの情報が質問に対して不十分な場合、慎重に回答します\n        ## Rules\n        - ナレッジベースの検索において、 instruction は関連する知識内容またはQ&Aペアの質問、answer は期待される回答です。\n        ## 参考内容：\n        ### ナレッジベースでの知識検索：\n        \"\"\"\n        {{quote}}\n        \"\"\"\n        ## ユーザーの質問：\n        \"{{question}}\"\n",
+                "key": "knConfig"
+              },
+              {
+                "connected": false,
+                "min": 0,
+                "max": 100,
+                "valueType": "chatHistory",
+                "description": "",
+                "step": 1,
+                "label": "チャットの文脈",
+                "type": "inputNumber",
+                "value": 0,
+                "key": "historyText"
+              },
+              {
+                "valueType": "string",
+                "description": "",
+                "label": "モデルを選択",
+                "type": "selectChatModel",
+                "value": "gpt-4o",
+                "key": "model",
+                "required": true
+              },
+              {
+                "enableVariables": true,
+                "valueType": "string",
+                "description": "モデルの役割や振る舞いを設定します。例：ペルソナ設定、応答ロジックなど。",
+                "label": "システムプロンプト",
+                "type": "textarea",
+                "value": "## 役割\nあなたは企業のPR記事を整理するアシスタントです。\n\n## タスク\n入力されたPR記事の内容をもとに、以下を整理してください。\n\n1. 要約\n記事の要点を2～4文で簡潔にまとめてください。\n\n2. カテゴリ\n以下の中から最も適切なものを1つ選んでください。\n- AI製品リリース\n- 企業動向\n- 技術アップデート\n- マーケティング/キャンペーン\n- 提携/エコシステム\n- その他\n\n3. キーワード\n3～5個抽出してください。\n\n4. 主要ポイント\n重要なポイントを3つに整理してください。\n\n## 出力形式\n要約：\nXXX\n\nカテゴリ：\nXXX\n\nキーワード：\nXXX、XXX、XXX\n\n主要ポイント：\n1. XXX\n2. XXX\n3. XXX",
+                "key": "systemPrompt"
+              },
+              {
+                "enableVariables": true,
+                "valueType": "string",
+                "description": "ユーザーが入力する具体的な質問やリクエスト。モデルへの指示となります。",
+                "label": "ユーザープロンプト",
+                "type": "textarea",
+                "value": "",
+                "key": "quotePrompt"
+              },
+              {
+                "connected": false,
+                "valueType": "boolean",
+                "description": "ユーザーに返信内容をアウトプットするかどうかをコントロールする",
+                "label": "ユーザーに返信を表示",
+                "type": "switch",
+                "value": false,
+                "key": "stream"
+              },
+              {
+                "min": 0,
+                "max": 1,
+                "markList": {
+                  "0": "厳密",
+                  "1": "クリエイティブ"
+                },
+                "valueType": "number",
+                "description": "返信の創造性を制御します。入力された情報と一致する回答を望むなら、数値が小さいほど良く、モデルが創意性を発揮するためには、数値が大きいほど良いです。",
+                "step": 0.1,
+                "label": "Temperature",
+                "type": "slider",
+                "value": 0,
+                "key": "temperature"
+              },
+              {
+                "min": 0,
+                "max": 1,
+                "markList": {
+                  "0": "0",
+                  "1": "1"
+                },
+                "valueType": "number",
+                "description": "出力の多様性を制御します。値が大きいほど多くの単語選択肢を含み、値が小さいほど高確率の単語に集中し、確定的な出力になりますが多様性は減ります。通常、【返信の創造性】と【核サンプリングTOP_P】はどちらか一方のみを設定します。",
+                "step": 0.1,
+                "label": "TOP_P",
+                "type": "slider",
+                "value": 1,
+                "key": "topP"
+              },
+              {
+                "min": 100,
+                "max": 4000,
+                "markList": {
+                  "100": "100",
+                  "4000": "4000"
+                },
+                "valueType": "number",
+                "step": 50,
+                "label": "Max Token",
+                "type": "slider",
+                "value": 4000,
+                "key": "maxToken"
+              }
+            ],
+            "intro": "AI対話モデルは、入力された情報とプロンプト（Prompt）に基づいて必要な情報を生成し、ユーザーに提示して、ユーザとのインタラクションを行う。",
+            "name": "LLM",
+            "disabled": false,
+            "category": "大規模言語モデル"
+          },
+          "initialized": true,
+          "id": "58a4cbf7-ee4a-402a-b488-61f455734dbc",
+          "position": {
+            "x": -921.8879890302508,
+            "y": -474.31085753092566
+          },
+          "type": "custom"
+        },
+        "targetNode": {
+          "data": {
+            "outputs": [],
+            "moduleType": "addMemoryVariable",
+            "inputs": [
+              {
+                "connected": true,
+                "valueType": "string",
+                "description": "",
+                "label": "aitext",
+                "type": "agentMemoryVar",
+                "targets": [],
+                "key": "aitext"
+              }
+            ],
+            "intro": "このコンポーネントを使用して変数をメモリ変数として保存すると、エージェントの他のコンポーネントで参照できます。",
+            "name": "メモリ変数の追加",
+            "disabled": false,
+            "category": "高度な設定"
+          },
+          "initialized": true,
+          "id": "b4272646-ab47-42a0-9ba2-ceca6621c30b",
+          "position": {
+            "x": -537.8879890302508,
+            "y": -330.31085753092566
+          },
+          "type": "custom"
+        }
+      },
+      {
+        "sourceHandle": "finish",
+        "animated": false,
+        "id": "vueflow__edge-58a4cbf7-ee4a-402a-b488-61f455734dbcfinish-04f5e208-55c4-4104-8852-87115e368fb9switchAny",
+        "source": "58a4cbf7-ee4a-402a-b488-61f455734dbc",
+        "type": "custom",
+        "targetHandle": "switchAny",
+        "target": "04f5e208-55c4-4104-8852-87115e368fb9",
+        "sourceNode": {
+          "data": {
+            "outputs": [
+              {
+                "valueType": "boolean",
+                "description": "モデルの実行が終了し、すべてのコンテンツが生成された後、返信が終了し、ダウンストリームコンポーネントがオンになります。",
+                "label": "返信終了",
+                "type": "source",
+                "targets": [],
+                "key": "isResponseAnswerText"
+              },
+              {
+                "valueType": "string",
+                "description": "大規模言語モデルで処理済みの情報は、返信内容として出力されます。参照変数：",
+                "label": "返信",
+                "type": "source",
+                "targets": [
+                  {
+                    "targetHandle": "aitext",
+                    "target": "b4272646-ab47-42a0-9ba2-ceca6621c30b"
+                  }
+                ],
+                "key": "answerText"
+              },
+              {
+                "valueType": "boolean",
+                "description": "実行が完了するとスイッチがオンになり、ダウンストリームのリンクされたコンポーネントが実行します。",
+                "label": "モジュール実行終了",
+                "type": "source",
+                "targets": [
+                  {
+                    "targetHandle": "switchAny",
+                    "target": "04f5e208-55c4-4104-8852-87115e368fb9"
+                  }
+                ],
+                "key": "finish"
+              }
+            ],
+            "moduleType": "aiChat",
+            "inputs": [
+              {
+                "connected": true,
+                "valueType": "boolean",
+                "description": "アップストリームのすべての条件を満たす場合にのみ、現在のコンポーネントの実行ロジックが有効になります",
+                "label": "条件をすべて満たした場合に動作を開始",
+                "type": "target",
+                "keyType": "trigger",
+                "value": false,
+                "key": "switch"
+              },
+              {
+                "connected": true,
+                "valueType": "boolean",
+                "description": "アップストリームのいずれかの条件を満たせば、現在のコンポーネントの実行ロジックが有効になります",
+                "label": "いずれかを満たした場合に動作を開始",
+                "type": "target",
+                "keyType": "triggerAny",
+                "value": false,
+                "key": "switchAny"
+              },
+              {
+                "connected": true,
+                "valueType": "string",
+                "description": "参照変数：{{text}}",
+                "label": "情報入力",
+                "type": "target",
+                "value": "",
+                "key": "text"
+              },
+              {
+                "connected": true,
+                "valueType": "image",
+                "description": "参照変数：{{images}}",
+                "label": "画像入力",
+                "type": "target",
+                "value": "",
+                "key": "images"
+              },
+              {
+                "connected": true,
+                "valueType": "search",
+                "description": "参照変数：{{knSearch}}",
+                "label": "ナレッジベース検索結果",
+                "type": "target",
+                "value": "",
+                "key": "knSearch"
+              },
+              {
+                "connected": false,
+                "enableVariables": true,
+                "valueType": "text",
+                "description": "ナレッジベースの高度な構成",
+                "label": "ナレッジベースの高度な構成",
+                "type": "target",
+                "value": "## Role:ナレッジQ&Aエキスパート\n        ## Goals:\n        - ナレッジベースで検索された知識に基づいて，チャットの文脈情報を組み合わせてユーザの質問に回答します\n        ## Constrains：\n        - ナレッジベースの内容に厳密に基づいて質問に回答します\n        - ナレッジベースからの情報が質問に対して不十分な場合、慎重に回答します\n        ## Rules\n        - ナレッジベースの検索において、 instruction は関連する知識内容またはQ&Aペアの質問、answer は期待される回答です。\n        ## 参考内容：\n        ### ナレッジベースでの知識検索：\n        \"\"\"\n        {{quote}}\n        \"\"\"\n        ## ユーザーの質問：\n        \"{{question}}\"\n",
+                "key": "knConfig"
+              },
+              {
+                "connected": false,
+                "min": 0,
+                "max": 100,
+                "valueType": "chatHistory",
+                "description": "",
+                "step": 1,
+                "label": "チャットの文脈",
+                "type": "inputNumber",
+                "value": 0,
+                "key": "historyText"
+              },
+              {
+                "valueType": "string",
+                "description": "",
+                "label": "モデルを選択",
+                "type": "selectChatModel",
+                "value": "gpt-4o",
+                "key": "model",
+                "required": true
+              },
+              {
+                "enableVariables": true,
+                "valueType": "string",
+                "description": "モデルの役割や振る舞いを設定します。例：ペルソナ設定、応答ロジックなど。",
+                "label": "システムプロンプト",
+                "type": "textarea",
+                "value": "## 役割\nあなたは企業のPR記事を整理するアシスタントです。\n\n## タスク\n入力されたPR記事の内容をもとに、以下を整理してください。\n\n1. 要約\n記事の要点を2～4文で簡潔にまとめてください。\n\n2. カテゴリ\n以下の中から最も適切なものを1つ選んでください。\n- AI製品リリース\n- 企業動向\n- 技術アップデート\n- マーケティング/キャンペーン\n- 提携/エコシステム\n- その他\n\n3. キーワード\n3～5個抽出してください。\n\n4. 主要ポイント\n重要なポイントを3つに整理してください。\n\n## 出力形式\n要約：\nXXX\n\nカテゴリ：\nXXX\n\nキーワード：\nXXX、XXX、XXX\n\n主要ポイント：\n1. XXX\n2. XXX\n3. XXX",
+                "key": "systemPrompt"
+              },
+              {
+                "enableVariables": true,
+                "valueType": "string",
+                "description": "ユーザーが入力する具体的な質問やリクエスト。モデルへの指示となります。",
+                "label": "ユーザープロンプト",
+                "type": "textarea",
+                "value": "",
+                "key": "quotePrompt"
+              },
+              {
+                "connected": false,
+                "valueType": "boolean",
+                "description": "ユーザーに返信内容をアウトプットするかどうかをコントロールする",
+                "label": "ユーザーに返信を表示",
+                "type": "switch",
+                "value": false,
+                "key": "stream"
+              },
+              {
+                "min": 0,
+                "max": 1,
+                "markList": {
+                  "0": "厳密",
+                  "1": "クリエイティブ"
+                },
+                "valueType": "number",
+                "description": "返信の創造性を制御します。入力された情報と一致する回答を望むなら、数値が小さいほど良く、モデルが創意性を発揮するためには、数値が大きいほど良いです。",
+                "step": 0.1,
+                "label": "Temperature",
+                "type": "slider",
+                "value": 0,
+                "key": "temperature"
+              },
+              {
+                "min": 0,
+                "max": 1,
+                "markList": {
+                  "0": "0",
+                  "1": "1"
+                },
+                "valueType": "number",
+                "description": "出力の多様性を制御します。値が大きいほど多くの単語選択肢を含み、値が小さいほど高確率の単語に集中し、確定的な出力になりますが多様性は減ります。通常、【返信の創造性】と【核サンプリングTOP_P】はどちらか一方のみを設定します。",
+                "step": 0.1,
+                "label": "TOP_P",
+                "type": "slider",
+                "value": 1,
+                "key": "topP"
+              },
+              {
+                "min": 100,
+                "max": 4000,
+                "markList": {
+                  "100": "100",
+                  "4000": "4000"
+                },
+                "valueType": "number",
+                "step": 50,
+                "label": "Max Token",
+                "type": "slider",
+                "value": 4000,
+                "key": "maxToken"
+              }
+            ],
+            "intro": "AI対話モデルは、入力された情報とプロンプト（Prompt）に基づいて必要な情報を生成し、ユーザーに提示して、ユーザとのインタラクションを行う。",
+            "name": "LLM",
+            "disabled": false,
+            "category": "大規模言語モデル"
+          },
+          "initialized": true,
+          "id": "58a4cbf7-ee4a-402a-b488-61f455734dbc",
+          "position": {
+            "x": -921.8879890302508,
+            "y": -474.31085753092566
+          },
+          "type": "custom"
+        },
+        "targetNode": {
+          "data": {
+            "outputs": [
+              {
+                "valueType": "string",
+                "description": "返信内容をそのまま出力します。",
+                "label": "返信",
+                "type": "source",
+                "value": "",
+                "targets": [
+                  {
+                    "targetHandle": "data",
+                    "target": "97b0093b-ad87-48bf-b3d4-77abcca7fff2"
+                  }
+                ],
+                "key": "text"
+              },
+              {
+                "valueType": "boolean",
+                "description": "実行が完了するとスイッチがオンになり、ダウンストリームのリンクされたコンポーネントが実行します。",
+                "label": "モジュール実行終了",
+                "type": "source",
+                "targets": [],
+                "key": "finish"
+              }
+            ],
+            "moduleType": "confirmreply",
+            "inputs": [
+              {
+                "connected": true,
+                "valueType": "boolean",
+                "description": "アップストリームのすべての条件を満たす場合にのみ、現在のコンポーネントの実行ロジックが有効になります",
+                "label": "条件をすべて満たした場合に動作を開始",
+                "type": "target",
+                "keyType": "trigger",
+                "value": false,
+                "key": "switch"
+              },
+              {
+                "connected": true,
+                "valueType": "boolean",
+                "description": "アップストリームのいずれかの条件を満たせば、現在のコンポーネントの実行ロジックが有効になります",
+                "label": "いずれかを満たした場合に動作を開始",
+                "type": "target",
+                "keyType": "triggerAny",
+                "value": false,
+                "key": "switchAny"
+              },
+              {
+                "connected": false,
+                "valueType": "boolean",
+                "description": "ユーザーに返信内容をアウトプットするかどうかをコントロールする",
+                "label": "ユーザーに返信を表示",
+                "type": "switch",
+                "value": false,
+                "key": "stream"
+              },
+              {
+                "connected": true,
+                "enableVariables": true,
+                "valueType": "string",
+                "description": " \\n を使って連続改行を実現できます。\n\n外部モジュールの入力を通じて返信が可能であり、外部モジュールの入力時に現在記入している内容が上書きされます。参照変数：{{text}}",
+                "label": "返信",
+                "type": "textarea",
+                "value": "【タイトル】\n{{_state.data.title}}\n\n【公開日時】\n{{_state.data.published_at}}\n\n\n【AI整理結果】\n{{aitext}}\n\n【本文】\n{{_state.data.press_release_body}}\n\n",
+                "key": "text"
+              }
+            ],
+            "intro": "トリガー条件と合わせて、プリセット内容またはアップストリームのモジュールがアクセスされた内容を出力します。",
+            "name": "定型回答",
+            "disabled": false,
+            "category": "大規模言語モデル"
+          },
+          "initialized": true,
+          "id": "04f5e208-55c4-4104-8852-87115e368fb9",
+          "position": {
+            "x": -537.8879890302508,
+            "y": -548.3108575309257
+          },
+          "type": "custom"
+        }
+      },
+      {
+        "sourceHandle": "text",
+        "animated": false,
+        "id": "vueflow__edge-04f5e208-55c4-4104-8852-87115e368fb9text-97b0093b-ad87-48bf-b3d4-77abcca7fff2data",
+        "source": "04f5e208-55c4-4104-8852-87115e368fb9",
+        "type": "custom",
+        "targetHandle": "data",
+        "target": "97b0093b-ad87-48bf-b3d4-77abcca7fff2",
+        "sourceNode": {
+          "data": {
+            "outputs": [
+              {
+                "valueType": "string",
+                "description": "返信内容をそのまま出力します。",
+                "label": "返信",
+                "type": "source",
+                "value": "",
+                "targets": [
+                  {
+                    "targetHandle": "data",
+                    "target": "97b0093b-ad87-48bf-b3d4-77abcca7fff2"
+                  }
+                ],
+                "key": "text"
+              },
+              {
+                "valueType": "boolean",
+                "description": "実行が完了するとスイッチがオンになり、ダウンストリームのリンクされたコンポーネントが実行します。",
+                "label": "モジュール実行終了",
+                "type": "source",
+                "targets": [],
+                "key": "finish"
+              }
+            ],
+            "moduleType": "confirmreply",
+            "inputs": [
+              {
+                "connected": true,
+                "valueType": "boolean",
+                "description": "アップストリームのすべての条件を満たす場合にのみ、現在のコンポーネントの実行ロジックが有効になります",
+                "label": "条件をすべて満たした場合に動作を開始",
+                "type": "target",
+                "keyType": "trigger",
+                "value": false,
+                "key": "switch"
+              },
+              {
+                "connected": true,
+                "valueType": "boolean",
+                "description": "アップストリームのいずれかの条件を満たせば、現在のコンポーネントの実行ロジックが有効になります",
+                "label": "いずれかを満たした場合に動作を開始",
+                "type": "target",
+                "keyType": "triggerAny",
+                "value": false,
+                "key": "switchAny"
+              },
+              {
+                "connected": false,
+                "valueType": "boolean",
+                "description": "ユーザーに返信内容をアウトプットするかどうかをコントロールする",
+                "label": "ユーザーに返信を表示",
+                "type": "switch",
+                "value": false,
+                "key": "stream"
+              },
+              {
+                "connected": true,
+                "enableVariables": true,
+                "valueType": "string",
+                "description": " \\n を使って連続改行を実現できます。\n\n外部モジュールの入力を通じて返信が可能であり、外部モジュールの入力時に現在記入している内容が上書きされます。参照変数：{{text}}",
+                "label": "返信",
+                "type": "textarea",
+                "value": "【タイトル】\n{{_state.data.title}}\n\n【公開日時】\n{{_state.data.published_at}}\n\n\n【AI整理結果】\n{{aitext}}\n\n【本文】\n{{_state.data.press_release_body}}\n\n",
+                "key": "text"
+              }
+            ],
+            "intro": "トリガー条件と合わせて、プリセット内容またはアップストリームのモジュールがアクセスされた内容を出力します。",
+            "name": "定型回答",
+            "disabled": false,
+            "category": "大規模言語モデル"
+          },
+          "initialized": true,
+          "id": "04f5e208-55c4-4104-8852-87115e368fb9",
+          "position": {
+            "x": -537.8879890302508,
+            "y": -548.3108575309257
+          },
+          "type": "custom"
+        },
+        "targetNode": {
+          "data": {
+            "outputs": [
+              {
+                "valueType": "boolean",
+                "description": "実行が完了するとスイッチがオンになり、ダウンストリームのリンクされたコンポーネントが実行します。",
+                "label": "モジュール実行終了",
+                "type": "source",
+                "targets": [],
+                "key": "finish"
+              }
+            ],
+            "moduleType": "storeToKnowledgeBase",
+            "inputs": [
+              {
+                "connected": true,
+                "valueType": "boolean",
+                "description": "アップストリームのすべての条件を満たす場合にのみ、現在のコンポーネントの実行ロジックが有効になります",
+                "label": "条件をすべて満たした場合に動作を開始",
+                "type": "target",
+                "keyType": "trigger",
+                "value": false,
+                "key": "switch"
+              },
+              {
+                "connected": true,
+                "valueType": "boolean",
+                "description": "アップストリームのいずれかの条件を満たせば、現在のコンポーネントの実行ロジックが有効になります",
+                "label": "いずれかを満たした場合に動作を開始",
+                "type": "target",
+                "keyType": "triggerAny",
+                "value": false,
+                "key": "switchAny"
+              },
+              {
+                "connected": true,
+                "valueType": "string",
+                "description": "必須項目。接続がない場合、このコンポーネントは有効になりません",
+                "label": "データの内容",
+                "type": "target",
+                "value": "",
+                "key": "data"
+              },
+              {
+                "connected": true,
+                "valueType": "string",
+                "description": "必須項目、ナレッジベース内のデータセット名。同じ名前のデータセットは上書きされます",
+                "label": "データセット名",
+                "type": "target",
+                "key": "dsName",
+                "required": true
+              },
+              {
+                "connected": false,
+                "valueType": "object",
+                "description": "データをナレッジベースの高度な構成に保存",
+                "label": "詳細設定",
+                "type": "target",
+                "value": {
+                  "chunkSize": 8000,
+                  "coverageRate": 0.15,
+                  "sliceType": 0
+                },
+                "key": "kbConfig",
+                "required": true
+              },
+              {
+                "valueType": "array",
+                "description": "",
+                "label": "ナレッジベースの選択",
+                "type": "selectKnowledgeBase",
+                "value": [],
+                "key": "knowledgeBase",
+                "required": true
+              }
+            ],
+            "intro": "データをナレッジベースに保存",
+            "name": "ナレッジベースに保存",
+            "disabled": false,
+            "category": "ナレッジベース"
+          },
+          "initialized": true,
+          "id": "97b0093b-ad87-48bf-b3d4-77abcca7fff2",
+          "position": {
+            "x": 614.1120109697492,
+            "y": -400.31085753092566
+          },
+          "type": "custom"
+        }
+      },
+      {
+        "sourceHandle": "finish",
+        "animated": false,
+        "id": "vueflow__edge-a37ab19e-641b-4a3b-a93e-5197ef38e8a8finish-97b0093b-ad87-48bf-b3d4-77abcca7fff2switch",
+        "source": "a37ab19e-641b-4a3b-a93e-5197ef38e8a8",
+        "type": "custom",
+        "targetHandle": "switch",
+        "target": "97b0093b-ad87-48bf-b3d4-77abcca7fff2",
+        "sourceNode": {
+          "data": {
+            "outputs": [
+              {
+                "valueType": "string",
+                "description": "返信内容をそのまま出力します。",
+                "label": "返信",
+                "type": "source",
+                "value": "",
+                "targets": [
+                  {
+                    "targetHandle": "dsName",
+                    "target": "97b0093b-ad87-48bf-b3d4-77abcca7fff2"
+                  }
+                ],
+                "key": "text"
+              },
+              {
+                "valueType": "boolean",
+                "description": "実行が完了するとスイッチがオンになり、ダウンストリームのリンクされたコンポーネントが実行します。",
+                "label": "モジュール実行終了",
+                "type": "source",
+                "targets": [
+                  {
+                    "targetHandle": "switch",
+                    "target": "97b0093b-ad87-48bf-b3d4-77abcca7fff2"
+                  }
+                ],
+                "key": "finish"
+              }
+            ],
+            "moduleType": "confirmreply",
+            "inputs": [
+              {
+                "connected": true,
+                "valueType": "boolean",
+                "description": "アップストリームのすべての条件を満たす場合にのみ、現在のコンポーネントの実行ロジックが有効になります",
+                "label": "条件をすべて満たした場合に動作を開始",
+                "type": "target",
+                "keyType": "trigger",
+                "value": false,
+                "key": "switch"
+              },
+              {
+                "connected": true,
+                "valueType": "boolean",
+                "description": "アップストリームのいずれかの条件を満たせば、現在のコンポーネントの実行ロジックが有効になります",
+                "label": "いずれかを満たした場合に動作を開始",
+                "type": "target",
+                "keyType": "triggerAny",
+                "value": false,
+                "key": "switchAny"
+              },
+              {
+                "connected": false,
+                "valueType": "boolean",
+                "description": "ユーザーに返信内容をアウトプットするかどうかをコントロールする",
+                "label": "ユーザーに返信を表示",
+                "type": "switch",
+                "value": false,
+                "key": "stream"
+              },
+              {
+                "connected": true,
+                "enableVariables": true,
+                "valueType": "string",
+                "description": " \\n を使って連続改行を実現できます。\n\n外部モジュールの入力を通じて返信が可能であり、外部モジュールの入力時に現在記入している内容が上書きされます。参照変数：{{text}}",
+                "label": "返信",
+                "type": "textarea",
+                "value": "{{_state.data.title}}｜{{_state.data.published_at}}",
+                "key": "text"
+              }
+            ],
+            "intro": "トリガー条件と合わせて、プリセット内容またはアップストリームのモジュールがアクセスされた内容を出力します。",
+            "name": "定型回答",
+            "disabled": false,
+            "category": "大規模言語モデル"
+          },
+          "initialized": true,
+          "id": "a37ab19e-641b-4a3b-a93e-5197ef38e8a8",
+          "position": {
+            "x": 230.11201096974924,
+            "y": -273.31085753092566
+          },
+          "type": "custom"
+        },
+        "targetNode": {
+          "data": {
+            "outputs": [
+              {
+                "valueType": "boolean",
+                "description": "実行が完了するとスイッチがオンになり、ダウンストリームのリンクされたコンポーネントが実行します。",
+                "label": "モジュール実行終了",
+                "type": "source",
+                "targets": [],
+                "key": "finish"
+              }
+            ],
+            "moduleType": "storeToKnowledgeBase",
+            "inputs": [
+              {
+                "connected": true,
+                "valueType": "boolean",
+                "description": "アップストリームのすべての条件を満たす場合にのみ、現在のコンポーネントの実行ロジックが有効になります",
+                "label": "条件をすべて満たした場合に動作を開始",
+                "type": "target",
+                "keyType": "trigger",
+                "value": false,
+                "key": "switch"
+              },
+              {
+                "connected": true,
+                "valueType": "boolean",
+                "description": "アップストリームのいずれかの条件を満たせば、現在のコンポーネントの実行ロジックが有効になります",
+                "label": "いずれかを満たした場合に動作を開始",
+                "type": "target",
+                "keyType": "triggerAny",
+                "value": false,
+                "key": "switchAny"
+              },
+              {
+                "connected": true,
+                "valueType": "string",
+                "description": "必須項目。接続がない場合、このコンポーネントは有効になりません",
+                "label": "データの内容",
+                "type": "target",
+                "value": "",
+                "key": "data"
+              },
+              {
+                "connected": true,
+                "valueType": "string",
+                "description": "必須項目、ナレッジベース内のデータセット名。同じ名前のデータセットは上書きされます",
+                "label": "データセット名",
+                "type": "target",
+                "key": "dsName",
+                "required": true
+              },
+              {
+                "connected": false,
+                "valueType": "object",
+                "description": "データをナレッジベースの高度な構成に保存",
+                "label": "詳細設定",
+                "type": "target",
+                "value": {
+                  "chunkSize": 8000,
+                  "coverageRate": 0.15,
+                  "sliceType": 0
+                },
+                "key": "kbConfig",
+                "required": true
+              },
+              {
+                "valueType": "array",
+                "description": "",
+                "label": "ナレッジベースの選択",
+                "type": "selectKnowledgeBase",
+                "value": [],
+                "key": "knowledgeBase",
+                "required": true
+              }
+            ],
+            "intro": "データをナレッジベースに保存",
+            "name": "ナレッジベースに保存",
+            "disabled": false,
+            "category": "ナレッジベース"
+          },
+          "initialized": true,
+          "id": "97b0093b-ad87-48bf-b3d4-77abcca7fff2",
+          "position": {
+            "x": 614.1120109697492,
+            "y": -400.31085753092566
+          },
+          "type": "custom"
+        }
+      },
+      {
+        "sourceHandle": "finish",
+        "animated": false,
+        "id": "vueflow__edge-312c1ec6-eb86-406e-99d2-4395c680ff0cfinish-58a4cbf7-ee4a-402a-b488-61f455734dbcswitchAny",
+        "source": "312c1ec6-eb86-406e-99d2-4395c680ff0c",
+        "type": "custom",
+        "targetHandle": "switchAny",
+        "target": "58a4cbf7-ee4a-402a-b488-61f455734dbc",
+        "sourceNode": {
+          "data": {
+            "outputs": [
+              {
+                "valueType": "string",
+                "description": "返信内容をそのまま出力します。",
+                "label": "返信",
+                "type": "source",
+                "value": "",
+                "targets": [
+                  {
+                    "targetHandle": "text",
+                    "target": "58a4cbf7-ee4a-402a-b488-61f455734dbc"
+                  }
+                ],
+                "key": "text"
+              },
+              {
+                "valueType": "boolean",
+                "description": "実行が完了するとスイッチがオンになり、ダウンストリームのリンクされたコンポーネントが実行します。",
+                "label": "モジュール実行終了",
+                "type": "source",
+                "targets": [
+                  {
+                    "targetHandle": "switchAny",
+                    "target": "58a4cbf7-ee4a-402a-b488-61f455734dbc"
+                  }
+                ],
+                "key": "finish"
+              }
+            ],
+            "moduleType": "confirmreply",
+            "inputs": [
+              {
+                "connected": true,
+                "valueType": "boolean",
+                "description": "アップストリームのすべての条件を満たす場合にのみ、現在のコンポーネントの実行ロジックが有効になります",
+                "label": "条件をすべて満たした場合に動作を開始",
+                "type": "target",
+                "keyType": "trigger",
+                "value": false,
+                "key": "switch"
+              },
+              {
+                "connected": true,
+                "valueType": "boolean",
+                "description": "アップストリームのいずれかの条件を満たせば、現在のコンポーネントの実行ロジックが有効になります",
+                "label": "いずれかを満たした場合に動作を開始",
+                "type": "target",
+                "keyType": "triggerAny",
+                "value": false,
+                "key": "switchAny"
+              },
+              {
+                "connected": false,
+                "valueType": "boolean",
+                "description": "ユーザーに返信内容をアウトプットするかどうかをコントロールする",
+                "label": "ユーザーに返信を表示",
+                "type": "switch",
+                "value": false,
+                "key": "stream"
+              },
+              {
+                "connected": true,
+                "enableVariables": true,
+                "valueType": "string",
+                "description": " \\n を使って連続改行を実現できます。\n\n外部モジュールの入力を通じて返信が可能であり、外部モジュールの入力時に現在記入している内容が上書きされます。参照変数：{{text}}",
+                "label": "返信",
+                "type": "textarea",
+                "value": "タイトル：{{_state.data.title}}\n公開日時：{{_state.data.published_at}}\n元記事URL：{{_state.url}}\n\n本文：\n{{_state.data.press_release_body}}\n",
+                "key": "text"
+              }
+            ],
+            "intro": "トリガー条件と合わせて、プリセット内容またはアップストリームのモジュールがアクセスされた内容を出力します。",
+            "name": "定型回答",
+            "disabled": false,
+            "category": "大規模言語モデル"
+          },
+          "initialized": true,
+          "id": "312c1ec6-eb86-406e-99d2-4395c680ff0c",
+          "position": {
+            "x": -1305.8879890302508,
+            "y": -426.31085753092566
+          },
+          "type": "custom"
+        },
+        "targetNode": {
+          "data": {
+            "outputs": [
+              {
+                "valueType": "boolean",
+                "description": "モデルの実行が終了し、すべてのコンテンツが生成された後、返信が終了し、ダウンストリームコンポーネントがオンになります。",
+                "label": "返信終了",
+                "type": "source",
+                "targets": [],
+                "key": "isResponseAnswerText"
+              },
+              {
+                "valueType": "string",
+                "description": "大規模言語モデルで処理済みの情報は、返信内容として出力されます。参照変数：",
+                "label": "返信",
+                "type": "source",
+                "targets": [
+                  {
+                    "targetHandle": "aitext",
+                    "target": "b4272646-ab47-42a0-9ba2-ceca6621c30b"
+                  }
+                ],
+                "key": "answerText"
+              },
+              {
+                "valueType": "boolean",
+                "description": "実行が完了するとスイッチがオンになり、ダウンストリームのリンクされたコンポーネントが実行します。",
+                "label": "モジュール実行終了",
+                "type": "source",
+                "targets": [
+                  {
+                    "targetHandle": "switchAny",
+                    "target": "04f5e208-55c4-4104-8852-87115e368fb9"
+                  }
+                ],
+                "key": "finish"
+              }
+            ],
+            "moduleType": "aiChat",
+            "inputs": [
+              {
+                "connected": true,
+                "valueType": "boolean",
+                "description": "アップストリームのすべての条件を満たす場合にのみ、現在のコンポーネントの実行ロジックが有効になります",
+                "label": "条件をすべて満たした場合に動作を開始",
+                "type": "target",
+                "keyType": "trigger",
+                "value": false,
+                "key": "switch"
+              },
+              {
+                "connected": true,
+                "valueType": "boolean",
+                "description": "アップストリームのいずれかの条件を満たせば、現在のコンポーネントの実行ロジックが有効になります",
+                "label": "いずれかを満たした場合に動作を開始",
+                "type": "target",
+                "keyType": "triggerAny",
+                "value": false,
+                "key": "switchAny"
+              },
+              {
+                "connected": true,
+                "valueType": "string",
+                "description": "参照変数：{{text}}",
+                "label": "情報入力",
+                "type": "target",
+                "value": "",
+                "key": "text"
+              },
+              {
+                "connected": true,
+                "valueType": "image",
+                "description": "参照変数：{{images}}",
+                "label": "画像入力",
+                "type": "target",
+                "value": "",
+                "key": "images"
+              },
+              {
+                "connected": true,
+                "valueType": "search",
+                "description": "参照変数：{{knSearch}}",
+                "label": "ナレッジベース検索結果",
+                "type": "target",
+                "value": "",
+                "key": "knSearch"
+              },
+              {
+                "connected": false,
+                "enableVariables": true,
+                "valueType": "text",
+                "description": "ナレッジベースの高度な構成",
+                "label": "ナレッジベースの高度な構成",
+                "type": "target",
+                "value": "## Role:ナレッジQ&Aエキスパート\n        ## Goals:\n        - ナレッジベースで検索された知識に基づいて，チャットの文脈情報を組み合わせてユーザの質問に回答します\n        ## Constrains：\n        - ナレッジベースの内容に厳密に基づいて質問に回答します\n        - ナレッジベースからの情報が質問に対して不十分な場合、慎重に回答します\n        ## Rules\n        - ナレッジベースの検索において、 instruction は関連する知識内容またはQ&Aペアの質問、answer は期待される回答です。\n        ## 参考内容：\n        ### ナレッジベースでの知識検索：\n        \"\"\"\n        {{quote}}\n        \"\"\"\n        ## ユーザーの質問：\n        \"{{question}}\"\n",
+                "key": "knConfig"
+              },
+              {
+                "connected": false,
+                "min": 0,
+                "max": 100,
+                "valueType": "chatHistory",
+                "description": "",
+                "step": 1,
+                "label": "チャットの文脈",
+                "type": "inputNumber",
+                "value": 0,
+                "key": "historyText"
+              },
+              {
+                "valueType": "string",
+                "description": "",
+                "label": "モデルを選択",
+                "type": "selectChatModel",
+                "value": "gpt-4o",
+                "key": "model",
+                "required": true
+              },
+              {
+                "enableVariables": true,
+                "valueType": "string",
+                "description": "モデルの役割や振る舞いを設定します。例：ペルソナ設定、応答ロジックなど。",
+                "label": "システムプロンプト",
+                "type": "textarea",
+                "value": "## 役割\nあなたは企業のPR記事を整理するアシスタントです。\n\n## タスク\n入力されたPR記事の内容をもとに、以下を整理してください。\n\n1. 要約\n記事の要点を2～4文で簡潔にまとめてください。\n\n2. カテゴリ\n以下の中から最も適切なものを1つ選んでください。\n- AI製品リリース\n- 企業動向\n- 技術アップデート\n- マーケティング/キャンペーン\n- 提携/エコシステム\n- その他\n\n3. キーワード\n3～5個抽出してください。\n\n4. 主要ポイント\n重要なポイントを3つに整理してください。\n\n## 出力形式\n要約：\nXXX\n\nカテゴリ：\nXXX\n\nキーワード：\nXXX、XXX、XXX\n\n主要ポイント：\n1. XXX\n2. XXX\n3. XXX",
+                "key": "systemPrompt"
+              },
+              {
+                "enableVariables": true,
+                "valueType": "string",
+                "description": "ユーザーが入力する具体的な質問やリクエスト。モデルへの指示となります。",
+                "label": "ユーザープロンプト",
+                "type": "textarea",
+                "value": "",
+                "key": "quotePrompt"
+              },
+              {
+                "connected": false,
+                "valueType": "boolean",
+                "description": "ユーザーに返信内容をアウトプットするかどうかをコントロールする",
+                "label": "ユーザーに返信を表示",
+                "type": "switch",
+                "value": false,
+                "key": "stream"
+              },
+              {
+                "min": 0,
+                "max": 1,
+                "markList": {
+                  "0": "厳密",
+                  "1": "クリエイティブ"
+                },
+                "valueType": "number",
+                "description": "返信の創造性を制御します。入力された情報と一致する回答を望むなら、数値が小さいほど良く、モデルが創意性を発揮するためには、数値が大きいほど良いです。",
+                "step": 0.1,
+                "label": "Temperature",
+                "type": "slider",
+                "value": 0,
+                "key": "temperature"
+              },
+              {
+                "min": 0,
+                "max": 1,
+                "markList": {
+                  "0": "0",
+                  "1": "1"
+                },
+                "valueType": "number",
+                "description": "出力の多様性を制御します。値が大きいほど多くの単語選択肢を含み、値が小さいほど高確率の単語に集中し、確定的な出力になりますが多様性は減ります。通常、【返信の創造性】と【核サンプリングTOP_P】はどちらか一方のみを設定します。",
+                "step": 0.1,
+                "label": "TOP_P",
+                "type": "slider",
+                "value": 1,
+                "key": "topP"
+              },
+              {
+                "min": 100,
+                "max": 4000,
+                "markList": {
+                  "100": "100",
+                  "4000": "4000"
+                },
+                "valueType": "number",
+                "step": 50,
+                "label": "Max Token",
+                "type": "slider",
+                "value": 4000,
+                "key": "maxToken"
+              }
+            ],
+            "intro": "AI対話モデルは、入力された情報とプロンプト（Prompt）に基づいて必要な情報を生成し、ユーザーに提示して、ユーザとのインタラクションを行う。",
+            "name": "LLM",
+            "disabled": false,
+            "category": "大規模言語モデル"
+          },
+          "initialized": true,
+          "id": "58a4cbf7-ee4a-402a-b488-61f455734dbc",
+          "position": {
+            "x": -921.8879890302508,
+            "y": -474.31085753092566
+          },
+          "type": "custom"
+        }
+      },
+      {
+        "sourceHandle": "text",
+        "animated": false,
+        "id": "vueflow__edge-a37ab19e-641b-4a3b-a93e-5197ef38e8a8text-97b0093b-ad87-48bf-b3d4-77abcca7fff2dsName",
+        "source": "a37ab19e-641b-4a3b-a93e-5197ef38e8a8",
+        "type": "custom",
+        "targetHandle": "dsName",
+        "target": "97b0093b-ad87-48bf-b3d4-77abcca7fff2",
+        "sourceNode": {
+          "data": {
+            "outputs": [
+              {
+                "valueType": "string",
+                "description": "返信内容をそのまま出力します。",
+                "label": "返信",
+                "type": "source",
+                "value": "",
+                "targets": [
+                  {
+                    "targetHandle": "dsName",
+                    "target": "97b0093b-ad87-48bf-b3d4-77abcca7fff2"
+                  }
+                ],
+                "key": "text"
+              },
+              {
+                "valueType": "boolean",
+                "description": "実行が完了するとスイッチがオンになり、ダウンストリームのリンクされたコンポーネントが実行します。",
+                "label": "モジュール実行終了",
+                "type": "source",
+                "targets": [
+                  {
+                    "targetHandle": "switch",
+                    "target": "97b0093b-ad87-48bf-b3d4-77abcca7fff2"
+                  }
+                ],
+                "key": "finish"
+              }
+            ],
+            "moduleType": "confirmreply",
+            "inputs": [
+              {
+                "connected": true,
+                "valueType": "boolean",
+                "description": "アップストリームのすべての条件を満たす場合にのみ、現在のコンポーネントの実行ロジックが有効になります",
+                "label": "条件をすべて満たした場合に動作を開始",
+                "type": "target",
+                "keyType": "trigger",
+                "value": false,
+                "key": "switch"
+              },
+              {
+                "connected": true,
+                "valueType": "boolean",
+                "description": "アップストリームのいずれかの条件を満たせば、現在のコンポーネントの実行ロジックが有効になります",
+                "label": "いずれかを満たした場合に動作を開始",
+                "type": "target",
+                "keyType": "triggerAny",
+                "value": false,
+                "key": "switchAny"
+              },
+              {
+                "connected": false,
+                "valueType": "boolean",
+                "description": "ユーザーに返信内容をアウトプットするかどうかをコントロールする",
+                "label": "ユーザーに返信を表示",
+                "type": "switch",
+                "value": false,
+                "key": "stream"
+              },
+              {
+                "connected": true,
+                "enableVariables": true,
+                "valueType": "string",
+                "description": " \\n を使って連続改行を実現できます。\n\n外部モジュールの入力を通じて返信が可能であり、外部モジュールの入力時に現在記入している内容が上書きされます。参照変数：{{text}}",
+                "label": "返信",
+                "type": "textarea",
+                "value": "{{_state.data.title}}｜{{_state.data.published_at}}",
+                "key": "text"
+              }
+            ],
+            "intro": "トリガー条件と合わせて、プリセット内容またはアップストリームのモジュールがアクセスされた内容を出力します。",
+            "name": "定型回答",
+            "disabled": false,
+            "category": "大規模言語モデル"
+          },
+          "initialized": true,
+          "id": "a37ab19e-641b-4a3b-a93e-5197ef38e8a8",
+          "position": {
+            "x": 230.11201096974924,
+            "y": -273.31085753092566
+          },
+          "type": "custom"
+        },
+        "targetNode": {
+          "data": {
+            "outputs": [
+              {
+                "valueType": "boolean",
+                "description": "実行が完了するとスイッチがオンになり、ダウンストリームのリンクされたコンポーネントが実行します。",
+                "label": "モジュール実行終了",
+                "type": "source",
+                "targets": [],
+                "key": "finish"
+              }
+            ],
+            "moduleType": "storeToKnowledgeBase",
+            "inputs": [
+              {
+                "connected": true,
+                "valueType": "boolean",
+                "description": "アップストリームのすべての条件を満たす場合にのみ、現在のコンポーネントの実行ロジックが有効になります",
+                "label": "条件をすべて満たした場合に動作を開始",
+                "type": "target",
+                "keyType": "trigger",
+                "value": false,
+                "key": "switch"
+              },
+              {
+                "connected": true,
+                "valueType": "boolean",
+                "description": "アップストリームのいずれかの条件を満たせば、現在のコンポーネントの実行ロジックが有効になります",
+                "label": "いずれかを満たした場合に動作を開始",
+                "type": "target",
+                "keyType": "triggerAny",
+                "value": false,
+                "key": "switchAny"
+              },
+              {
+                "connected": true,
+                "valueType": "string",
+                "description": "必須項目。接続がない場合、このコンポーネントは有効になりません",
+                "label": "データの内容",
+                "type": "target",
+                "value": "",
+                "key": "data"
+              },
+              {
+                "connected": true,
+                "valueType": "string",
+                "description": "必須項目、ナレッジベース内のデータセット名。同じ名前のデータセットは上書きされます",
+                "label": "データセット名",
+                "type": "target",
+                "key": "dsName",
+                "required": true
+              },
+              {
+                "connected": false,
+                "valueType": "object",
+                "description": "データをナレッジベースの高度な構成に保存",
+                "label": "詳細設定",
+                "type": "target",
+                "value": {
+                  "chunkSize": 8000,
+                  "coverageRate": 0.15,
+                  "sliceType": 0
+                },
+                "key": "kbConfig",
+                "required": true
+              },
+              {
+                "valueType": "array",
+                "description": "",
+                "label": "ナレッジベースの選択",
+                "type": "selectKnowledgeBase",
+                "value": [],
+                "key": "knowledgeBase",
+                "required": true
+              }
+            ],
+            "intro": "データをナレッジベースに保存",
+            "name": "ナレッジベースに保存",
+            "disabled": false,
+            "category": "ナレッジベース"
+          },
+          "initialized": true,
+          "id": "97b0093b-ad87-48bf-b3d4-77abcca7fff2",
+          "position": {
+            "x": 614.1120109697492,
+            "y": -400.31085753092566
+          },
+          "type": "custom"
+        }
+      }
+    ]
+  },
+  "info": {
+    "name": "クローラーテンプレート",
+    "intro": "デフォルトの説明",
+    "avatar": "/assets/agent/avatarJa.png"
+  },
+  "globalConfig": {
+    "enableHtmlRenders": true
+  }
+}

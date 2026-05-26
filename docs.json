@@ -28,19 +28,19 @@
             ]
           },
           {
-            "group": "実践チュートリアル",
-            "pages": [
-              "welcom/ai-soumu"
-            ]
-          },
-          {
             "group": "エージェント作成ガイド",
             "pages": [
               "welcom/agent_1",
               "welcom/agent_2_1",
               "welcom/agent_2_3",
-              "welcom/agent_2_4",
               "welcom/agent_2_6"
+            ]
+          },
+          {
+            "group": "実践チュートリアル",
+            "pages": [
+              "welcom/ai-soumu",
+              "welcom/ai-soumu-natural-language"
             ]
           },
           {
@@ -52,6 +52,7 @@
                 "pages": [
                   "welcom/agent_2_2_21",
                   "welcom/agent_2_2_20",
+                  "welcom/agent_2_2_26",
                   "welcom/agent_2_2_2",
                   "welcom/agent_2_2_3",
                   "welcom/agent_2_2_4"
@@ -61,7 +62,10 @@
                 "group": "📚 ナレッジベース",
                 "pages": [
                   "welcom/agent_2_2_5",
-                  "welcom/agent_2_2_13"
+                  "welcom/agent_2_2_13",
+                  "welcom/agent_2_2_27",
+                  "welcom/agent_2_2_28",
+                  "welcom/agent_2_2_29"
                 ]
               },
               {
@@ -87,6 +91,10 @@
                   "welcom/agent_2_2_12",
                   "welcom/agent_2_2_14",
                   "welcom/agent_2_2_16",
+                  "welcom/agent_2_2_30",
+                  "welcom/agent_2_2_31",
+                  "welcom/agent_2_2_32",
+                  "welcom/agent_2_2_33",
                   "welcom/agent_2_2_22",
                   "welcom/agent_2_2_24",
                   "welcom/agent_2_2_25",
@@ -96,7 +104,9 @@
               {
                 "group": "🗄️ データベース",
                 "pages": [
+                  "welcom/agent_2_2_34",
                   "welcom/agent_2_2_17",
+                  "welcom/agent_2_2_35",
                   "welcom/agent_2_2_18",
                   "welcom/agent_2_2_19"
                 ]
@@ -104,11 +114,57 @@
             ]
           },
           {
-            "group": "ナレッジベース",
+            "group": "リソース",
             "pages": [
-              "welcom/knowledgebase_1",
-              "welcom/knowledgebase21",
-              "welcom/knowledgebase_2_2"
+              "welcom/resource_1",
+              {
+                "group": "📚 ナレッジベース",
+                "pages": [
+                  "welcom/knowledgebase_1",
+                  "welcom/knowledgebase21",
+                  "welcom/knowledgebase_2_2"
+                ]
+              },
+              {
+                "group": "🗄️ データベース",
+                "pages": [
+                  "welcom/database_1",
+                  "welcom/database_2",
+                  "welcom/database_3"
+                ]
+              },
+              {
+                "group": "🛠️ ツール",
+                "pages": [
+                  "welcom/agent_2_4",
+                  {
+                    "group": "公式ツール",
+                    "pages": [
+                      "welcom/web_1",
+                      "welcom/tool_document_compare"
+                    ]
+                  },
+                  {
+                    "group": "カスタムツール",
+                    "pages": [
+                      "welcom/tool_1"
+                    ]
+                  },
+                  "welcom/system_3"
+                ]
+              },
+              {
+                "group": "🔌 MCP管理",
+                "pages": [
+                  "welcom/mcp_1"
+                ]
+              },
+              {
+                "group": "✨ スキル管理",
+                "pages": [
+                  "welcom/skill_1"
+                ]
+              }
             ]
           },
           {
@@ -116,20 +172,20 @@
             "pages": [
               "welcom/system_1",
               "welcom/system_2",
-              "welcom/system_3",
               "welcom/system_4"
             ]
           },
           {
-            "group": "データベース",
+            "group": "評価",
             "pages": [
-              "welcom/database_1",
-              "welcom/database_2"
+              "welcom/dashboard_1",
+              "welcom/evaluation_1"
             ]
           },
           {
             "group": "開発者向け",
             "pages": [
+              "welcom/web_2",
               "welcom/agent_v1.4",
               "welcom/agent_v2.1"
             ]

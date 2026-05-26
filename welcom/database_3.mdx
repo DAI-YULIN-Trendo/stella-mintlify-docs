@@ -1,0 +1,48 @@
+---
+title: "データベースの操作"
+description: "データベースの追加、検索、更新、削除といった CRUD 操作について説明します。"
+---
+
+データベースは、データの追加（Insert）、検索（Select）、更新（Update）、削除（Delete）の基本操作をサポートしています。これらはまとめて CRUD と呼ばれ、業務データを扱う Agent の中心的な処理になります。
+
+<Frame>
+  <img src="/images/update-1-0/image12.png" alt="データベースの操作画面" />
+</Frame>
+
+## CRUD 操作
+
+<CardGroup cols={2}>
+  <Card title="Create / Insert" icon="plus">
+    新しい申請、問い合わせ、顧客情報などをデータベースに登録します。
+  </Card>
+  <Card title="Read / Select" icon="magnifying-glass">
+    条件に一致するレコードを検索し、回答や分析に利用します。
+  </Card>
+  <Card title="Update" icon="pen-to-square">
+    ステータス、担当者、在庫数など、既存データを更新します。
+  </Card>
+  <Card title="Delete" icon="trash">
+    不要なデータや誤登録データを削除します。
+  </Card>
+</CardGroup>
+
+## Agent での利用例
+
+<Steps>
+  <Step title="ユーザーの意図を分類する">
+    検索、登録、更新、削除のどの操作が必要かを判断します。
+  </Step>
+  <Step title="必要な項目を抽出する">
+    対象テーブル、検索条件、更新内容などを整理します。
+  </Step>
+  <Step title="SQL を生成または指定する">
+    NL2SQL、LLM、固定 SQL を利用して実行 SQL を準備します。
+  </Step>
+  <Step title="データベースモジュールで実行する">
+    検索はデータベースクエリ、更新系処理はデータベース更新を利用します。
+  </Step>
+</Steps>
+
+<Warning>
+  更新や削除を伴う処理では、操作前の確認、対象条件の限定、権限管理を必ず設計してください。
+</Warning>

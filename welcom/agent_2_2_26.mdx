@@ -1,0 +1,42 @@
+---
+title: "Agent（Agentic）"
+description: "Agentic モジュールを使い、推理モデルを中心にナレッジベース、ツール、スキルを組み合わせてタスクを実行します。"
+---
+
+Agent（Agentic）モジュールは、推理モデルを中心に、ナレッジベース、ツール、スキルを組み合わせて複雑なタスクを段階的に処理するためのモジュールです。
+
+<Info>
+  利用するには推理モデルの設定が必要です。タスク分解やツール呼び出しを行うため、通常の LLM モジュールよりも実行計画を明確に設計することが重要です。
+</Info>
+
+<Frame>
+  <img src="/images/update-1-0/image1.png" alt="Agentic モジュールの設定画面" />
+</Frame>
+
+## 主な設定
+
+<CardGroup cols={2}>
+  <Card title="推理モデル" icon="microchip">
+    Agentic の中核となるモデルです。タスクを分解し、必要なリソースを判断します。
+  </Card>
+  <Card title="ナレッジベース" icon="book-open">
+    回答や判断の根拠として参照するナレッジベースを指定できます。
+  </Card>
+  <Card title="ツール / スキル" icon="wrench">
+    外部 API、MCP、社内ツール、登録済みスキルを呼び出して処理を拡張できます。
+  </Card>
+  <Card title="反復回数" icon="repeat">
+    Agent が計画、実行、確認を繰り返す最大回数を設定します。
+  </Card>
+</CardGroup>
+
+## 使いどころ
+
+- 複数の情報源を参照しながら回答する
+- ツールを呼び出して業務処理を進める
+- ナレッジ検索、データ取得、生成処理を組み合わせる
+- 1回の LLM 応答では完結しない複雑な業務フローを実行する
+
+<Frame>
+  <img src="/images/update-1-0/image2.png" alt="Agentic モジュールで利用するリソース設定" />
+</Frame>

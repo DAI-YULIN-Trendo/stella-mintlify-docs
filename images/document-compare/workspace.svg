@@ -1,0 +1,97 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2048" height="1056" viewBox="0 0 2048 1056" role="img" aria-label="ドキュメント比較ツールの操作画面">
+  <defs>
+    <linearGradient id="panel" x1="0" y1="0" x2="1" y2=".7">
+      <stop offset="0" stop-color="#f5fbff"/>
+      <stop offset=".56" stop-color="#e9f4ff"/>
+      <stop offset="1" stop-color="#bddfff"/>
+    </linearGradient>
+    <radialGradient id="bubble" cx="50%" cy="50%" r="50%">
+      <stop offset="0" stop-color="#b9d2ff" stop-opacity=".55"/>
+      <stop offset="1" stop-color="#b9d2ff" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="soft" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="12" stdDeviation="20" flood-color="#1f2355" flood-opacity=".08"/>
+    </filter>
+  </defs>
+
+  <rect width="2048" height="1056" fill="#f7f8fb"/>
+  <rect width="2048" height="72" fill="#fff"/>
+  <text x="30" y="42" font-family="Inter, Arial, sans-serif" font-size="34" font-weight="800" fill="#28aef0">✺ Agentify</text>
+
+  <rect x="0" y="72" width="216" height="984" fill="#fff"/>
+  <rect x="0" y="98" width="210" height="60" rx="7" fill="#ececf8"/>
+  <text x="22" y="137" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="800" fill="#171447">⌂　ホーム</text>
+  <text x="22" y="207" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="700" fill="#6b668c">▣　ルールを入力</text>
+  <text x="22" y="276" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="700" fill="#6b668c">▤　審査記録</text>
+  <text x="22" y="349" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="700" fill="#6b668c">▭　プロジェクト管</text>
+  <text x="75" y="382" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="700" fill="#6b668c">理</text>
+
+  <rect x="240" y="72" width="1796" height="389" fill="url(#panel)"/>
+  <circle cx="1370" cy="392" r="190" fill="url(#bubble)"/>
+  <circle cx="1748" cy="246" r="260" fill="url(#bubble)"/>
+  <text x="285" y="123" font-family="Inter, Arial, sans-serif" font-size="31" font-weight="800" fill="#171447">ドキュメントレビュー</text>
+  <text x="285" y="169" font-family="Inter, Arial, sans-serif" font-size="23" fill="#9ba2bb">ドキュメントをアップロードして、内容に基づいた応答を実行</text>
+
+  <rect x="280" y="246" width="494" height="175" rx="10" fill="#f8fbff" stroke="#d8e0ef" filter="url(#soft)"/>
+  <circle cx="369" cy="246" r="40" fill="#1e5bff"/>
+  <rect x="355" y="232" width="28" height="28" rx="3" fill="#fff"/>
+  <text x="369" y="254" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="19" font-weight="800" fill="#1e5bff">?</text>
+  <text x="335" y="336" font-family="Inter, Arial, sans-serif" font-size="28" font-weight="800" fill="#171447">ドキュメントのレビュー</text>
+  <text x="331" y="379" font-family="Inter, Arial, sans-serif" font-size="21" fill="#9aa1b7">複数のドキュメントに質問ができ、大規模モ…</text>
+
+  <rect x="803" y="246" width="493" height="175" rx="10" fill="#f8fbff" stroke="#1f5dff" stroke-width="2"/>
+  <circle cx="889" cy="246" r="40" fill="#1e5bff"/>
+  <rect x="876" y="232" width="27" height="27" rx="3" fill="#fff"/>
+  <text x="890" y="253" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="17" font-weight="800" fill="#1e5bff">&lt;&gt;</text>
+  <text x="857" y="336" font-family="Inter, Arial, sans-serif" font-size="28" font-weight="800" fill="#171447">ドキュメント比較</text>
+  <text x="852" y="379" font-family="Inter, Arial, sans-serif" font-size="21" fill="#9aa1b7">複数のドキュメントを比較し、大規模モデル…</text>
+
+  <rect x="240" y="461" width="1796" height="595" fill="#fff"/>
+
+  <text x="280" y="514" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="800" fill="#202030">比較グループを選択</text>
+  <rect x="450" y="486" width="370" height="40" rx="4" fill="#fff" stroke="#d8ddea"/>
+  <text x="469" y="512" font-family="Inter, Arial, sans-serif" font-size="18" fill="#9aa1b7">比較グループを選択してください</text>
+  <text x="789" y="512" font-family="Inter, Arial, sans-serif" font-size="20" fill="#8990a8">⌄</text>
+  <rect x="846" y="486" width="183" height="40" rx="6" fill="#dfe4ff"/>
+  <text x="866" y="512" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="800" fill="#3f63ff">比較グループを表示</text>
+
+  <text x="1088" y="514" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="800" fill="#202030">プロジェクト</text>
+  <rect x="1208" y="486" width="228" height="40" rx="4" fill="#fff" stroke="#d8ddea"/>
+  <text x="1230" y="512" font-family="Inter, Arial, sans-serif" font-size="18" fill="#b7bccb">プロジェクトを選択</text>
+  <text x="1407" y="512" font-family="Inter, Arial, sans-serif" font-size="20" fill="#8990a8">⌄</text>
+  <rect x="1466" y="486" width="166" height="40" rx="6" fill="#dfe4ff"/>
+  <text x="1486" y="512" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="800" fill="#3f63ff">新規プロジェクト</text>
+
+  <rect x="280" y="553" width="1715" height="372" rx="12" fill="#fff" stroke="#dce2ef" stroke-width="2" stroke-dasharray="6 5"/>
+  <rect x="313" y="576" width="813" height="321" rx="8" fill="#f0f1f6"/>
+  <rect x="1150" y="576" width="813" height="321" rx="8" fill="#f0f1f6"/>
+
+  <g fill="#cfd3df">
+    <path d="M697 657h43l23 23v27h-66z"/>
+    <path d="M1534 657h43l23 23v27h-66z"/>
+  </g>
+  <text x="720" y="693" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="26" font-weight="900" fill="#fff">↑</text>
+  <text x="1557" y="693" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="26" font-weight="900" fill="#fff">↑</text>
+
+  <text x="410" y="762" font-family="Inter, Arial, sans-serif" font-size="20" font-weight="800" fill="#11142d">クリックしてアップロード、</text>
+  <text x="618" y="762" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="800" fill="#a1a6bb">またはここにドキュメントをドラッグしてください</text>
+  <text x="356" y="813" font-family="Inter, Arial, sans-serif" font-size="16" fill="#a1a6bb">1. 現在、pdf,doc,docx,pptx,xlsx,txt,csv,ofd,png,jpg,jpeg,gif,tif,jfifタイプのファイルのみアップロード</text>
+  <text x="660" y="835" font-family="Inter, Arial, sans-serif" font-size="16" fill="#a1a6bb">できます</text>
+  <text x="382" y="858" font-family="Inter, Arial, sans-serif" font-size="16" fill="#a1a6bb">2. 学習効率を確保するために、アップロードするドキュメントは30Mを超えないことをお勧めします</text>
+
+  <text x="1247" y="762" font-family="Inter, Arial, sans-serif" font-size="20" font-weight="800" fill="#11142d">クリックしてアップロード、</text>
+  <text x="1455" y="762" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="800" fill="#a1a6bb">またはここにドキュメントをドラッグしてください</text>
+  <text x="1192" y="813" font-family="Inter, Arial, sans-serif" font-size="16" fill="#a1a6bb">1. 現在、pdf,doc,docx,pptx,xlsx,txt,csv,ofd,png,jpg,jpeg,gif,tif,jfifタイプのファイルのみアップロード</text>
+  <text x="1498" y="835" font-family="Inter, Arial, sans-serif" font-size="16" fill="#a1a6bb">できます</text>
+  <text x="1219" y="858" font-family="Inter, Arial, sans-serif" font-size="16" fill="#a1a6bb">2. 学習効率を確保するために、アップロードするドキュメントは30Mを超えないことをお勧めします</text>
+
+  <text x="311" y="984" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="800" fill="#202030">審査ルール</text>
+  <rect x="416" y="958" width="207" height="40" rx="4" fill="#fff" stroke="#d8ddea"/>
+  <text x="432" y="984" font-family="Inter, Arial, sans-serif" font-size="18" fill="#9aa1b7">選択してください</text>
+  <text x="594" y="984" font-family="Inter, Arial, sans-serif" font-size="20" fill="#8990a8">⌄</text>
+  <rect x="644" y="958" width="622" height="40" rx="4" fill="#fff" stroke="#d8ddea"/>
+  <text x="662" y="984" font-family="Inter, Arial, sans-serif" font-size="18" fill="#9aa1b7">ルール内容を選択</text>
+  <text x="1236" y="984" font-family="Inter, Arial, sans-serif" font-size="20" fill="#8990a8">⌄</text>
+  <rect x="1035" y="1016" width="208" height="48" rx="8" fill="#aebaff"/>
+  <text x="1104" y="1047" font-family="Inter, Arial, sans-serif" font-size="20" font-weight="800" fill="#fff">実行開始</text>
+</svg>

@@ -1,0 +1,35 @@
+---
+title: "Webページ取得"
+description: "指定した Web ページの内容を取得し、後続モジュールで処理できる形式に渡します。"
+---
+
+Webページ取得モジュールは、指定した URL の Web ページ内容を取得し、後続の LLM、情報抽出、ナレッジベース保存などで利用できるようにするモジュールです。
+
+<Frame>
+  <img src="/images/update-1-0/image9.png" alt="Webページ取得モジュールの設定画面" />
+</Frame>
+
+## 使いどころ
+
+<CardGroup cols={2}>
+  <Card title="外部ページの取得" icon="globe">
+    Web ページ本文を取得し、要約、翻訳、分類などに利用します。
+  </Card>
+  <Card title="ナレッジ化" icon="book-open">
+    取得したページ内容を整形し、ナレッジベースへ保存する前処理に使えます。
+  </Card>
+</CardGroup>
+
+## 基本フロー
+
+<Steps>
+  <Step title="URL を入力する">
+    取得したい Web ページの URL を指定します。
+  </Step>
+  <Step title="ページ内容を取得する">
+    モジュールがページ本文を取得します。
+  </Step>
+  <Step title="後続処理へ接続する">
+    LLM、情報抽出、内容分割、ナレッジベース保存などへ接続します。
+  </Step>
+</Steps>

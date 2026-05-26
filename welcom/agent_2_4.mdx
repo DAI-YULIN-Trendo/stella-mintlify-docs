@@ -6,10 +6,10 @@ title: "🛠️ ツール"
 左側のナビゲーションパネルにある「ツール」メニューをクリックすると、以下のような**統合ツールライブラリ**が表示されます。
 
 <CardGroup cols={2}>
-  <Card title="カスタムツール" icon="wrench">
+  <Card title="カスタムツール" icon="wrench" href="/welcom/tool_1">
     ユーザー自身が作成した独自のツール
   </Card>
-  <Card title="公式ツール" icon="toolbox">
+  <Card title="公式ツール" icon="toolbox" href="/welcom/web_1">
     システムが提供するプリセット済みのツールセット
   </Card>
 </CardGroup>
@@ -18,13 +18,30 @@ title: "🛠️ ツール"
   この画面では、**自分で開発したツール**や**利用権限を持つ外部ツール**など、アカウントに関連付けられたすべてのツールが一括して表示されます。
 </Info>
 
-<img src="/images/41.png" />
+<Frame>
+  <img src="/images/41.png" alt="ツールライブラリで公式ツールを確認する画面" />
+</Frame>
+
+## 公式ツール
+
+公式ツールは、よく使われる業務処理をすぐに利用できるように用意されたプリセットツールです。
+
+<CardGroup cols={2}>
+  <Card title="Webスクレイピング" icon="globe" href="/welcom/web_1">
+    Web サイトから必要な情報を定期的に取得し、Agent やナレッジベースと連携できます。
+  </Card>
+  <Card title="ドキュメント比較" icon="file-diff" href="/welcom/tool_document_compare">
+    複数の文書が指定条件を満たしているかを確認し、レビュー業務を支援します。
+  </Card>
+</CardGroup>
 
 ## 🔌 ツールモジュール
 
 利用したいツールは、**キャンバス（画面上のフロー設計画面）にドラッグ＆ドロップ**することで簡単に組み込むことができます。
 
-<img src="/images/42.png" />
+<Frame>
+  <img src="/images/42.png" alt="キャンバスにツールモジュールを追加する画面" />
+</Frame>
 
 ## カスタムツールの作成
 
@@ -32,7 +49,6 @@ title: "🛠️ ツール"
   <Step title="ナビゲーション">
     左側のナビゲーションバーで「**ツール**」をクリックし、「**カスタムツール**」を選択します。
     
-    ![](https://uxkpl4cba3j.feishu.cn/space/api/box/stream/download/asynccode/?code=ODNiOGFiNGFhMDk3ODU2ZWY4OGIzYTEzZjUyMTU1MDZfSE54a3lrMG5nOXh0Y0syMENsOG5hdURrZG1pWVhIUHFfVG9rZW46QTBUMWJ6SDZ0b2dIUkJ4TkpqMWNNS0NZblRBXzE3NDMwNDM5NzA6MTc0MzA0NzU3MF9WNA)
   </Step>
 
   <Step title="作成方法の選択">
@@ -56,13 +72,9 @@ title: "🛠️ ツール"
       </Card>
     </CardGroup>
 
-    ![](https://uxkpl4cba3j.feishu.cn/space/api/box/stream/download/asynccode/?code=NWM4ZTUwMmYzMDdlYjE0ODAwZjMwZThmODUwYmUzZTZfazVVYTN6bGQxano4dUtoaENxU3lNUTdLZUFxU0RoOW5fVG9rZW46Wkd6R2JWRjJ1b2x2UEt4bVZWNGN5dGxxbmxoXzE3NDMwNDM5NzA6MTc0MzA0NzU3MF9WNA)
-
     <Warning>
       インポート内容が不完全な場合、**必須項目は手動で補完する必要があります。**
     </Warning>
-
-    ![](https://uxkpl4cba3j.feishu.cn/space/api/box/stream/download/asynccode/?code=M2Y3NWRhNjFkOThiMTM4MWE0ZTliMWJiZjc4ZDVhMTFfc0VkUjBvNm9RUnFGY0JrMUFIQVRRb3kxM2QyWWkwa1hfVG9rZW46VGtiRWI3NUdCb0U4U094azN1TWNmMklVbjJlXzE3NDMwNDM5NzA6MTc0MzA0NzU3MF9WNA)
   </Step>
 
   <Step title="リクエスト方式の設定">
@@ -241,5 +253,5 @@ title: "🛠️ ツール"
 </Info>
 
 <Note>
-  ツールが**非公開（下架）**状態になると、サイドバーには表示されなくなりますが、**過去に使用されたエージェントには影響しません**。
+  ツールが**非公開状態**になると、サイドバーには表示されなくなりますが、**過去に使用されたエージェントには影響しません**。
 </Note>

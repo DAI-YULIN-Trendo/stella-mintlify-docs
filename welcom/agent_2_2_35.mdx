@@ -1,0 +1,39 @@
+---
+title: "データベース更新"
+description: "INSERT、UPDATE、DELETE などの更新系 SQL を実行するデータベース向けモジュールです。"
+---
+
+データベース更新モジュールは、接続済みデータベースに対して INSERT、UPDATE、DELETE などの更新系 SQL を実行するモジュールです。
+
+<Frame>
+  <img src="/images/update-1-0/image11.png" alt="データベース更新モジュールの設定画面" />
+</Frame>
+
+## 主な用途
+
+<CardGroup cols={3}>
+  <Card title="追加（INSERT）" icon="plus">
+    申請、問い合わせ、登録情報などを新規レコードとして保存します。
+  </Card>
+  <Card title="更新（UPDATE）" icon="pen-to-square">
+    ステータス、担当者、在庫数など既存レコードを更新します。
+  </Card>
+  <Card title="削除（DELETE）" icon="trash">
+    不要になったレコードを削除します。
+  </Card>
+</CardGroup>
+
+<Warning>
+  本番環境では、更新系 SQL の実行権限を慎重に設定してください。LLM で SQL を生成する場合は、許可する操作、対象テーブル、禁止 SQL を明示することを推奨します。
+</Warning>
+
+## 推奨フロー
+
+```text
+ユーザー入力
+  -> 情報分類
+  -> データフィールド抽出
+  -> SQL 生成
+  -> データベース更新
+  -> LLM / 定型回答
+```

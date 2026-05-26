@@ -3,57 +3,70 @@ title: "AI総務 Agent 構築手順書"
 description: "ナレッジベースとデータベースを組み合わせた AI総務 Agent の構築チュートリアル"
 ---
 
-# AI総務 Agent 構築手順書
+export const Screenshot = ({ src, alt, variant = 'wide' }) => (
+  <Frame>
+    <img
+      src={src}
+      alt={alt}
+      style={{
+        display: 'block',
+        width: variant === 'portrait' ? 'min(100%, 240px)' : variant === 'compact' ? 'min(100%, 420px)' : '100%',
+        margin: '0 auto',
+        borderRadius: '0.5rem',
+      }}
+    />
+  </Frame>
+);
 
 ## 1. Agentify へのログインと事前設定
 
 ### 1.1 Agentify にログインする
 
-![AI総務 Agent 手順 1](/images/ai-soumu/image1.png)
+<Screenshot src="/images/ai-soumu/image1.png" alt="AI総務 Agent 手順 1" />
 
 ### 1.2 新しい Agent を作成する
 
 左側メニューから「新Agent作成」に入り、表示された Agent 作成画面で「Agentワークフロー」と「最初から開始」を選択し、「確認」をクリックします。
 
-![AI総務 Agent 手順 2](/images/ai-soumu/image2.png)
+<Screenshot src="/images/ai-soumu/image2.png" alt="AI総務 Agent 手順 2" variant="portrait" />
 
-![AI総務 Agent 手順 3](/images/ai-soumu/image3.png)
+<Screenshot src="/images/ai-soumu/image3.png" alt="AI総務 Agent 手順 3" variant="compact" />
 
-![AI総務 Agent 手順 4](/images/ai-soumu/image4.png)
+<Screenshot src="/images/ai-soumu/image4.png" alt="AI総務 Agent 手順 4" />
 
 今回は従来版、つまりワークフロー形式で構築します。新しい Agent を作成する際に Agent 名を設定して保存します。本チュートリアルでは「AI総務 Agent」を構築します。
 
-![AI総務 Agent 手順 5](/images/ai-soumu/image5.png)
+<Screenshot src="/images/ai-soumu/image5.png" alt="AI総務 Agent 手順 5" />
 
 ワークフローの「プランニング」では、デフォルトの構成として「ユーザー入力」と「LLM」の2つのモジュールが表示されます。「プランニング」の機能概要は、[プランニングのドキュメント](https://docs.agentify.jp/welcom/agent_2_1)を参照してください。
 
 基本モジュールの説明は、[基本モジュールのドキュメント](https://docs.agentify.jp/welcom/agent_2_2_1)を参照してください。
 
-![AI総務 Agent 手順 6](/images/ai-soumu/image6.png)
+<Screenshot src="/images/ai-soumu/image6.png" alt="AI総務 Agent 手順 6" />
 
 次に、AI総務 Agent の構築に進みます。まず、この Agent に求める input と output を整理します。
 
 Agentify では、Agent の input としてテキスト、画像、ドキュメントを利用できます。
 
-![AI総務 Agent 手順 7](/images/ai-soumu/image7.png)
+<Screenshot src="/images/ai-soumu/image7.png" alt="AI総務 Agent 手順 7" />
 
 手動トリガーでは、input による起動に加えて、ボタンを追加して Agent を起動できます。
 
-![AI総務 Agent 手順 8](/images/ai-soumu/image8.png)
+<Screenshot src="/images/ai-soumu/image8.png" alt="AI総務 Agent 手順 8" />
 
 また、Agent を公開したあとにトリガーを設定することで、定期実行も可能です。
 
-![AI総務 Agent 手順 9](/images/ai-soumu/image9.png)
+<Screenshot src="/images/ai-soumu/image9.png" alt="AI総務 Agent 手順 9" />
 
-![AI総務 Agent 手順 10](/images/ai-soumu/image10.png)
+<Screenshot src="/images/ai-soumu/image10.png" alt="AI総務 Agent 手順 10" variant="compact" />
 
-![AI総務 Agent 手順 11](/images/ai-soumu/image11.png)
+<Screenshot src="/images/ai-soumu/image11.png" alt="AI総務 Agent 手順 11" variant="portrait" />
 
 公開後の Agent は、HTTP App、API、または MCP Server として呼び出せます。Agent の公開については、[Agent 公開のドキュメント](https://docs.agentify.jp/welcom/agent_2_6)を参照してください。
 
-![AI総務 Agent 手順 12](/images/ai-soumu/image12.png)
+<Screenshot src="/images/ai-soumu/image12.png" alt="AI総務 Agent 手順 12" />
 
-![AI総務 Agent 手順 13](/images/ai-soumu/image13.png)
+<Screenshot src="/images/ai-soumu/image13.png" alt="AI総務 Agent 手順 13" />
 
 ## 2. Agent 構築
 
@@ -83,17 +96,17 @@ AI を構築する前に、業務の基本フレームを整理します。特�
 - 設備トラブル対応方法
 - よくある質問
 
-参考資料のダウンロード先: [Google Drive](https://drive.google.com/file/d/1m0L5EDjCNVx1YShxk6dqht0AmxxmAXbM/view?usp=drive_link)
+参考資料のダウンロード先: [AI総務 Agentナレッジベース用.pdf](https://drive.google.com/file/d/1m0L5EDjCNVx1YShxk6dqht0AmxxmAXbM/view?usp=drive_link)
 
-![AI総務 Agent 手順 14](/images/ai-soumu/image14.png)
+<Screenshot src="/images/ai-soumu/image14.png" alt="AI総務 Agent 手順 14" />
 
-![AI総務 Agent 手順 15](/images/ai-soumu/image15.png)
+<Screenshot src="/images/ai-soumu/image15.png" alt="AI総務 Agent 手順 15" variant="compact" />
 
-![AI総務 Agent 手順 16](/images/ai-soumu/image16.png)
+<Screenshot src="/images/ai-soumu/image16.png" alt="AI総務 Agent 手順 16" />
 
 解析ステータスが成功と表示されたら、ナレッジベースの準備は完了です。ファイルをクリックするとチャンクの詳細も確認できます。
 
-![AI総務 Agent 手順 17](/images/ai-soumu/image17.png)
+<Screenshot src="/images/ai-soumu/image17.png" alt="AI総務 Agent 手順 17" />
 
 ### 2.3 Step 2: データベースを準備する
 
@@ -106,9 +119,9 @@ AI を構築する前に、業務の基本フレームを整理します。特�
 
 ナレッジベースが「ルール」を管理するのに対して、データベースは「現在の申請状況」や「在庫数」など、随時変化する情報を管理します。
 
-![AI総務 Agent 手順 18](/images/ai-soumu/image18.png)
+<Screenshot src="/images/ai-soumu/image18.png" alt="AI総務 Agent 手順 18" />
 
-![AI総務 Agent 手順 19](/images/ai-soumu/image19.png)
+<Screenshot src="/images/ai-soumu/image19.png" alt="AI総務 Agent 手順 19" />
 
 構築を簡単にするため、本チュートリアルでは [Neon](https://neon.com/) の無料データベースを事前に用意して利用します。テスト用のテーブル定義 SQL は以下です。
 
@@ -144,7 +157,7 @@ CREATE TABLE office_assets (
 );
 ```
 
-![AI総務 Agent 手順 20](/images/ai-soumu/image20.png)
+<Screenshot src="/images/ai-soumu/image20.png" alt="AI総務 Agent 手順 20" />
 
 データベースでは「追加」「更新」「削除」の3つの権限を有効にします。
 
@@ -167,7 +180,7 @@ VALUES
 ('社員証カード', '社員証', 20, '利用可能', '総務倉庫');
 ```
 
-![AI総務 Agent 手順 21](/images/ai-soumu/image21.png)
+<Screenshot src="/images/ai-soumu/image21.png" alt="AI総務 Agent 手順 21" />
 
 ### 2.5 Step 4: 情報分類モジュールを設定する
 
@@ -251,7 +264,7 @@ AI総務 Agent では、ユーザーの問い合わせ内容によって利用�
 説明文や補足は出力しないでください。
 ```
 
-![AI総務 Agent 手順 22](/images/ai-soumu/image22.png)
+<Screenshot src="/images/ai-soumu/image22.png" alt="AI総務 Agent 手順 22" />
 
 ### 2.6 Step 5: 条件分岐を設定する
 
@@ -266,7 +279,7 @@ AI総務 Agent では、ユーザーの問い合わせ内容によって利用�
 
 追加したラベルは、後続の条件分岐で使用します。
 
-![AI総務 Agent 手順 23](/images/ai-soumu/image23.png)
+<Screenshot src="/images/ai-soumu/image23.png" alt="AI総務 Agent 手順 23" />
 
 情報分類モジュールで設定した各ラベルは、後続のワークフローにおける分岐条件として使用します。
 
@@ -282,51 +295,51 @@ AI総務 Agent では、ユーザーの問い合わせ内容によって利用�
 
 ナレッジベース検索モジュールでは、ユーザー入力を検索クエリとして使用します。これにより、有給休暇、経費精算、備品申請ルール、入社手続きなど、登録済みの総務ルールから関連情報を取得できます。
 
-![AI総務 Agent 手順 24](/images/ai-soumu/image24.png)
+<Screenshot src="/images/ai-soumu/image24.png" alt="AI総務 Agent 手順 24" />
 
-![AI総務 Agent 手順 25](/images/ai-soumu/image25.png)
+<Screenshot src="/images/ai-soumu/image25.png" alt="AI総務 Agent 手順 25" />
 
 この分岐では、情報分類モジュールで「社内ルール質問」と判定された入力に対して、ナレッジベースを参照し、LLM モジュールで回答を生成します。
 
 この時点で LLM モジュールへ接続する入力は、ナレッジベース検索結果に加えて、ユーザー入力のテキスト情報も必要です。LLM モジュールにはナレッジベース回答用のデフォルトプロンプトがあるため、ここでは接続以外の追加設定は不要です。
 
-![AI総務 Agent 手順 26](/images/ai-soumu/image26.png)
+<Screenshot src="/images/ai-soumu/image26.png" alt="AI総務 Agent 手順 26" />
 
-![AI総務 Agent 手順 27](/images/ai-soumu/image27.png)
+<Screenshot src="/images/ai-soumu/image27.png" alt="AI総務 Agent 手順 27" />
 
 <Tip>
 接続が多いと感じる場合は、Agentify の組み込み変数を参照できます。変数を直接書き込む方法や、メモリ変数モジュールで独自変数を定義して、プロンプトや定型回答から呼び出す方法もあります。本チュートリアルでは、初心者が構築しやすいように変数受け渡しのテクニックは使っていません。興味がある場合は、[組み込み変数のドキュメント](https://docs.agentify.jp/welcom/agent_v1.4)を参照してください。
 </Tip>
 
-![AI総務 Agent 手順 28](/images/ai-soumu/image28.png)
+<Screenshot src="/images/ai-soumu/image28.png" alt="AI総務 Agent 手順 28" variant="compact" />
 
-![AI総務 Agent 手順 29](/images/ai-soumu/image29.png)
+<Screenshot src="/images/ai-soumu/image29.png" alt="AI総務 Agent 手順 29" />
 
 接続が完了すると、現在のロジックではナレッジベースに関連情報が存在する場合のみ LLM モジュールが起動することを確認できます。
 
-![AI総務 Agent 手順 30](/images/ai-soumu/image30.png)
+<Screenshot src="/images/ai-soumu/image30.png" alt="AI総務 Agent 手順 30" />
 
 そのため、関連情報が存在しない場合にもユーザーへ通知できるよう、戻り値を設定します。
 
-![AI総務 Agent 手順 31](/images/ai-soumu/image31.png)
+<Screenshot src="/images/ai-soumu/image31.png" alt="AI総務 Agent 手順 31" />
 
-![AI総務 Agent 手順 32](/images/ai-soumu/image32.png)
+<Screenshot src="/images/ai-soumu/image32.png" alt="AI総務 Agent 手順 32" variant="compact" />
 
 保存後にテストします。テスト結果を分かりやすく確認するため、Agent 設定の左側メニューからナレッジベースの引用元表示を有効にします。
 
-![AI総務 Agent 手順 33](/images/ai-soumu/image33.png)
+<Screenshot src="/images/ai-soumu/image33.png" alt="AI総務 Agent 手順 33" />
 
-![AI総務 Agent 手順 34](/images/ai-soumu/image34.png)
+<Screenshot src="/images/ai-soumu/image34.png" alt="AI総務 Agent 手順 34" />
 
 今回のテスト input: 有給は何日前までに申請すればいいですか？
 
-![AI総務 Agent 手順 35](/images/ai-soumu/image35.png)
+<Screenshot src="/images/ai-soumu/image35.png" alt="AI総務 Agent 手順 35" />
 
 角のマークをクリックすると、参照されたファイルと引用元を確認できます。
 
-![AI総務 Agent 手順 36](/images/ai-soumu/image36.png)
+<Screenshot src="/images/ai-soumu/image36.png" alt="AI総務 Agent 手順 36" />
 
-![AI総務 Agent 手順 37](/images/ai-soumu/image37.png)
+<Screenshot src="/images/ai-soumu/image37.png" alt="AI総務 Agent 手順 37" />
 
 ### 2.8 Step 7.1: 備品在庫確認分岐を作成する
 
@@ -354,7 +367,7 @@ AI総務 Agent では、ユーザーの問い合わせ内容によって利用�
 
 ここでは Agentify の「データフィールド抽出」モジュールを利用します。「備品在庫確認」と判定された場合に起動します。
 
-![AI総務 Agent 手順 38](/images/ai-soumu/image38.png)
+<Screenshot src="/images/ai-soumu/image38.png" alt="AI総務 Agent 手順 38" />
 
 このモジュールでは、prompt と抽出フィールドを定義して抽出ルールを設定します。以下は prompt 例です。
 
@@ -391,35 +404,35 @@ asset_name = マウス
 asset_name = 不明
 ```
 
-![AI総務 Agent 手順 39](/images/ai-soumu/image39.png)
+<Screenshot src="/images/ai-soumu/image39.png" alt="AI総務 Agent 手順 39" variant="portrait" />
 
-![AI総務 Agent 手順 40](/images/ai-soumu/image40.png)
+<Screenshot src="/images/ai-soumu/image40.png" alt="AI総務 Agent 手順 40" />
 
 ### 2.9 Step 7.2: データベースに接続する
 
 次に、データフィールド抽出で取得した項目を使ってデータベース検索を行います。データベース検索には SQL が必要なため、ここでは NL2SQL とデータベース検索の2つのコンポーネントを利用します。
 
-![AI総務 Agent 手順 41](/images/ai-soumu/image41.png)
+<Screenshot src="/images/ai-soumu/image41.png" alt="AI総務 Agent 手順 41" variant="portrait" />
 
-![AI総務 Agent 手順 42](/images/ai-soumu/image42.png)
+<Screenshot src="/images/ai-soumu/image42.png" alt="AI総務 Agent 手順 42" />
 
 それぞれのコンポーネントで、検索対象のデータベースを設定します。
 
-![AI総務 Agent 手順 43](/images/ai-soumu/image43.png)
+<Screenshot src="/images/ai-soumu/image43.png" alt="AI総務 Agent 手順 43" />
 
-![AI総務 Agent 手順 44](/images/ai-soumu/image44.png)
+<Screenshot src="/images/ai-soumu/image44.png" alt="AI総務 Agent 手順 44" variant="portrait" />
 
-![AI総務 Agent 手順 45](/images/ai-soumu/image45.png)
+<Screenshot src="/images/ai-soumu/image45.png" alt="AI総務 Agent 手順 45" variant="portrait" />
 
 接続が完了したら、出力結果をテストします。
 
-![AI総務 Agent 手順 46](/images/ai-soumu/image46.png)
+<Screenshot src="/images/ai-soumu/image46.png" alt="AI総務 Agent 手順 46" />
 
-![AI総務 Agent 手順 47](/images/ai-soumu/image47.png)
+<Screenshot src="/images/ai-soumu/image47.png" alt="AI総務 Agent 手順 47" />
 
 自然言語で回答したい場合は、データベース検索モジュールの後ろに LLM モジュールを追加して応答を整形します。この場合、データベース検索モジュール自体の出力は閉じても構いません。
 
-![AI総務 Agent 手順 48](/images/ai-soumu/image48.png)
+<Screenshot src="/images/ai-soumu/image48.png" alt="AI総務 Agent 手順 48" />
 
 LLM の参考プロンプトは以下です。
 
@@ -437,7 +450,7 @@ LLM の参考プロンプトは以下です。
 回答は日本語で、丁寧かつ簡潔にしてください。
 ```
 
-![AI総務 Agent 手順 49](/images/ai-soumu/image49.png)
+<Screenshot src="/images/ai-soumu/image49.png" alt="AI総務 Agent 手順 49" />
 
 ### 2.10 Step 8: 「申請登録」分岐
 
@@ -451,13 +464,13 @@ LLM の参考プロンプトは以下です。
 データベース更新時の誤操作を防ぐため、「定型回答」と「ユーザー入力」の2つのモジュールを追加して操作を制御することをおすすめします。
 </Warning>
 
-![AI総務 Agent 手順 50](/images/ai-soumu/image50.png)
+<Screenshot src="/images/ai-soumu/image50.png" alt="AI総務 Agent 手順 50" />
 
 ユーザー入力モジュールのボタン追加方法と実際の操作イメージは以下です。
 
-![AI総務 Agent 手順 51](/images/ai-soumu/image51.png)
+<Screenshot src="/images/ai-soumu/image51.png" alt="AI総務 Agent 手順 51" variant="compact" />
 
-![AI総務 Agent 手順 52](/images/ai-soumu/image52.png)
+<Screenshot src="/images/ai-soumu/image52.png" alt="AI総務 Agent 手順 52" />
 
 後続の LLM モジュールの接続方法と prompt は以下です。
 
@@ -555,11 +568,11 @@ assignee,
 created_at;
 ```
 
-![AI総務 Agent 手順 53](/images/ai-soumu/image53.png)
+<Screenshot src="/images/ai-soumu/image53.png" alt="AI総務 Agent 手順 53" />
 
 同時に、データベース更新モジュールにも接続します。
 
-![AI総務 Agent 手順 54](/images/ai-soumu/image54.png)
+<Screenshot src="/images/ai-soumu/image54.png" alt="AI総務 Agent 手順 54" />
 
 最後に、操作結果を LLM モジュールで自然言語に加工し、ユーザーへ返します。
 
@@ -574,15 +587,15 @@ created_at;
 回答は日本語で、丁寧かつ簡潔にしてください。
 ```
 
-![AI総務 Agent 手順 55](/images/ai-soumu/image55.png)
+<Screenshot src="/images/ai-soumu/image55.png" alt="AI総務 Agent 手順 55" />
 
 テスト入力: 営業部の田中です。新入社員用にノートPCを1台申請したいです。6月1日から使いたいです。
 
-![AI総務 Agent 手順 56](/images/ai-soumu/image56.png)
+<Screenshot src="/images/ai-soumu/image56.png" alt="AI総務 Agent 手順 56" />
 
-![AI総務 Agent 手順 57](/images/ai-soumu/image57.png)
+<Screenshot src="/images/ai-soumu/image57.png" alt="AI総務 Agent 手順 57" />
 
-![AI総務 Agent 手順 58](/images/ai-soumu/image58.png)
+<Screenshot src="/images/ai-soumu/image58.png" alt="AI総務 Agent 手順 58" />
 
 ### 2.11 Step 9: 動作確認
 
@@ -607,8 +620,8 @@ created_at;
 
 まずは、社内ルール質問、備品在庫確認、申請登録の3つを基本機能として構築することで、ナレッジベースとデータベースを活用した AI Agent の動作を確認できます。
 
-本チュートリアルの Agent 全体ワークフローのリソースコード: [Google Drive](https://drive.google.com/file/d/166XjIkwEr6KRtryw1b4gqYogjCkAFpAb/view?usp=sharing)
+本チュートリアルの Agent 全体ワークフローのリソースコード: [Agentify AI総務 Agent DSL.txt](https://drive.google.com/file/d/166XjIkwEr6KRtryw1b4gqYogjCkAFpAb/view?usp=sharing)
 
 ダウンロード後、ファイル内のコードをインポートして利用できます。学習用のサンプルのため、ナレッジベースとデータベースのテストファイルは別途手動で設定してください。
 
-![AI総務 Agent 手順 59](/images/ai-soumu/image59.png)
+<Screenshot src="/images/ai-soumu/image59.png" alt="AI総務 Agent 手順 59" />

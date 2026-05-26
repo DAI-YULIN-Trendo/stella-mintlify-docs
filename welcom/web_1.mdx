@@ -1,168 +1,235 @@
 ---
-title: "クローラーの使い方ガイド"
+title: "Webスクレイピング実践ガイド"
+description: "PR TIMES の AI 関連ニュースを例に、公式ツールの Webスクレイピング設定と Agent 連携を説明します。"
 ---
 
-クローラーツールは、特定のウェブサイトの情報を取得し、エージェントの機能と組み合わせて元データのさらなる加工処理を行うことを目的としています。これにより、ユーザーの利用シーンに対応した活用が可能になります。
+このガイドでは、PR TIMES の AI 関連ニュースページを例に、Agentify の公式ツール「Webスクレイピング」の使い方と設定ロジックを説明します。
+
+<CardGroup cols={3}>
+  <Card title="リンクを抽出" icon="link">
+    一覧ページから対象記事の URL を正規表現で抽出します。
+  </Card>
+  <Card title="本文を取得" icon="file-lines">
+    抽出した各記事ページからタイトル、本文、公開日を取得します。
+  </Card>
+  <Card title="ナレッジ化" icon="book-open">
+    取得結果を Agent で整形し、ナレッジベースへ保存します。
+  </Card>
+</CardGroup>
 
+## Webスクレイピングの基本ロジック
 
+Webスクレイピングツールは、ツール画面から公式ツールとして作成・利用できます。典型的な利用シーンは、複数のタイトルやリンクを含む一覧ページから対象ページを抽出し、それぞれの詳細ページにある必要な情報を取得するケースです。
 
-具体的な利用手順は以下のとおりです：
+```text
+一覧ページの URL を入力
+  -> 正規表現で対象リンクを抽出
+  -> 抽出したリンク先を順番に取得
+  -> 必要な項目をフィールドとして保存
+  -> Agent で整形してナレッジベースに保存
+```
 
-![](https://uxkpl4cba3j.feishu.cn/space/api/box/stream/download/asynccode/?code=M2YxZmQ4ZGI2NDkzMzczODdjMTFiZmM2NTVkNDE3NTdfMzZzYmJXWjZFRG9Wb1NvTERTR3c1MkVQRVFYNEwwMWxfVG9rZW46QVJnamJxaUszb0NQQjF4YVRXZmN2ZDVFbkxlXzE3NDMwNDM4OTA6MTc0MzA0NzQ5MF9WNA)
+<Frame>
+  <img src="/images/update-1-1/image1.png" alt="公式ツールの Webスクレイピングを選択する画面" />
+</Frame>
 
+## 1. 新しいスクレイピングタスクを作成する
 
+Agentify にログインし、左側メニューから「ツール」>「公式ツール」>「Webスクレイピング」を開きます。画面右上の「新規タスクの確認」から、新しいスクレイピングタスクを作成します。
 
-# 1. ホームで「Web情報収集タスク新規作成」をクリックし、設定画面へ進みます。
+<Frame>
+  <img src="/images/update-1-1/image2.png" alt="Webスクレイピングタスクを新規作成する画面" />
+</Frame>
 
-![](https://uxkpl4cba3j.feishu.cn/space/api/box/stream/download/asynccode/?code=NWFmZjAwM2EzMDI2ZTBmODdkNjZmY2YxOTRmNWU0ZGFfVmFLVFJsaDROVnIzMVkzOERsM05hTzVCQ0k0TXNsTjhfVG9rZW46SnFKcmJhRTVYb25vdHZ4WkhFYWN1VFE3bk9mXzE3NDMwNDM4OTA6MTc0MzA0NzQ5MF9WNA)
+## 2. スクレイピング設定
 
+### 2.1 取得対象ページを設定する
 
+まず、情報源となる Web ページの URL を決めます。この URL は、複数の記事タイトルやリンクを含む一覧ページである必要があります。
 
-# 2. クローラー設定
+本ガイドでは、PR TIMES の AI キーワードページを例にします。
 
-次に、実際のウェブページを使って、クローラーツールの使用方法を説明します。
-
-## Step 1：
-
-対象のウェブページを設定します（例： http://www.cbssports.com/nba/）。
-
-![](https://uxkpl4cba3j.feishu.cn/space/api/box/stream/download/asynccode/?code=MWIzOGM4Nzg0Y2ZiMTVjMDBjNzE0Y2M2MmE5OGI1OGVfZm5seFdtdTlVYVJkY3RDc3RsTkl0ZUFMMTJyUktjRXBfVG9rZW46Qnl5TmJsR05GbzVpTld4Q2tkZWNTN2RMblBkXzE3NDMwNDM4OTA6MTc0MzA0NzQ5MF9WNA)
-
-## Step 2：
-
-抽出するページ要素（フィールド）を設定します。
-
-### 実例
-
-![](https://uxkpl4cba3j.feishu.cn/space/api/box/stream/download/asynccode/?code=YmEyODI2Y2QxYmYyMjk0MzYxODRmN2UyZTc2ZGI4YzFfd1ZoUmJ0SjRRRUVxMlJPRkhRYTB6bU0xVFhlU2h3dTRfVG9rZW46S2lTZWJORWp4b1NqV0h4ZjJyVmNCSllFbkxoXzE3NDMwNDM4OTA6MTc0MzA0NzQ5MF9WNA)
-
-
-
-### 機能説明
-
-#### ケース設定例
-
-![](https://uxkpl4cba3j.feishu.cn/space/api/box/stream/download/asynccode/?code=OTBlZTdhMjhlNzc1NzcxZjNmZmIzMGU1MTQwYTA0YjZfMjVGWXp6dTRaVFExenh3UVcwQUFYM2YzWHc3WlpQOUpfVG9rZW46RjlOV2JjWWhrb2RBMVZ4bm1mZGNZMjZqbnJiXzE3NDMwNDM4OTA6MTc0MzA0NzQ5MF9WNA)
-
-
-
-#### 機能の詳細説明
-
-##### 抽出フィールドの追加
-
-このウェブページから、どのフィールドを取得するかを直接設定します。
-
-![](https://uxkpl4cba3j.feishu.cn/space/api/box/stream/download/asynccode/?code=ZWRiMmNmNDFlMTgyZTdhZTg5NTNkMzc2OGI5NzY5NWZfRVVSSUdia2dNRzR5Tm1Ba0hTYXM2aUY2VUZEMmtCM1dfVG9rZW46T0RySWJra0Rpb3dhWm14WURiRmN0YjlSbndkXzE3NDMwNDM4OTA6MTc0MzA0NzQ5MF9WNA)
-
-フィールドキー、フィールドの説明、フィールドの抽出ルール（通常は正規表現で記述）を明確に定義します。
-
-
-
-**&#x20;抽出ルールはこちら：**
-
-[ 爬虫指令脚本使用指南](https://yvrbb9678zj.feishu.cn/wiki/RwFewd9uDiMpIjkPhvZcCF0Unbc)
-
-
-
-設定例：
-
-| Webアドレス                                                                                                          | ルール                                                                                                                                                                                                                                     |
-| ---------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| ホームページURLhttps://www.szns.gov.cn/詳細ページURLhttps://www.szns.gov.cn/xxgk/qzfxxgkml/bmdt/content/post\_11320844.html | ・ホームページエリア設定操作：getHtml抽出方法：links抽出ルール：regex=>.*/content/.*&#x51E6;理方法：all・詳細ページのタイトルを抽出操作：getHtml抽出方法：xpath=>//div\[@class=tyxxy\_t']/h1/Text()処理方法：get・詳細ページの本文を抽出操作：getHtml抽出方法：xpath=>//div\[@class='tyxxy\_main']/allText()処理方法：get |
-
-フィールドタイプは2種類：
-
-1.string：内容を持つ一般的なテキスト項目（例：ページタイトルや本文など）
-
-2.Webページ：対象ページ内にさらに抽出可能なページがある場合に使用。このタイプでは自動的に「抽出」ボタンが表示されます。
-
-![](https://uxkpl4cba3j.feishu.cn/space/api/box/stream/download/asynccode/?code=ZWFkZDI4MGUwYzQyYTY3OWIzNzI3OTkzYTczZWVjNGNfTURzT1BlTGEwb0h0c0xuNkhMNnExQmRoZG00ekcyVGNfVG9rZW46Q050bmJJZGZMb2FNZWp4TlJkQ2NoMlBrbjNjXzE3NDMwNDM4OTA6MTc0MzA0NzQ5MF9WNA)
-
-&#x20;操作例（画像参照）
-
-「抽出」をクリックすると、対象サイトの1階層下のページ構造が展開され、設定項目が追加されます。
-
-「抽出のキャンセル」をクリックすると、下層の設定が削除されます。
-
-![](https://uxkpl4cba3j.feishu.cn/space/api/box/stream/download/asynccode/?code=ZWRjMDRhM2IyZmRlZGViNjU1ZmUyNDU1MzYzZGY1YjBfV21XZTNZek96RkZHd0RXTlJ0VkMxVlNFNnQ5Y0ZFck9fVG9rZW46QktSMGJta0VZbzRoMWd4SnAyZGN5dnNrblhjXzE3NDMwNDM4OTA6MTc0MzA0NzQ5MF9WNA)
-
-
-
-##### エクスポート設定
-
-本バージョンでは、エージェントへのエクスポートとHTTPエクスポートの2種類をサポートしています。
-
-
-
-1\. エージェントへのエクスポート
-
-エージェントへのエクスポートは、クローラーで取得した元データを、エージェントを通じてさらに加工・処理するために使用されます。実際の運用シーンでは、この機能がよりユーザーのニーズに適した形で活用されます。
-
-例として、英語のWebページを翻訳してナレッジベースに保存するといった使い方が可能です。
-
-![](https://uxkpl4cba3j.feishu.cn/space/api/box/stream/download/asynccode/?code=MjM5YjMxNmIxYzg1NDBlNmI4YjRmMWNkOGJhYzRhMDhfRHNNcFN4ZXRaMVlUMUg0YjhKMUdXQ3FUUGFrWWRBSnVfVG9rZW46R1Z1MWJuSXNHb01iTmd4RHg1YmNDQ0dkbnFmXzE3NDMwNDM4OTA6MTc0MzA0NzQ5MF9WNA)
-
-エクスポート対象のエージェントは複数選択可能です。
-
-###### エクスポート時凡例：
-
-構造化データとしてエクスポートするため、バックエンドでは以下の2つの標準フィールドが定義されています：
-
-・取得データ本体： \_state.data.xx
-
-・データソースURL： \_state.url
-
-※xxには、翻訳対象となるクローラー設定のフィールドキーを入力します。
-
-例：クローラーで本文のフィールド名が content であれば、\_state.data.content を使用します。
-
-![](https://uxkpl4cba3j.feishu.cn/space/api/box/stream/download/asynccode/?code=YTJmNmExMDA3M2FjYWNmNzczOTQ3ZjJjYTllZjkxMzJfSDBseFREWTN0cVA4YlVpaTlZUWladnhjNGxBOTlZcGtfVG9rZW46Rnl3QWJRTnNib1R2U3J4cm1NMmNXNUNobmhkXzE3NDMwNDM4OTA6MTc0MzA0NzQ5MF9WNA)
-
-&#x20;ナレッジベースへの保存内容の詳細設定も可能です。
-
-![](https://uxkpl4cba3j.feishu.cn/space/api/box/stream/download/asynccode/?code=NzUxZTlmYWZmZTJlOWYzY2JjOGI5NWJiYzBkNWM3NDRfZk1WV1F6bjVxMXVXeFVuWWp2YjFpYlZJQ1A2WkQ4RGhfVG9rZW46RXNJS2JOQW91b3I2RGt4Zjh0a2NMYkc2bjNiXzE3NDMwNDM4OTA6MTc0MzA0NzQ5MF9WNA)
-
-
-
-2\. HTTPへのエクスポート
-
-![](https://uxkpl4cba3j.feishu.cn/space/api/box/stream/download/asynccode/?code=YTA2NDc3NmRjMTQwMTZiZTRhMjgyZGU2NDdmNWNlZmRfbWMwMXB6ZEJoVDhFZ0dYUFhnVUhES3JuZ0V2UHZCY1BfVG9rZW46VFh2dmJERExYb2poMnN4ZjR6T2NERDl1bk5pXzE3NDMwNDM4OTA6MTc0MzA0NzQ5MF9WNA)
-
-POSTリクエストによるAPI連携により、取得したデータを外部データベースや他のシステムへ直接送信できます。
-
-**Step 3：**
-
-![](https://uxkpl4cba3j.feishu.cn/space/api/box/stream/download/asynccode/?code=MjRmZjI4ZDA2NjM3MWVjNGEzNmMxNGQ5ZjM4NDkzOWVfSDh6Rm1lTGVjZk1SdjkyN0p1c1N3SVBFWkpDQmJlWG1fVG9rZW46WjhZR2J3aUhGb3NTUDN4MHNhSWNERmZvbmljXzE3NDMwNDM4OTA6MTc0MzA0NzQ5MF9WNA)
-
-「タスクを見る」をクリックすると、クローラータスク一覧ページへ戻ります。
-
-
-
-## 3. クローラータスク管理
-
-![](https://uxkpl4cba3j.feishu.cn/space/api/box/stream/download/asynccode/?code=NGZhYTFjMzA3NDI5NDMyYmVmYmNjN2FhNWQ5MTUzZDhfaFpNWTc5bnFpSldXRDlzRjlPRTlTZ0NuSlVpOTlRdUpfVG9rZW46T1ZiQWJGSUxxb3dOMWV4SHVvSWNZMUoxbjQyXzE3NDMwNDM4OTA6MTc0MzA0NzQ5MF9WNA)
-
-1\. 設定
-
-![](https://uxkpl4cba3j.feishu.cn/space/api/box/stream/download/asynccode/?code=ZGJlOTBjNmY3YmYwZjNmZWQ3NTc1ZTRiOWY4M2QzYjZfT0FLaEJ0aUpBTWlKZDBIcm5JM05GRjRLOEwyNHc2cXFfVG9rZW46T1dhSGJDTjY0b3lKOHl4ZUtjV2NpcWtZbnNkXzE3NDMwNDM4OTA6MTc0MzA0NzQ5MF9WNA)
-
-间隔时间可设置分钟、小时、天维度，作为定时轮训
-
-・実行間隔の設定：分・時間・日単位で設定可能。定期的なポーリング実行に対応します。
-
-・Cron式のカスタマイズ：Cron式を使用できる方は、自分で記述して柔軟なスケジュール設定が可能です。
-
-　例：月・水・金にのみ実行など。
-
-2\. 起動
-
-・設定完了後、タスクを起動できます。
-
-・起動後はいつでも停止可能ですが、「停止」は一時停止ではなく完全停止となるため、操作にはご注意ください。
-
-3\. 編集と削除
-
-起動中のタスクは、編集・削除・再設定はできません。
-
-![](https://uxkpl4cba3j.feishu.cn/space/api/box/stream/download/asynccode/?code=ZjdkYjNiNGVkMWNkZGZmYWZhZWM2NjQ4YmFkYTBlMTFfYnVzaUJWaFoyVUszSGhYWmVhSHV6STF2N0ZnYVExMWpfVG9rZW46VTZsb2JFSlNHb3BaVEp4eldaVWNFN3RYbmxmXzE3NDMwNDM4OTA6MTc0MzA0NzQ5MF9WNA)
-
+```text
+https://prtimes.jp/topics/keywords/AI
+```
+
+この URL を「取得 URL」に入力し、タスク名には後から識別しやすい名前を設定します。例として `prtimes-news` のような名前を付けます。入力後、「次へ」をクリックしてフィールド設定へ進みます。
+
+<Frame>
+  <img src="/images/update-1-1/image3.png" alt="PR TIMES の AI 関連ニュースページを取得 URL に設定する画面" />
+</Frame>
+
+### 2.2 記事リンクを抽出する
+
+最初のフィールドでは、一覧ページから取得対象の記事リンクを抽出します。対象 URL には多くのリンクが含まれるため、記事ページの URL パターンを確認し、正規表現で必要なリンクだけを絞り込みます。
+
+<CardGroup cols={2}>
+  <Card title="フィールド key" icon="key">
+    `article_links` を設定します。正規表現で抽出した記事リンク一覧を表す key です。
+  </Card>
+  <Card title="フィールド説明" icon="tag">
+    `Webページ` など、抽出内容が分かる説明を設定します。
+  </Card>
+  <Card title="フィールドタイプ" icon="globe">
+    リンクを抽出するため、フィールドタイプは `Webページ` を選択します。
+  </Card>
+  <Card title="抽出ルール" icon="code">
+    `getHtml`、`links`、`regex`、`all` を組み合わせて対象 URL を抽出します。
+  </Card>
+</CardGroup>
+
+<Frame>
+  <img src="/images/update-1-1/image4.png" alt="スクレイピングフィールドを追加する画面" />
+</Frame>
+
+記事 URL は `/main/html/rd/p/xxxxx.xxxxx.html` の形式を含むため、以下のルールを設定します。
+
+```shell
+getHtml
+links
+regex=>https://prtimes\.jp/main/html/rd/p/\d+\.\d+\.html
+all
+```
+
+<Frame>
+  <img src="/images/update-1-1/image5.png" alt="PR TIMES 記事リンクの URL パターンを確認する画面" />
+</Frame>
+
+<Frame>
+  <img src="/images/update-1-1/image6.png" alt="記事リンク抽出ルールを設定する画面" />
+</Frame>
+
+<Tip>
+  `getHtml` の後に `regex` で記事リンクを抽出できない場合でも、ブラウザ上で対象リンクが表示されていることがあります。その場合は JS レンダリングを有効にしてから `links` を抽出してください。
+</Tip>
+
+<Frame>
+  <img src="/images/update-1-1/image7.png" alt="JS レンダリングを有効にする設定画面" />
+</Frame>
+
+<Frame>
+  <img src="/images/update-1-1/image8.png" alt="JS レンダリング後にリンク抽出を確認する画面" />
+</Frame>
+
+### 2.3 記事ページ内のフィールドを取得する
+
+`article_links` のフィールドタイプを `Webページ` にすると、リンク先ページに対して追加フィールドを設定できます。「Webページ」の横にある「取得」をクリックし、記事詳細ページから必要な情報を取得します。
+
+<Frame>
+  <img src="/images/update-1-1/image9.png" alt="Webページフィールドの取得ボタンをクリックする画面" />
+</Frame>
+
+ここでは、記事ページから以下の3項目を取得します。
+
+- 記事タイトル
+- 記事本文
+- 公開日
+
+「記事タイトル」を例にすると、`article_links` の下にフィールドを追加し、key を `title`、フィールド説明を `タイトル`、フィールドタイプを `string` にします。抽出ルールは XPath を使って設定します。
+
+<Info>
+  XPath や regex の書き方は、[クローラーマニュアル](/welcom/web_2) を参照してください。ページ構造の確認には AI を併用することもできます。
+</Info>
+
+<Frame>
+  <img src="/images/update-1-1/image10.png" alt="記事詳細ページのフィールドを追加する画面" />
+</Frame>
+
+<Frame>
+  <img src="/images/update-1-1/image11.png" alt="タイトル取得フィールドの具体設定画面" />
+</Frame>
+
+<AccordionGroup>
+  <Accordion title="記事タイトルの抽出ルール" icon="heading">
+    | 項目 | 設定値 |
+    | --- | --- |
+    | フィールド key | `title` |
+    | フィールド説明 | `ニュースタイトル` |
+    | フィールドタイプ | `string` |
+
+    ```shell
+    getHtml
+    xpath=>//h1[@id='press-release-title']/text()
+    get
+    ```
+  </Accordion>
+  <Accordion title="記事本文の抽出ルール" icon="file-lines">
+    | 項目 | 設定値 |
+    | --- | --- |
+    | フィールド key | `press_release_body` |
+    | フィールド説明 | `ニュース本文` |
+    | フィールドタイプ | `string` |
+
+    ```shell
+    getHtml
+    xpath=>//div[@id='press-release-body']/allText()
+    get
+    ```
+  </Accordion>
+  <Accordion title="公開日の抽出ルール" icon="calendar">
+    | 項目 | 設定値 |
+    | --- | --- |
+    | フィールド key | `published_at` |
+    | フィールド説明 | `公開日` |
+    | フィールドタイプ | `string` |
+
+    ```shell
+    getHtml
+    xpath=>//time/text()
+    get
+    ```
+  </Accordion>
+</AccordionGroup>
+
+すべてのフィールド設定が完了したら、「エクスポート設定」で連携する Agent を選択します。この Agent が取得内容を加工し、ナレッジベースへ保存します。
+
+<Frame>
+  <img src="/images/update-1-1/image12.png" alt="スクレイピング結果を処理する Agent を選択する画面" />
+</Frame>
+
+## 3. タスクを開始する
+
+スクレイピングタスク一覧へ戻り、タスクを開始する前に定期取得の間隔を設定します。間隔は「分」「時間」「日」の単位で指定できます。設定後、「開始」をクリックするとタスクが実行されます。
+
+実行後は、「取得リンク数」で対象ページが取得できているかを確認します。あわせて、連携先のナレッジベースに期待した形式で保存されているかも確認してください。
+
+<Frame>
+  <img src="/images/update-1-1/image13.png" alt="スクレイピングタスクの定期取得間隔を設定する画面" />
+</Frame>
+
+<Frame>
+  <img src="/images/update-1-1/image14.png" alt="スクレイピングタスクの実行結果を確認する画面" />
+</Frame>
+
+## 4. 連携 Agent の設計
+
+スクレイピングでは、各記事ページから取得した `title`、`press_release_body`、`published_at` が key 名に対応する変数として Agent に渡されます。また、正規表現で抽出したリンク URL も変数として利用できます。
+
+本ガイドでは、記事ごとに1つのナレッジベーススライスとして保存する構成を想定します。
+
+<CardGroup cols={2}>
+  <Card title="スライス本文" icon="file-lines">
+    記事本文 `press_release_body` を保存します。
+  </Card>
+  <Card title="スライスタイトル" icon="heading">
+    記事タイトル、URL、公開日を組み合わせて保存します。
+  </Card>
+</CardGroup>
+
+この加工は、Agent のプランニング内で「定型回答」モジュールなどを使って整形し、その結果をナレッジベース保存モジュールへ渡す構成にできます。
+
+<Frame>
+  <img src="/images/update-1-1/image15.png" alt="スクレイピング結果をナレッジベース保存用に整形する Agent 構成" />
+</Frame>
+
+<Card title="インポート用テンプレート" icon="download" href="../クローラーテンプレート.txt">
+  Agent プランニング画面でインポートできます。インポート後は「ナレッジベースに保存」モジュールの保存先を、自分のアカウントのナレッジベースへ変更してください。
+</Card>
+
+## 5. 結果を確認する
+
+最後に、ナレッジベース内で取得した記事情報が想定通りに保存されているかを確認します。以下は保存結果の例です。
+
+<Frame>
+  <img src="/images/update-1-1/image16.png" alt="PR TIMES ニュースをナレッジベースに保存した結果" />
+</Frame>
