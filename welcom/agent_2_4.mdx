@@ -143,7 +143,11 @@ title: "🛠️ ツール"
       </Accordion>
       
       <Accordion title="Bearer Token 認証" icon="key">
-        **定義:** クライアントが OAuth2.0 などの手段で取得した アクセストークン を使用して認証する方式です。
+        **定義:** 事前に取得したアクセストークンを `Authorization` ヘッダーに設定して認証する方式です。
+
+        <Warning>
+          現時点では、プラットフォームは OAuth 2.0 の認可フローに対応していません。OAuth 2.0 が必要な外部 API を利用する場合は、外部側で取得済みのアクセストークンを Bearer Token として設定してください。
+        </Warning>
         
         **例:**
         ```http

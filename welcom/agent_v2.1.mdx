@@ -38,6 +38,10 @@ Agent編集ページに移動し、ボタンをクリックします。
   認証に使用するトークンの値は、**Agentトークン**（通常はAuthKeyとAuthSecretのペアを指します）または**パーソナルアクセストークン**（同様にAuthKeyとAuthSecretのペアを指します）のいずれかを使用できます。
 </Tip>
 
+<Warning>
+  現時点では、プラットフォーム Open API は OAuth 2.0 の認可フローに対応していません。外部連携では、下記の MD5、Bearerトークン、またはトークン方式を使用してください。
+</Warning>
+
 <AccordionGroup>
   <Accordion title="1.2.1 MD5方式（推奨）">
     HTTPリクエストヘッダーに以下のパラメータを渡します。
